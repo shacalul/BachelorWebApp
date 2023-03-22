@@ -15,6 +15,9 @@ const FilterCategories = () => {
         <div className="flex-1 border border-r">
           <CategoryType />
         </div>
+        <button type="submit" className="btn btn-primary">
+          Check now
+        </button>
       </div>
     </form>
   );

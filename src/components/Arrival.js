@@ -16,15 +16,16 @@ const Arrival = () => {
         ? [currentYear + 1, currentYear + 2]
         : [currentYear, currentYear + 1];
     const arrivalDates = [];
-    availableYears.forEach((year) => {
+    for (let year = currentYear; year <= currentYear + 2; year++) {
       availableMonths.forEach((month) => {
-        if (month === 2) {
-          arrivalDates.push(new Date(`${year}-${month}-03`));
-        } else {
-          arrivalDates.push(new Date(`${year}-${month}-01`));
+        const arrivalDay = month === 2 ? 3 : 1; // Set the arrival day based on the month
+        const arrivalDate = new Date(year, month - 1, arrivalDay);
+        if (arrivalDate >= now) {
+          // Add the arrival date only if it's in the future
+          arrivalDates.push(arrivalDate);
         }
       });
-    });
+    }
     return arrivalDates;
   }
 

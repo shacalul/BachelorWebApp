@@ -1,16 +1,8 @@
 import React from "react";
-import { CategoryContext } from "../context/CategoryContext";
 import { Menu } from "@headlessui/react";
 import { BsChevronDown } from "react-icons/bs";
+import { categoryData } from "../data/CategoryData";
 
-const list = [
-  { name: "Category A" },
-  { name: "Category B" },
-  { name: "Category C" },
-  { name: "Category D" },
-  { name: "Category E" },
-  { name: "Category F" },
-];
 const CategoryType = () => {
   return (
     <Menu as="div" className="w-full h-full bg-white relative">
@@ -22,12 +14,12 @@ const CategoryType = () => {
         as="ul"
         className="bg-white absolute w-full flex flex-col z-40"
       >
-        {list.map((li, index) => {
+        {categoryData.map((li) => {
           return (
             <Menu.Item
               as="li"
               className="border-b last-of-type:border-b-0 h-12 hover:bg-accent hover:text-white w-full flex justify-center items-center cursor-pointer"
-              key={index}
+              key={li.id}
             >
               {li.name}
             </Menu.Item>

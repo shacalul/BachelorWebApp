@@ -1,42 +1,32 @@
 import React, { useState } from "react";
 import { BsCalendar } from "react-icons/bs";
 import { Menu } from "@headlessui/react";
+
 const Departure = () => {
-  // const [selectedDate, setSelectedDate] = useState(null);
-  // const arrivalDates = getArrivalDates();
+  const [selectedDate, setSelectedDate] = useState(null);
+  const departureDates = getDepartureDates();
 
-  // function getArrivalDates() {
-  //   const availableMonths = [2, 8];
-  //   const now = new Date();
-  //   const currentYear = now.getFullYear();
-  //   const currentMonth = now.getMonth() + 1;
-  //   const availableYears =
-  //     currentMonth >= availableMonths[1]
-  //       ? [currentYear + 1, currentYear + 2]
-  //       : [currentYear];
-  //   const arrivalDates = [];
-  //   availableYears.forEach((year) => {
-  //     availableMonths.forEach((month) => {
-  //       const arrivalDate = new Date(`${year}-${month}-01`);
-  //       if (
-  //         arrivalDate >= now &&
-  //         arrivalDate.getFullYear() - now.getFullYear() <= 1
-  //       ) {
-  //         arrivalDates.push(arrivalDate);
-  //       }
-  //     });
-  //   });
-  //   return arrivalDates;
-  // }
-
-  const list = [
-    { name: "03/02/2024" },
-    { name: "01/08/2024" },
-    { name: "03/02/2025" },
-    { name: "01/08/2025" },
-    { name: "03/02/2026" },
-    { name: "01/08/2026" },
-  ];
+  function getDepartureDates() {
+    const availableMonths = [2, 8];
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const departureDates = [];
+    for (let year = currentYear + 1; year <= currentYear + 3; year++) {
+      availableMonths.forEach((month) => {
+        const departureDay = month === 2 ? 3 : 1; // Set the departure day based on the month
+        const departureDate = new Date(year, month - 1, departureDay);
+        if (departureDate >= now) {
+          // Add the departure date only if it's in the future
+          departureDates.push(departureDate);
+        }
+      });
+    }
+    return departureDates;
+  }
+  const list = departureDates.map((date) => ({
+    name: date.toLocaleDateString("en-GB"),
+    value: date,
+  }));
 
   return (
     <Menu as="div" className="w-full h-full bg-white relative">
@@ -54,6 +44,7 @@ const Departure = () => {
               as="li"
               className="border-b last-of-type:border-b-0 h-12 hover:bg-accent hover:text-white w-full flex justify-center items-center cursor-pointer"
               key={index}
+              onClick={() => setSelectedDate(li.value)}
             >
               {li.name}
             </Menu.Item>
