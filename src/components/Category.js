@@ -44,7 +44,7 @@ const CategoryInfo = ({ id, name, description, rent }) => {
         to={`/category/${id}`}
         className="btn btn-secondary btn-sm max-w-[240px] mx-auto"
       >
-        Book now for ${rent}
+        Read more
       </Link>
     </>
   );
