@@ -16,7 +16,7 @@ const FilterCategories = () => {
           <CategoryType />
         </div>
         <button type="submit" className="btn btn-primary">
-          Check now
+          Book now
         </button>
       </div>
     </form>

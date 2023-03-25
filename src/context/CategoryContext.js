@@ -6,15 +6,21 @@ export const CategoryContext = createContext();
 
 const CategoryProvider = ({ children }) => {
   const [categories, setCategories] = useState(categoryData);
-  const [arrival, setArrival] = useState("03.02.2023");
-  const [departure, setDeparture] = useState("asda");
-  const [category, setCategory] = useState("asda");
-  console.log(
-    `arrival ${arrival}, departure ${departure}, category ${departure}`
-  );
+  const [arrival, setArrival] = useState("Arrival");
+  const [departure, setDeparture] = useState("Departure");
+  const [categoryType, setCategoryType] = useState("Category");
+
   return (
     <CategoryContext.Provider
-      value={{ categories, arrival, departure, category }}
+      value={{
+        categories,
+        arrival,
+        setArrival,
+        departure,
+        setDeparture,
+        categoryType,
+        setCategoryType,
+      }}
     >
       {children}
     </CategoryContext.Provider>

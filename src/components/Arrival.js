@@ -1,20 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { BsCalendar } from "react-icons/bs";
 import { Menu } from "@headlessui/react";
-
+import { CategoryContext } from "../context/CategoryContext";
 const Arrival = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const { arrival, setArrival } = useContext(CategoryContext);
   const arrivalDates = getArrivalDates();
 
   function getArrivalDates() {
     const availableMonths = [2, 8];
     const now = new Date();
     const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth() + 1;
-    const availableYears =
-      currentMonth >= availableMonths[1]
-        ? [currentYear + 1, currentYear + 2]
-        : [currentYear, currentYear + 1];
+
     const arrivalDates = [];
     for (let year = currentYear; year <= currentYear + 2; year++) {
       availableMonths.forEach((month) => {
@@ -37,7 +33,7 @@ const Arrival = () => {
   return (
     <Menu as="div" className="w-full h-full bg-white relative">
       <Menu.Button className="w-full h-full flex items-center justify-between px-8 ">
-        Arrival
+        {arrival}
         <BsCalendar className=" text-accent text-base" />
       </Menu.Button>
       <Menu.Items
@@ -50,7 +46,7 @@ const Arrival = () => {
               as="li"
               className="border-b last-of-type:border-b-0 h-12 hover:bg-accent hover:text-white w-full flex justify-center items-center cursor-pointer"
               key={index}
-              onClick={() => setSelectedDate(li.value)}
+              onClick={() => setArrival(li.name)}
             >
               {li.name}
             </Menu.Item>

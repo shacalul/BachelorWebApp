@@ -3,10 +3,16 @@ import React, { useState, useEffect } from "react";
 const TopAppBar = () => {
   const [topAppBar, setTopAppBar] = useState(false);
   useEffect(() => {
-    window.addEventListener("scroll", () => {
+    const handleScroll = () => {
       window.scrollY > 50 ? setTopAppBar(true) : setTopAppBar(false);
-    });
-  });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <topAppBar
       className={`${
@@ -37,7 +43,7 @@ const TopAppBar = () => {
             Contact
           </a>
           <a href="" className="hover:text-accent transition">
-            Tenant page
+            Administration
           </a>
         </nav>
       </div>

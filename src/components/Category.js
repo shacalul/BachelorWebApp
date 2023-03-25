@@ -46,6 +46,8 @@ const CategoryInfo = ({ id, name, description, rent }) => {
       >
         Read more
       </Link>
+
+      <div className="mt-4"></div>
     </>
   );
 };

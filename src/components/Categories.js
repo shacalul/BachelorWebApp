@@ -11,10 +11,11 @@ const Categories = () => {
     <section className="py-24">
       <div className="container mx-auto lg:px-0">
         {/*grid*/}
-
-        {categories.map((category) => {
-          return <Category category={category} key={category.id} />;
-        })}
+        <div className="grid grid-cols-3 gap-4">
+          {categories.map((category) => {
+            return <Category category={category} key={category.id} />;
+          })}
+        </div>
       </div>
     </section>
   );

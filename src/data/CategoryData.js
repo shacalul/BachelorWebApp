@@ -11,7 +11,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="640"
+        height="360"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -32,7 +32,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="640"
+        height="360"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -54,7 +54,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="640"
+        height="360"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -68,7 +68,7 @@ export const categoryData = [
     id: 4,
     name: "Category C",
     description:
-      "Category C is a one-storey flat for 1 person, which includes 1 room with bathroom and kitchen. The flat is equipped with a bed with top mattress, 1 wardrobe, 1 desk with table lamp, swivel chair and access to wireless internet. The kitchen is fully equipped. When moving in, you will receive a start package that includes a pillow, duvet, linen and sheets.",
+      "Category C is a one-storey flat for 1 person or a couple, which includes 1 room with a comfortable bed and top mattress, a spacious wardrobe, a cozy desk with a table lamp, a swivel chair, and access to wireless internet. The fully-equipped kitchen is perfect for cooking your favorite meals. When moving in, you will receive a start package that includes a pillow, duvet, linen, and sheets, so you can settle in quickly and comfortably.",
     rent: 3190,
     consumption: 650,
     deposit: 6200,
@@ -76,7 +76,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="640"
+        height="360"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -98,7 +98,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="640"
+        height="360"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -120,7 +120,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="640"
+        height="360"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -142,7 +142,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="640"
+        height="360"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
