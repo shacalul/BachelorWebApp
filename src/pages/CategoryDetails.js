@@ -13,12 +13,21 @@ const CategoryDetails = () => {
   const { id } = useParams();
   console.log(id);
 
+  const category = categories.find((category) => category.id === Number(id));
+
   const { name, description, rent, consumption, deposit, moveInPrice, images } =
-    categories.find((category) => category.id === Number(id));
+    category;
 
   return (
     <section className="bg-pink-200">
-      <div className="bg-room h-[560px]"></div>
+      <div className="bg-category bg-cover h-[560px] bg-center relative flex justify-center items-center">
+        {images}
+      </div>
+      <div className="container mx-auto">
+        <div className="flex flex-col lg:flex-row h-full py-24">
+          <div className="w-full h-full lg:w-[60%]">Lorem ipsum pula mea</div>
+        </div>
+      </div>
     </section>
   );
 };
