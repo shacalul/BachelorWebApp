@@ -11,7 +11,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="360"
+        height="640"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -32,7 +32,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="360"
+        height="640"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -54,7 +54,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="360"
+        height="640"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -76,7 +76,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="360"
+        height="640"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -98,7 +98,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="360"
+        height="640"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -120,7 +120,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="360"
+        height="640"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen
@@ -142,7 +142,7 @@ export const categoryData = [
     images: [
       <iframe
         width="100%"
-        height="360"
+        height="640"
         frameBorder="0"
         allow="xr-spatial-tracking; gyroscope; accelerometer"
         allowFullScreen

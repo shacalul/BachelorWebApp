@@ -7,7 +7,7 @@ import BottomAppbar from "./components/Navbar/BottomAppBar";
 //pages imports
 import Home from "./pages/Home";
 import CategoryDetails from "./pages/CategoryDetails";
-
+import Contact from "./pages/Contact";
 //react router
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -20,12 +20,16 @@ const router = createBrowserRouter([
     path: "/category/:id",
     element: <CategoryDetails />,
   },
+  {
+    path: "/contact",
+    element: <Contact />,
+  },
 ]);
 
 const App = () => {
   return (
     <div>
-      <TopAppbar />
+      <TopAppbar currentPage={window.location.pathname} />
       <RouterProvider router={router} />
       <BottomAppbar />
     </div>

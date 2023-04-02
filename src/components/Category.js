@@ -64,8 +64,8 @@ const Category = ({ category }) => {
     images,
   } = category;
   return (
-    <div className="bg-white shadow-2xl min-h-[500px]group py-4 my-8" key={id}>
-      <div className="overflow-hidden">
+    <div className="bg-white shadow-2xl  min-h-[500px]group py-4 my-8" key={id}>
+      <div className="overflow-hidden w-full">
         <div>{images}</div>
       </div>
       <PriceDetails

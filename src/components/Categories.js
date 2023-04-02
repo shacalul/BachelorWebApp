@@ -10,6 +10,12 @@ const Categories = () => {
   return (
     <section className="py-24">
       <div className="container mx-auto lg:px-0">
+        <div className="text-center">
+          <div className="font-tertiary uppercase text-[15px] tracking-[6px]">
+            Student Village Kamtjatka
+          </div>
+          <h2 className="font-primary text-[45px] mb-4">Room categories</h2>
+        </div>
         {/*grid*/}
         <div className="grid grid-cols-3 gap-4">
           {categories.map((category) => {

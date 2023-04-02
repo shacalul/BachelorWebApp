@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import Arrival from "../components/Arrival";
 import Departure from "../components/Departure";
-import FilterCategories from "../components/FilterCategories";
+import CategoryType from "../components/CategoryType";
 
 import { CategoryContext } from "../context/CategoryContext";
 import { FaCheck } from "react-icons/fa";
@@ -19,13 +19,35 @@ const CategoryDetails = () => {
     category;
 
   return (
-    <section className="bg-pink-200">
-      <div className="bg-category bg-cover h-[560px] bg-center relative flex justify-center items-center">
+    <section>
+      <div className="w-full h-[640px] relative flex justify-center items-center ">
         {images}
       </div>
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row h-full py-24">
-          <div className="w-full h-full lg:w-[60%]">Lorem ipsum pula mea</div>
+          <div className="w-full h-full lg:w-[60%] px-6">
+            <h2 className="h2">{name}</h2>
+            <p className="mb-8">{description}</p>
+          </div>
+          <div className="w-full h-full lg:w-[40%]">
+            {/* reservation */}
+            <div className="py-8 px-6 bg-accent/20 mb-12">
+              <div className="flex flex-col space-y-4 mb-4">
+                <div className="h-[60px]">
+                  <Arrival />
+                </div>
+                <div className="h-[60px]">
+                  <Departure />
+                </div>
+                <div className="h-[60px]">
+                  <CategoryType />
+                </div>
+              </div>
+              <button className="btn btn-large btn-primary w-full h-[60px]">
+                Book now
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
