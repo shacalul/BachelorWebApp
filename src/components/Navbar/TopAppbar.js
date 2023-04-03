@@ -15,7 +15,7 @@ const TopAppBar = ({ currentPage }) => {
   }, []);
 
   const headerBgColor = () => {
-    if (currentPage === "/contact") {
+    if (currentPage === "/contact" || "/bookaroom") {
       return "bg-black py-6 shadow-lg";
     } else {
       return "bg-transparent py-8";
@@ -42,7 +42,7 @@ const TopAppBar = ({ currentPage }) => {
           <a href="" className="hover:text-accent transition">
             Facilities
           </a>
-          <a href="" className="hover:text-accent transition">
+          <a href="bookaroom" className="hover:text-accent transition">
             Book a room
           </a>
           <a href="/contact" className="hover:text-accent transition">

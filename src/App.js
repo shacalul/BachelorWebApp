@@ -8,6 +8,7 @@ import BottomAppbar from "./components/Navbar/BottomAppBar";
 import Home from "./pages/Home";
 import CategoryDetails from "./pages/CategoryDetails";
 import Contact from "./pages/Contact";
+import BookRoom from "./pages/BookRoom";
 //react router
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/contact",
     element: <Contact />,
+  },
+  {
+    path: "bookaroom",
+    element: <BookRoom />,
   },
 ]);
 
