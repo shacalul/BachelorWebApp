@@ -15,7 +15,7 @@ const TopAppBar = ({ currentPage }) => {
   }, []);
 
   const headerBgColor = () => {
-    if (currentPage === "/contact" || "/bookaroom") {
+    if (currentPage === "/contact" || currentPage === "/bookaroom") {
       return "bg-black py-6 shadow-lg";
     } else {
       return "bg-transparent py-8";

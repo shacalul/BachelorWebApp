@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 import BookRoom from "./pages/BookRoom";
 //react router
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ThemeProvider } from "@material-tailwind/react";
 
 const router = createBrowserRouter([
   {
@@ -34,9 +35,11 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <div>
-      <TopAppbar currentPage={window.location.pathname} />
-      <RouterProvider router={router} />
-      <BottomAppbar />
+      <ThemeProvider>
+        <TopAppbar currentPage={window.location.pathname} />
+        <RouterProvider router={router} />
+        <BottomAppbar />
+      </ThemeProvider>
     </div>
   );
 };
