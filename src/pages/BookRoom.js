@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Phone } from "react-telephone";
 import { useCountries } from "use-react-countries";
 import { Select, Option } from "@material-tailwind/react";
-
+import { arrivalList } from "../components/Arrival";
+import { departureList } from "../components/Departure";
+import { categoryData } from "../data/CategoryData";
+import InfoModal from "../components/InfoModal";
 const BookRoom = () => {
   const { countries } = useCountries();
+  const [firstName, setFirstName] = useState("");
+
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+
   return (
     <div className="min-h-screen">
       <div class="flex items-center justify-center p-10 py-10">
@@ -17,7 +26,7 @@ const BookRoom = () => {
               information and we'll take care of the rest.
             </p>
             <div class="-mx-3 flex flex-wrap">
-              <div class="w-full px-3 sm:w-1/3">
+              <div class="w-full px-3 sm:w-1/2">
                 <div class="mb-5">
                   <label
                     for="fName"
@@ -27,31 +36,17 @@ const BookRoom = () => {
                   </label>
                   <input
                     type="text"
-                    name="fName"
-                    id="fName"
+                    name="firstName"
+                    id="firstName"
                     placeholder="First Name"
+                    value={firstName}
+                    onChange={handleFirstNameChange}
                     class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                   />
                 </div>
               </div>
-              <div class="w-full px-3 sm:w-1/3">
-                <div class="mb-5">
-                  <label
-                    for="lName"
-                    class="mb-3 block text-base font-medium text-[#07074D]"
-                  >
-                    Middle Name
-                  </label>
-                  <input
-                    type="text"
-                    name="mName"
-                    id="mName"
-                    placeholder="(optional)"
-                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                  />
-                </div>
-              </div>
-              <div class="w-full px-3 sm:w-1/3">
+
+              <div class="w-full px-3 sm:w-1/2">
                 <div class="mb-5">
                   <label
                     for="lName"
@@ -116,37 +111,76 @@ const BookRoom = () => {
                 </div>
               </div>
             </div>
-            <div class="mb-5">
-              <label class="mb-3 block text-base font-medium text-[#07074D]">
-                Country Of Provenience
-              </label>
-              <div className="w-full">
-                <Select
-                  size="lg"
-                  label="Select Country"
-                  selected={(element) =>
-                    element &&
-                    React.cloneElement(element, {
-                      className:
-                        "flex items-center px-0 gap-2 pointer-events-none",
-                    })
-                  }
-                >
-                  {countries.map(({ name, flags }) => (
-                    <Option
-                      key={name}
-                      value={name}
-                      className="flex items-center gap-2"
+            <div class="-mx-3 flex flex-wrap">
+              <div class="w-full px-3 sm:w-1/2">
+                <div class="mb-5">
+                  <label class="mb-3 block text-base font-medium text-[#07074D]">
+                    Nationality
+                  </label>
+                  <div className="w-full">
+                    <Select
+                      size="lg"
+                      label="Select Nationality"
+                      selected={(element) =>
+                        element &&
+                        React.cloneElement(element, {
+                          className:
+                            "flex items-center px-0 gap-2 pointer-events-none",
+                        })
+                      }
                     >
-                      <img
-                        src={flags.svg}
-                        alt={name}
-                        className="h-5 w-5 rounded-full object-cover"
-                      />
-                      {name}
-                    </Option>
-                  ))}
-                </Select>
+                      {countries.map(({ name, flags }) => (
+                        <Option
+                          key={name}
+                          value={name}
+                          className="flex items-center gap-2"
+                        >
+                          <img
+                            src={flags.svg}
+                            alt={name}
+                            className="h-5 w-5 rounded-full object-cover"
+                          />
+                          {name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                </div>
+              </div>
+              <div class="w-full px-3 sm:w-1/2">
+                <div class="mb-5">
+                  <label class="mb-3 block text-base font-medium text-[#07074D]">
+                    Country
+                  </label>
+                  <div className="w-full">
+                    <Select
+                      size="lg"
+                      label="Select Country"
+                      selected={(element) =>
+                        element &&
+                        React.cloneElement(element, {
+                          className:
+                            "flex items-center px-0 gap-2 pointer-events-none",
+                        })
+                      }
+                    >
+                      {countries.map(({ name, flags }) => (
+                        <Option
+                          key={name}
+                          value={name}
+                          className="flex items-center gap-2"
+                        >
+                          <img
+                            src={flags.svg}
+                            alt={name}
+                            className="h-5 w-5 rounded-full object-cover"
+                          />
+                          {name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="-mx-3 flex flex-wrap">
@@ -308,38 +342,42 @@ const BookRoom = () => {
               </div>
             </div>
             <div class="-mx-3 flex flex-wrap">
-              <div class="w-full px-3 sm:w-1/2">
-                <div class="mb-5">
+              <div className="w-full px-3 sm:w-1/2">
+                <div className="mb-5">
                   <label
-                    for="fName"
-                    class="mb-3 block text-base font-medium text-[#07074D]"
+                    className="mb-3 block text-base font-medium text-[#07074D]"
+                    htmlFor="sProgram"
                   >
                     Start Of Programme
                   </label>
-                  <input
-                    type="text"
-                    name="uniStartDate"
-                    id="uniStartDate"
-                    placeholder="(dd.mm.yyyy)"
-                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                  />
+                  <div className="w-full border " name="sProgram" id="sProgram">
+                    <Select size="lg" label="Select Date">
+                      {arrivalList.map((option) => (
+                        <Option key={option.value} value={option.value}>
+                          {option.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
                 </div>
               </div>
-              <div class="w-full px-3 sm:w-1/2">
-                <div class="mb-5">
+              <div className="w-full px-3 sm:w-1/2">
+                <div className="mb-5">
                   <label
-                    for="lName"
-                    class="mb-3 block text-base font-medium text-[#07074D]"
+                    className="mb-3 block text-base font-medium text-[#07074D]"
+                    htmlFor="eProgram"
                   >
                     End Of Programme
                   </label>
-                  <input
-                    type="text"
-                    name="uniFinishDate"
-                    id="uniFinishDate"
-                    placeholder="(dd.mm.yyyy)"
-                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                  />
+                  <div className="w-full border " name="eProgram" id="eProgram">
+                    <Select size="lg" label="Select Date">
+                      {departureList.map((option) => (
+                        <Option key={option.value} value={option.value}>
+                          {option.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -356,56 +394,62 @@ const BookRoom = () => {
                 id="roomCategoryDropDown"
               >
                 <Select size="lg" label="Select Room Category">
-                  <Option>Material Tailwind HTML</Option>
-                  <Option>Material Tailwind React</Option>
-                  <Option>Material Tailwind Vue</Option>
-                  <Option>Material Tailwind Angular</Option>
-                  <Option>Material Tailwind Svelte</Option>
+                  {categoryData.map((category) => (
+                    <Option key={category.id}>{category.name}</Option>
+                  ))}
                 </Select>
               </div>
             </div>
             <div class="-mx-3 flex flex-wrap">
-              <div class="w-full px-3 sm:w-1/2">
-                <div class="mb-5">
+              <div className="w-full px-3 sm:w-1/2">
+                <div className="mb-5">
                   <label
-                    for="arrivalBooking"
-                    class="mb-3 block text-base font-medium text-[#07074D]"
+                    className="mb-3 block text-base font-medium text-[#07074D]"
+                    htmlFor="arrivalDepartureDropDown"
                   >
-                    Arrival
+                    Arrival Date
                   </label>
-                  <input
-                    type="text"
-                    name="arrivalBooking"
-                    id="arrivalBooking"
-                    placeholder="(dd.mm.yyyy)"
-                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                  />
+                  <div
+                    className="w-full border "
+                    name="arrivalDepartureDropDown"
+                    id="arrivalDepartureDropDown"
+                  >
+                    <Select size="lg" label="Select Date">
+                      {arrivalList.map((option) => (
+                        <Option key={option.value} value={option.value}>
+                          {option.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
                 </div>
               </div>
-              <div class="w-full px-3 sm:w-1/2">
-                <div class="mb-5">
+              <div className="w-full px-3 sm:w-1/2">
+                <div className="mb-5">
                   <label
-                    for="departureBooking"
-                    class="mb-3 block text-base font-medium text-[#07074D]"
+                    className="mb-3 block text-base font-medium text-[#07074D]"
+                    htmlFor="departureDepartureDropDown"
                   >
-                    Departure
+                    Departure Date
                   </label>
-                  <input
-                    type="text"
-                    name="departureBooking"
-                    id="departureBooking"
-                    placeholder="(dd.mm.yyyy)"
-                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                  />
+                  <div
+                    className="w-full border "
+                    name="departureDepartureDropDown"
+                    id="departureDepartureDropDown"
+                  >
+                    <Select size="lg" label="Select Date">
+                      {departureList.map((option) => (
+                        <Option key={option.value} value={option.value}>
+                          {option.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div>
-              <button class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none ">
-                Submit
-              </button>
-            </div>
+            <InfoModal firstName={firstName} />
           </div>
         </div>
       </div>

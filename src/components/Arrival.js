@@ -1,34 +1,34 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { BsCalendar } from "react-icons/bs";
 import { Menu } from "@headlessui/react";
 import { CategoryContext } from "../context/CategoryContext";
-const Arrival = () => {
-  const { arrival, setArrival } = useContext(CategoryContext);
-  const arrivalDates = getArrivalDates();
 
-  function getArrivalDates() {
-    const availableMonths = [2, 8];
-    const now = new Date();
-    const currentYear = now.getFullYear();
+export function getArrivalDates() {
+  const availableMonths = [2, 8];
+  const now = new Date();
+  const currentYear = now.getFullYear();
 
-    const arrivalDates = [];
-    for (let year = currentYear; year <= currentYear + 2; year++) {
-      availableMonths.forEach((month) => {
-        const arrivalDay = month === 2 ? 3 : 1; // Set the arrival day based on the month
-        const arrivalDate = new Date(year, month - 1, arrivalDay);
-        if (arrivalDate >= now) {
-          // Add the arrival date only if it's in the future
-          arrivalDates.push(arrivalDate);
-        }
-      });
-    }
-    return arrivalDates;
+  const arrivalDates = [];
+  for (let year = currentYear; year <= currentYear + 2; year++) {
+    availableMonths.forEach((month) => {
+      const arrivalDay = month === 2 ? 3 : 1; // Set the arrival day based on the month
+      const arrivalDate = new Date(year, month - 1, arrivalDay);
+      if (arrivalDate >= now) {
+        // Add the arrival date only if it's in the future
+        arrivalDates.push(arrivalDate);
+      }
+    });
   }
+  return arrivalDates;
+}
 
-  const list = arrivalDates.map((date) => ({
-    name: date.toLocaleDateString("en-GB"),
-    value: date,
-  }));
+export const arrivalList = getArrivalDates().map((date) => ({
+  name: date.toLocaleDateString("en-GB"),
+  value: date,
+}));
+
+export default function Arrival() {
+  const { arrival, setArrival } = useContext(CategoryContext);
 
   return (
     <Menu as="div" className="w-full h-full bg-white relative">
@@ -40,7 +40,7 @@ const Arrival = () => {
         as="ul"
         className="bg-white absolute w-full flex flex-col z-40"
       >
-        {list.map((li, index) => {
+        {arrivalList.map((li, index) => {
           return (
             <Menu.Item
               as="li"
@@ -55,6 +55,4 @@ const Arrival = () => {
       </Menu.Items>
     </Menu>
   );
-};
-
-export default Arrival;
+}
