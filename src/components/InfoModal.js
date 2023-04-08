@@ -5,12 +5,12 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-
+import { useNavigate } from "react-router-dom";
 export default function InfoModal({ firstName }) {
   const [size, setSize] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const handleOpen = (value) => setSize(value);
-
+  const navigate = useNavigate();
   const message = `Dear ${firstName},
   
 
@@ -87,7 +87,12 @@ export default function InfoModal({ firstName }) {
             <div class="w-full px-3 sm:w-1/2">
               <div class="mb-5">
                 <button
-                  onClick={() => handleOpen()}
+                  onClick={() => {
+                    if (isChecked) {
+                      handleOpen();
+                      navigate("/checkoutform");
+                    }
+                  }}
                   className={`btn btn-secondary btn-sm w-full mx-auto ${
                     !isChecked
                       ? "bg-gray-500 bg-opacity-50 cursor-not-allowed disabled:pointer-events-none"

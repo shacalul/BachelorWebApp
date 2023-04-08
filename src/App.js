@@ -9,35 +9,26 @@ import Home from "./pages/Home";
 import CategoryDetails from "./pages/CategoryDetails";
 import Contact from "./pages/Contact";
 import BookRoom from "./pages/BookRoom";
+import CheckoutForm from "./pages/CheckoutForm";
 //react router
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "@material-tailwind/react";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/category/:id",
-    element: <CategoryDetails />,
-  },
-  {
-    path: "/contact",
-    element: <Contact />,
-  },
-  {
-    path: "bookaroom",
-    element: <BookRoom />,
-  },
-]);
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const App = () => {
   return (
     <div>
       <ThemeProvider>
-        <TopAppbar currentPage={window.location.pathname} />
-        <RouterProvider router={router} />
+        <TopAppbar />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/category/:id" element={<CategoryDetails />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/bookaroom" element={<BookRoom />} />
+            <Route path="/checkoutform" element={<CheckoutForm />} />
+          </Routes>
+        </BrowserRouter>
         <BottomAppbar />
       </ThemeProvider>
     </div>
