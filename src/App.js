@@ -19,7 +19,7 @@ const App = () => {
   return (
     <div>
       <ThemeProvider>
-        <TopAppbar />
+        <TopAppbar currentPage={window.location.pathname} />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
