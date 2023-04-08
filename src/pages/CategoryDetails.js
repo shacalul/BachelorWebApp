@@ -6,7 +6,6 @@ import Departure from "../components/Departure";
 import CategoryType from "../components/CategoryType";
 
 import { CategoryContext } from "../context/CategoryContext";
-import { FaCheck } from "react-icons/fa";
 
 const CategoryDetails = () => {
   const { categories } = useContext(CategoryContext);

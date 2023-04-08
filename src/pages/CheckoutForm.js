@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const CheckoutForm = () => {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname === "/checkout") {
+      window.location.reload();
+    }
+  }, [location]);
   return (
     <div class="relative mx-auto w-full bg-white">
       <div class="grid min-h-screen grid-cols-10">

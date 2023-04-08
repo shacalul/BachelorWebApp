@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 
 const TopAppBar = ({ currentPage }) => {
   const [topAppBar, setTopAppBar] = useState(false);
+  const [hideTopAppBar, setHideTopAppBar] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,6 +15,14 @@ const TopAppBar = ({ currentPage }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (currentPage === "/checkoutform") {
+      setHideTopAppBar(true);
+    } else {
+      setHideTopAppBar(false);
+    }
+  }, [currentPage]);
 
   const headerBgColor = useMemo(() => {
     if (currentPage === "/contact" || currentPage === "/bookaroom") {
@@ -46,14 +55,14 @@ const TopAppBar = ({ currentPage }) => {
     },
   ];
 
-  return (
+  return hideTopAppBar ? null : (
     <header
       className={`${
         topAppBar ? "bg-white py-6 shadow-lg" : headerBgColor
       } fixed z-50 w-full transition-all duration-500`}
     >
       <div className="container mx-auto flex flex-col items-center gap-y-6 lg:flex-row lg:justify-between lg:gap-y-0">
-        <a href="/" className="text-white"></a>
+        <button href="/" className=""></button>
         <ul
           className={`${
             topAppBar ? "text-primary" : "text-white"
