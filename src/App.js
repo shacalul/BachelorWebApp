@@ -9,12 +9,13 @@ import Home from "./pages/Home";
 import CategoryDetails from "./pages/CategoryDetails";
 import Contact from "./pages/Contact";
 import BookRoom from "./pages/BookRoom";
-import CheckoutForm from "./pages/CheckoutForm";
+import Checkout from "./pages/Checkout";
 
 //react router
 import { ThemeProvider } from "@material-tailwind/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import AdministrationSignin from "./pages/AdministrationSignin";
+import AdministrationSignUp from "./pages/AdministrationSignUp";
 const App = () => {
   return (
     <div>
@@ -64,8 +65,17 @@ const App = () => {
             />
             <Route
               path="/checkoutform"
-              element={<CheckoutForm hideAppbars={true} />}
+              element={<Checkout hideAppbars={true} />}
             />
+            <Route
+              path="/administrationSignin"
+              element={<AdministrationSignin />}
+            />
+            <Route
+            path="/administrationSignup"
+            element={<AdministrationSignUp/>}
+            />
+
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

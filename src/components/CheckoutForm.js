@@ -1,6 +1,11 @@
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 const CheckoutForm = () => {
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate("/administrationSignin");
+  }
   return (
     <div class="relative mx-auto w-full bg-white">
       <div class="grid min-h-screen grid-cols-10">
@@ -94,6 +99,7 @@ const CheckoutForm = () => {
             <button
               type="submit"
               class="mt-4 inline-flex w-full items-center justify-center rounded bg-teal-600 py-2.5 px-4 text-base font-semibold tracking-wide text-white text-opacity-80 outline-none ring-offset-2 transition hover:text-opacity-100 focus:ring-2 focus:ring-teal-500 sm:text-lg"
+              onClick={handleClick}
             >
               Place Order
             </button>

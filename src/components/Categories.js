@@ -8,7 +8,7 @@ const Categories = () => {
   const { categories } = useContext(CategoryContext);
 
   return (
-    <section className="py-24">
+    <section id="categories" className="py-24">
       <div className="container mx-auto lg:px-0">
         <div className="text-center">
           <div className="font-tertiary uppercase text-[15px] tracking-[6px]">

@@ -38,7 +38,7 @@ const TopAppBar = ({ currentPage }) => {
       link: "/",
     },
     {
-      name: "Facilities",
+      name: "Rooms & Categories",
       link: "/",
     },
     {
@@ -51,7 +51,7 @@ const TopAppBar = ({ currentPage }) => {
     },
     {
       name: "Administration",
-      link: "/",
+      link: "/administrationSignin",
     },
   ];
 
