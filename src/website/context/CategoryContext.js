@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 //data
-import { categoryData } from "../data/CategoryData";
+import { categoryData } from "../data/CategoryData"
 //create context
 export const CategoryContext = createContext();
 

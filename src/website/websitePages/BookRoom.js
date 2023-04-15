@@ -1,5 +1,5 @@
 import React from "react";
-import BookRoomForm from "../components/BookRoomForm";
+import BookRoomForm from "../websiteComponents/BookRoomForm";
 const BookRoom = () => {
   
 

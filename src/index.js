@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import CategoryProvider from "./context/CategoryContext";
+import CategoryProvider from "./website/context/CategoryContext"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

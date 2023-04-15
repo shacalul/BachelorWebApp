@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import DetailsPagination from "../components/DetailsPagination";
+import DetailsPagination from "../websiteComponents/DetailsPagination";
 
 
 const CategoryDetails = () => {

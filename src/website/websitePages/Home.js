@@ -1,8 +1,8 @@
 import React from "react";
 //components
-import Categories from "../components/Categories";
-import FilterCategories from "../components/FilterCategories";
-import HomeCarousel from "../components/HomeCarousel";
+import Categories from "../websiteComponents/Categories";
+import FilterCategories from "../websiteComponents/FilterCategories";
+import HomeCarousel from "../websiteComponents/HomeCarousel";
 const Home = () => {
   return (
     <>

@@ -1,7 +1,7 @@
 import React from "react";
-import Arrival from "../components/Arrival";
-import Departure from "../components/Departure";
-import CategoryType from "../components/CategoryType";
+import Arrival from "../websiteComponents/Arrival";
+import Departure from "../websiteComponents/Departure";
+import CategoryType from "../websiteComponents/CategoryType";
 import { useNavigate } from "react-router-dom";
 const FilterCategories = () => {
   const navigate = useNavigate();

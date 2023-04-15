@@ -3,6 +3,11 @@ import sideImage from "../../assets/carouselImages/carouselThird.jpg";
 import {useNavigate} from "react-router-dom"
 const Signin = () => {
   const navigate = useNavigate();
+  
+  function handlelogInClick(){
+    navigate("/dashboard")
+    
+  }
 
   function handleClick() {
     navigate("/administrationSignup");
@@ -54,7 +59,7 @@ const Signin = () => {
               />
             </div>
 
-            <button type="submit" class="btn btn-primary w-full">
+            <button type="submit" class="btn btn-primary w-full"  onClick={handlelogInClick} >
               Login to your account
             </button>
             <div class="text-sm font-medium text-gray-500 dark:text-gray-400">

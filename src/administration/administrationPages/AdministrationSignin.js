@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Signin from "../components/Authentication/Signin";
+import Signin from "../administrationComponents/Signin";
 const AdministrationSignin = () => {
   return (
     <div>

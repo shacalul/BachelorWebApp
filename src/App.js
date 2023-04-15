@@ -1,21 +1,24 @@
 import React from "react";
 
 //components imports
-import TopAppbar from "./components/Navbar/TopAppbar";
-import BottomAppbar from "./components/Navbar/BottomAppBar";
-import ScrollToTop from "./components/ScrollToTop";
+import TopAppbar from "./website/Navbar/TopAppbar"
+import BottomAppbar from "./website/Navbar/BottomAppBar";
+import ScrollToTop from "./website/websiteComponents/ScrollToTop";
 //pages imports
-import Home from "./pages/Home";
-import CategoryDetails from "./pages/CategoryDetails";
-import Contact from "./pages/Contact";
-import BookRoom from "./pages/BookRoom";
-import Checkout from "./pages/Checkout";
-
+import Home from "./website/websitePages/Home";
+import CategoryDetails from "./website/websitePages/CategoryDetails";
+import Contact from "./website/websitePages/Contact"
+import BookRoom from "./website/websitePages/BookRoom";
+import Checkout from "./website/websitePages/Checkout";
+import AdministrationSignin from "./administration/administrationPages/AdministrationSignin";
+import AdministrationSignUp from "./administration/administrationPages/AdministrationSignUp";
 //react router
 import { ThemeProvider } from "@material-tailwind/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import AdministrationSignin from "./pages/AdministrationSignin";
-import AdministrationSignUp from "./pages/AdministrationSignUp";
+
+import SideBarAdministration from "./administration/administrationComponents/SideBarAdministration"
+import Dashboard from "./administration/administrationPages/Dashboard";
+
 const App = () => {
   return (
     <div>
@@ -75,10 +78,18 @@ const App = () => {
             path="/administrationSignup"
             element={<AdministrationSignUp/>}
             />
-
+            <Route
+           
+              path="/dashboard"             
+              element={    <>
+              <SideBarAdministration/>
+              <Dashboard hideAppbars={true} /></>}    
+            />
+             
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
+    
     </div>
   );
 };
