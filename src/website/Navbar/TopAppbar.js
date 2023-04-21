@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { NavLink } from "react-router-dom";
 
 const TopAppBar = ({ currentPage }) => {
   const [topAppBar, setTopAppBar] = useState(false);
@@ -70,7 +71,7 @@ const TopAppBar = ({ currentPage }) => {
         >
           {Links.map((link) => (
             <li key={link.name} className="hover:text-accent transition">
-              <a href={link.link}>{link.name}</a>
+              <NavLink to={link.link}>{link.name}</NavLink>
             </li>
           ))}
         </ul>
