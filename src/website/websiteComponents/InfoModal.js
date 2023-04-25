@@ -45,7 +45,7 @@ export default function InfoModal({ firstName }) {
         </button>
       </div>
       <Dialog open={size === "xl"} size={size} handler={handleOpen}>
-        <DialogHeader className="flex items-center justify-center ">
+        <DialogHeader className="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none">
           <div
             className="font-serif 
           "

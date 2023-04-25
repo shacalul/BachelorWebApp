@@ -2,7 +2,7 @@ import api from "./api";
 
 export function getCustomers() {
   return api
-    .get(`/customers`)
+    .get("/customers")
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
@@ -30,7 +30,7 @@ export function createCustomer(customerData) {
     });
 }
 
-export function updateCustomer(id,customerData) {
+export function updateCustomer(id, customerData) {
   return api
     .put(`/customers/${id}`, customerData)
     .then((response) => response.data)
