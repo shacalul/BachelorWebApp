@@ -24,7 +24,6 @@ import Profile from "./administration/administrationPages/Profile";
 import Calendar from "./administration/administrationPages/Calendar";
 import Finances from "./administration/administrationPages/Finances";
 import Index from "./administration/administrationPages/Index";
-import CheckoutForm from "./website/websiteComponents/CheckoutForm";
 
 const App = () => {
   const AdminApp = () => {
