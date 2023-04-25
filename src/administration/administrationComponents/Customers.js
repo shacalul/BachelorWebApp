@@ -103,6 +103,8 @@ const Customers = () => {
 
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
+      <h2 class="h2 text-center ">Tenants</h2>
+
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full sm:w-1/2 px-3">
           <div className="mb-5">
@@ -129,7 +131,7 @@ const Customers = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for tenant"
+                placeholder="Search for tenants..."
               />
             </div>
           </div>
@@ -182,18 +184,21 @@ const Customers = () => {
                 <td className="px-6 py-4">{customer.phone_number}</td>
 
                 <td>
-                  <button
-                    className="customers__action"
-                    onClick={() => handleEdit(customer)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="customers__action customers__action--delete"
-                    onClick={() => handleDelete(customer.id)}
-                  >
-                    Delete
-                  </button>
+                  <div class="inline-flex">
+                    <button
+                      className="text-white bg-[#fde68a] hover:bg-[#fcd34d] focus:outline-none focus:ring-4  
+                      focus:ring-amber-300  dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-900 font-bold  py-2 px-4 rounded-l"
+                      onClick={() => handleEdit(customer)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-white bg-[#fca5a5] hover:bg-[#f87171] focus:outline-none focus:ring-4 focus:ring-red-300  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 font-bold py-2 px-4 rounded-r"
+                      onClick={() => handleDelete(customer.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
