@@ -15,7 +15,7 @@ const BookRoomForm = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{overflowY:'scroll'}}>
       <div class="flex items-center justify-center p-10 py-10">
         <div class="mx-auto w-full max-w-[550px]">
           <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">

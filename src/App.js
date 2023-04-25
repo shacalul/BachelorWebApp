@@ -79,10 +79,10 @@ const App = () => {
               }
             />
             <Route
-              path="/checkoutform"
+              path="/checkout"
               element={
                 <Layout currentPage={window.location.pathname}>
-                  <CheckoutForm />
+                  <Checkout />
                 </Layout>
               }
             />
