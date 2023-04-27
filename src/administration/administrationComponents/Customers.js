@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ReactPaginate from "react-paginate";
-
-import axios from "axios";
 import {
   getCustomers,
   createCustomer,
@@ -9,14 +6,13 @@ import {
   deleteCustomer,
 } from "../../api/customers";
 import "./Customers.css";
+import AddTenantsModal from "./AddTenantsModal";
 
 const Customers = () => {
-  const CUSTOMERS_PER_PAGE = 10;
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     surname: "",
@@ -24,7 +20,6 @@ const Customers = () => {
     phone: "",
     nationality: "",
   });
-  const [firstName, handleFirstNameChange] = useState("");
 
   useEffect(() => {
     fetchCustomers();
@@ -80,27 +75,11 @@ const Customers = () => {
       nationality: customer.nationality,
     });
   };
-
-  const openModal = () => {
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    resetForm();
-  };
-
-  const Modal = ({ onClose, children }) => (
-    <div className="modal fixed inset-0 flex items-center justify-center p-4 bg-black bg-opacity-50">
-      <div className="modal-content bg-white rounded p-4 max-w-lg mx-auto my-auto">
-        <button onClick={onClose} className="close-modal float-right mb-4">
-          &times;
-        </button>
-        {children}
-      </div>
-    </div>
+  const filteredCustomers = customers.filter((customer) =>
+    `${customer.firstName} ${customer.surname} ${customer.email} ${customer.phone_number} ${customer.nationality}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
   );
-
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
       <h2 class="h2 text-center ">Tenants</h2>
@@ -132,18 +111,15 @@ const Customers = () => {
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search for tenants..."
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
               />
             </div>
           </div>
         </div>
         <div className="w-full sm:w-1/2 px-3 text-right">
           <div className="mb-5">
-            <button
-              className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-              onClick={openModal}
-            >
-              Add Tenant
-            </button>
+            <AddTenantsModal style={{ overflowY: "scroll" }} />
           </div>
         </div>
       </div>
@@ -167,7 +143,7 @@ const Customers = () => {
             </tr>
           </thead>
           <tbody>
-            {customers.map((customer) => (
+            {filteredCustomers.map((customer) => (
               <tr
                 key={customer.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -204,45 +180,6 @@ const Customers = () => {
             ))}
           </tbody>
         </table>
-
-        {showModal && (
-          <Modal onClose={closeModal}>
-            <form className="customers__form" onSubmit={handleSubmit}>
-              <div class="w-full px-3 sm:w-1/2">
-                <div class="mb-5">
-                  <label
-                    for="fName"
-                    class="mb-3 block text-base font-medium text-[#07074D]"
-                  >
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    id="firstName"
-                    placeholder="First Name"
-                    value={firstName}
-                    onChange={handleFirstNameChange}
-                    class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                  />
-                </div>
-              </div>
-
-              <button className="customers__button" type="submit">
-                {isEditing ? "Update" : "Add"}
-              </button>
-              {isEditing && (
-                <button
-                  className="customers__button customers__button--cancel"
-                  type="button"
-                  onClick={resetForm}
-                >
-                  Cancel
-                </button>
-              )}
-            </form>
-          </Modal>
-        )}
       </div>
     </div>
   );
