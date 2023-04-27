@@ -1,13 +1,14 @@
 import React from "react";
 
 //components imports
-import TopAppbar from "./website/Navbar/TopAppbar"
+import Layout from "./website/Layout/Layout";
+import TopAppbar from "./website/Navbar/TopAppbar";
 import BottomAppbar from "./website/Navbar/BottomAppBar";
 import ScrollToTop from "./website/websiteComponents/ScrollToTop";
 //pages imports
 import Home from "./website/websitePages/Home";
 import CategoryDetails from "./website/websitePages/CategoryDetails";
-import Contact from "./website/websitePages/Contact"
+import Contact from "./website/websitePages/Contact";
 import BookRoom from "./website/websitePages/BookRoom";
 import Checkout from "./website/websitePages/Checkout";
 import AdministrationSignin from "./administration/administrationPages/AdministrationSignin";
@@ -16,10 +17,29 @@ import AdministrationSignUp from "./administration/administrationPages/Administr
 import { ThemeProvider } from "@material-tailwind/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import SideBarAdministration from "./administration/administrationComponents/SideBarAdministration"
-import Dashboard from "./administration/administrationPages/Dashboard";
+import AdminLayout from "./administration/administrationPages/AdminLayout";
+import Invoices from "./administration/administrationPages/Invoices";
+import Tenants from "./administration/administrationPages/Tenants";
+import Profile from "./administration/administrationPages/Profile";
+import Calendar from "./administration/administrationPages/Calendar";
+import Finances from "./administration/administrationPages/Finances";
+import Index from "./administration/administrationPages/Index";
 
 const App = () => {
+  const AdminApp = () => {
+    return (
+      <AdminLayout>
+        <Routes>
+          <Route path="" element={<Index />} />
+          <Route path="/tenants" element={<Tenants />} />
+          <Route path="/invoices" element={<Invoices />} />
+          <Route path="/finances" element={<Finances />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/calendar" element={<Calendar />} />
+        </Routes>
+      </AdminLayout>
+    );
+  };
   return (
     <div>
       <ThemeProvider>
@@ -29,67 +49,55 @@ const App = () => {
             <Route
               path="/"
               element={
-                <>
-                  <TopAppbar currentPage={window.location.pathname} />
+                <Layout currentPage={window.location.pathname}>
                   <Home />
-                  <BottomAppbar />
-                </>
+                </Layout>
               }
             />
             <Route
               path="/category/:id"
               element={
-                <>
-                  <TopAppbar currentPage={window.location.pathname} />
+                <Layout currentPage={window.location.pathname}>
                   <CategoryDetails />
-                  <BottomAppbar />
-                </>
+                </Layout>
               }
             />
             <Route
               path="/contact"
               element={
-                <>
-                  <TopAppbar currentPage={window.location.pathname} />
+                <Layout currentPage={window.location.pathname}>
                   <Contact />
-                  <BottomAppbar />
-                </>
+                </Layout>
               }
             />
             <Route
               path="/bookaroom"
               element={
-                <>
-                  <TopAppbar currentPage={window.location.pathname} />
+                <Layout currentPage={window.location.pathname}>
                   <BookRoom />
-                  <BottomAppbar />
-                </>
+                </Layout>
               }
             />
             <Route
-              path="/checkoutform"
-              element={<Checkout hideAppbars={true} />}
+              path="/checkout"
+              element={
+                <Layout currentPage={window.location.pathname}>
+                  <Checkout />
+                </Layout>
+              }
             />
             <Route
               path="/administrationSignin"
               element={<AdministrationSignin />}
             />
             <Route
-            path="/administrationSignup"
-            element={<AdministrationSignUp/>}
+              path="/administrationSignup"
+              element={<AdministrationSignUp />}
             />
-            <Route
-           
-              path="/dashboard"             
-              element={    <>
-              <SideBarAdministration/>
-              <Dashboard hideAppbars={true} /></>}    
-            />
-             
+            <Route path="/admin/*" element={<AdminApp />}></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
-    
     </div>
   );
 };
