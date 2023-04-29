@@ -4,16 +4,13 @@ on:
   push:
     branches:
       - master
-    
-permissions: 
-  contents: write
       
   # Allows to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: read-all|write-all
   pages: write
   id-token: write
 
