@@ -7,7 +7,8 @@ import {
 } from "../../api/customers";
 import "./Customers.css";
 import AddTenantsModal from "./AddTenantsModal";
-
+import EditTenantsModal from "./EditTenantsModal";
+import DeleteModal from "./DeleteModal";
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -161,19 +162,8 @@ const Customers = () => {
 
                 <td>
                   <div class="inline-flex">
-                    <button
-                      className="text-white bg-[#fde68a] hover:bg-[#fcd34d] focus:outline-none focus:ring-4  
-                      focus:ring-amber-300  dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-900 font-bold  py-2 px-4 rounded-l"
-                      onClick={() => handleEdit(customer)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="text-white bg-[#fca5a5] hover:bg-[#f87171] focus:outline-none focus:ring-4 focus:ring-red-300  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 font-bold py-2 px-4 rounded-r"
-                      onClick={() => handleDelete(customer.id)}
-                    >
-                      Delete
-                    </button>
+                    <EditTenantsModal />
+                    <DeleteModal />
                   </div>
                 </td>
               </tr>
