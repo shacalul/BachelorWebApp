@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { getFinances } from "../../api/finances";
 
-/*
+const BalanceCard = ({ balance }) => {
+	return (
+	  <div className="flex justify-between mb-4">
+		<div className="text-sm font-medium text-gray-500">Balance:</div>
+		<div className="text-lg font-bold">{balance}</div>
+	  </div>
+	);
+  };
+  
 
 const Finances = () => {
+  const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [finances, setFinances] = useState([]);
-  const [selectedFinance, setSelectedFinance] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [formData, setFormData] = useState({
-    name: "",
-    amount: "",
-    category: "",
-    description: "",
-  });
 
   useEffect(() => {
     fetchFinances();
@@ -22,58 +23,51 @@ const Finances = () => {
   const fetchFinances = async () => {
     try {
       const data = await getFinances();
-      setFinances(data);
+      // Initialize checked state for each finance object
+      const financesWithChecked = data.map((finance) => ({
+        ...finance,
+        isChecked: false,
+      }));
+      setFinances(financesWithChecked);
     } catch (error) {
       console.error("Error fetching finances:", error);
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      if (isEditing) {
-        await updateFinance({ ...formData, id: selectedFinance.id });
-      } else {
-        await createFinance(formData);
+  const handleCheckboxChange = (index) => {
+    const newFinances = [...finances];
+    newFinances[index].isChecked = !newFinances[index].isChecked;
+    setFinances(newFinances);
+    let truevalue = true;
+    finances.forEach((finance) => {
+      if (!finance.isChecked) {
+        truevalue = false;
       }
-      fetchFinances();
-      resetForm();
-    } catch (error) {
-      console.error("Error submitting finance:", error);
-    }
+    });
+    setIsCheckedAll(truevalue);
   };
 
-
-  /*const resetForm = () => {
-    setIsEditing(false);
-    setSelectedFinance(null);
-    setFormData({ name: "", email: "", phone: "" });
+  const handleCheckAllChange = () => {
+    const newFinances = finances.map((finance) => ({
+      ...finance,
+      isChecked: !finance.isChecked,
+    }));
+    setFinances(newFinances);
+    let truevalue = true;
+    finances.forEach((finance) => {
+      if (finance.isChecked) {
+        truevalue = false;
+      }
+    });
+    setIsCheckedAll(truevalue);
   };
-*/
-/*
-  const filteredFinances = finances.filter((finance) =>
-    `${finance.name} ${finance.amount} ${finance.category} ${finance.description}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
-  */
-const Finances = () => {
-  const [finances, setFinances] = useState([]);
-  useEffect(() => {
-    fetchFinances();
-  }, []);
 
-  const fetchFinances = async () => {
-    try {
-      const data = await getFinances();
-      setFinances(data);
-    } catch (error) {
-      console.error("Error fetching finances:", error);
-    }
-  };
+  
+
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
-      <h2 class="h2 text-center ">Balance</h2>
+      <h2 class="h2 text-center ">Finances</h2>
+	  <BalanceCard balance={1234.56} />
 
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full sm:w-1/2 px-3">
@@ -97,13 +91,13 @@ const Finances = () => {
                   ></path>
                 </svg>
               </div>
-              <input
+			  <input
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search for tenants..."
-                //value={searchQuery}
-                // onChange={(event) => setSearchQuery(event.target.value)}
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
               />
             </div>
           </div>
@@ -115,7 +109,7 @@ const Finances = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Name
+                Type
               </th>
               <th scope="col" className="px-6 py-3">
                 amount of money
@@ -125,15 +119,25 @@ const Finances = () => {
               </th>
 
               <th scope="col" className="px-6 py-3">
-                category
+                tenant
               </th>
               <th scope="col" className="px-6 py-3">
-                tenant
+                due date
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={isCheckedAll}
+                    onChange={() => handleCheckAllChange()}
+                  />
+                  <span className="ml-2">Balance all</span>
+                </div>
               </th>
             </tr>
           </thead>
           <tbody>
-            {finances.map((finance) => (
+            {finances.map((finance, index) => (
               <tr
                 key={finance.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -145,14 +149,17 @@ const Finances = () => {
                   <div class="text-base font-semibold">{finance.name}</div>
                 </td>
                 <td className="px-6 py-4">{finance.amountOfMoney}</td>
-                <td className="px-6 py-4">{finance.description}</td>
                 <td className="px-6 py-4">{finance.financeCategory.name}</td>
                 <td className="px-6 py-4">
                   {finance.customer.firstName} {finance.customer.surname}
                 </td>
-
-                <td>
-                  <div class="inline-flex"></div>
+                <td className="px-6 py-4">{finance.date}</td>
+                <td className="px-6 py-4">
+                  <input
+                    type="checkbox"
+                    checked={finance.isChecked}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
                 </td>
               </tr>
             ))}
@@ -164,3 +171,5 @@ const Finances = () => {
 };
 
 export default Finances;
+
+
