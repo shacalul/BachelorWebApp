@@ -2,23 +2,32 @@ import React, { useState, useEffect } from "react";
 import { getFinances } from "../../api/finances";
 
 const BalanceCard = ({ balance }) => {
-	return (
-	  <div className="flex justify-between mb-4">
-		<div className="text-sm font-medium text-gray-500">Balance:</div>
-		<div className="text-lg font-bold">{balance}</div>
-	  </div>
-	);
-  };
-  
+  return (
+    <div className="flex justify-between mb-4">
+      <div className="text-sm font-medium text-gray-500">Balance:</div>
+      <div className="text-lg font-bold">{balance}</div>
+    </div>
+  );
+};
 
 const Finances = () => {
   const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [finances, setFinances] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [result, setResult] = useState();
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const options = ["Deposit", "Rent", "Other"];
+
+  const handleDropDown = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
   useEffect(() => {
     fetchFinances();
+    getTotalBalance();
   }, []);
+  //when finance change get new balance with use effect
 
   const fetchFinances = async () => {
     try {
@@ -62,12 +71,18 @@ const Finances = () => {
     setIsCheckedAll(truevalue);
   };
 
-  
+  const getTotalBalance = () => {
+    let result = 0;
+    finances.forEach((finance) => {
+      result += parseInt(finance.amountOfMoney);
+    });
+    setResult(result);
+  };
 
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
       <h2 class="h2 text-center ">Finances</h2>
-	  <BalanceCard balance={1234.56} />
+      <BalanceCard balance={result} />
 
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full sm:w-1/2 px-3">
@@ -91,7 +106,7 @@ const Finances = () => {
                   ></path>
                 </svg>
               </div>
-			  <input
+              <input
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -102,8 +117,31 @@ const Finances = () => {
             </div>
           </div>
         </div>
-        <div className="w-full sm:w-1/2 px-3 text-right"></div>
+        <div className="w-full sm:w-1/2 text-right">
+			<div className="flex -mt-4 ml-24 justify-between ">
+		<div>
+            <select value={selectedOption} onChange={handleDropDown}>
+              <option value="">Month</option>
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <select value={selectedOption} onChange={handleDropDown}>
+              <option value="">Finance Type</option>
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div></div>
+        </div>
       </div>
+
       <div className="min-w-full">
         <table className="min-w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -171,5 +209,3 @@ const Finances = () => {
 };
 
 export default Finances;
-
-
