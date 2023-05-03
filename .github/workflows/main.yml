@@ -36,8 +36,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_SERNAME}}/clockbox:latest
-
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/clockbox:latest 
+          
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
