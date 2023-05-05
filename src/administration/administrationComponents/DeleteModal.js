@@ -1,7 +1,9 @@
 import { React, Fragment, useState } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 
-const DeleteModal = () => {
+import { deleteCustomer } from "../../api/customers";
+
+const DeleteModal = ({ id }) => {
   const [size, setSize] = useState(null);
   const handleOpen = (value) => setSize(value);
   const message = `Are you sure you want to delete this tenant? This action will remove their information from our system and cannot be undone.
@@ -12,6 +14,15 @@ const DeleteModal = () => {
     .split("\n")
     .map((para) => <p className="mb-4">{para}</p>);
 
+  const handleDelete = async () => {
+    console.log("Deleting customer with ID:", id);
+    try {
+      const response = await deleteCustomer(id);
+      console.log("Response:", response);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   return (
     <Fragment>
       <div>
@@ -24,7 +35,7 @@ const DeleteModal = () => {
       </div>
       <Dialog open={size === "sm"} size={size} handler={handleOpen}>
         <DialogBody divider>
-          <p>{formattedMessage}</p>
+          <p>{formattedMessage}</p> <span>{id}</span>
         </DialogBody>
         <DialogFooter>
           <div class="-mx-3 flex flex-wrap w-full">
@@ -40,7 +51,10 @@ const DeleteModal = () => {
             </div>
             <div class="w-full px-3 sm:w-1/2">
               <div class="mb-5">
-                <button className="btn btn-secondary btn-sm w-full mx-auto">
+                <button
+                  className="btn btn-secondary btn-sm w-full mx-auto"
+                  onClick={handleDelete}
+                >
                   Confirm
                 </button>
               </div>
