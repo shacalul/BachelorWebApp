@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
+import ProfileInfo from "../administrationComponents/ProfileInfo";
 
 const Profile = () => {
-	return (
-		<>
-			<h2>Profile</h2>
-		</>
-	);
+  return (
+    <>
+      <ProfileInfo />
+    </>
+  );
 };
 
 export default Profile;

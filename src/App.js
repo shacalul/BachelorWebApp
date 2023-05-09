@@ -25,6 +25,7 @@ import Calendar from "./administration/administrationPages/Calendar";
 import Finances from "./administration/administrationPages/Finances";
 import Index from "./administration/administrationPages/Index";
 import Administrators from "./administration/administrationPages/Administrators";
+import ProfileInfo from "./administration/administrationComponents/ProfileInfo";
 
 const App = () => {
   const AdminApp = () => {
