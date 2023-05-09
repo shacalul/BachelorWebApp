@@ -1,9 +1,9 @@
 import React from "react";
-
+import Administrator from "../administrationComponents/Administrator";
 const Administrators = () => {
   return (
     <>
-      <h2>Administrators</h2>
+      <Administrator />
     </>
   );
 };
