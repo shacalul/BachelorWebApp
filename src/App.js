@@ -24,6 +24,7 @@ import Profile from "./administration/administrationPages/Profile";
 import Calendar from "./administration/administrationPages/Calendar";
 import Finances from "./administration/administrationPages/Finances";
 import Index from "./administration/administrationPages/Index";
+import Administrators from "./administration/administrationPages/Administrators";
 
 const App = () => {
   const AdminApp = () => {
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/finances" element={<Finances />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/administrators" element={<Administrators />} />
         </Routes>
       </AdminLayout>
     );
