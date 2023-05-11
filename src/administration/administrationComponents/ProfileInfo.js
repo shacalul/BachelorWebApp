@@ -52,128 +52,126 @@ const ProfileInfo = ({ onSubmit }) => {
 
   return (
     <Fragment>
-      <div style={{ overflow: "hidden" }}>
-        <div style={{ maxHeight: "500px" }}>
-          <div className="min-h-screen">
-            <div class="flex items-center justify-center p-10 py-10">
-              <div class="mx-auto w-full max-w-[550px]">
-                <div class="py-4 lg:py-4 px-4 mx-auto max-w-screen-md">
-                  <h2 class="h2 text-center ">Profile</h2>
+      <div style={{ maxHeight: "500px" }}>
+        <div className="min-h-screen">
+          <div class="flex items-center justify-center ">
+            <div class="mx-auto w-full max-w-[550px]">
+              <div class="py-4 lg:py-4 px-4 mx-auto max-w-screen-md">
+                <h2 class="h2 text-center ">Profile</h2>
 
+                <div class="-mx-3 flex flex-wrap">
+                  <div class="w-full px-3 sm:w-1/2">
+                    <div class="mb-5">
+                      <label
+                        for="fName"
+                        class="mb-3 block text-base font-medium text-[#07074D]"
+                      >
+                        First Name
+                      </label>
+                      <input
+                        ref={fNameRef}
+                        type="text"
+                        name="firstName"
+                        id="firstName"
+                        placeholder="First Name"
+                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="w-full px-3 sm:w-1/2">
+                    <div class="mb-5">
+                      <label
+                        for="lName"
+                        class="mb-3 block text-base font-medium text-[#07074D]"
+                      >
+                        Last Name
+                      </label>
+                      <input
+                        ref={lNameRef}
+                        type="text"
+                        name="lName"
+                        id="lName"
+                        placeholder="Last Name"
+                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-5">
+                  <label class="mb-3 block text-base font-medium text-[#07074D]">
+                    Email
+                  </label>
+                  <div class="flex items-center space-x-6">
+                    <div class="flex items-center w-full">
+                      <input
+                        ref={emailRef}
+                        type="text"
+                        name="email"
+                        id="email"
+                        placeholder="Email"
+                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-5">
                   <div class="-mx-3 flex flex-wrap">
                     <div class="w-full px-3 sm:w-1/2">
-                      <div class="mb-5">
+                      <div>
                         <label
-                          for="fName"
+                          for="cCode"
                           class="mb-3 block text-base font-medium text-[#07074D]"
                         >
-                          First Name
+                          Country Code
                         </label>
-                        <input
-                          ref={fNameRef}
-                          type="text"
-                          name="firstName"
-                          id="firstName"
-                          placeholder="First Name"
-                          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                        />
+                        <Phone>
+                          <Phone.Country
+                            ref={countryRef}
+                            onChange={(e) => setCountryCode(e.target.value)}
+                            className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                          />
+                        </Phone>
                       </div>
                     </div>
-
                     <div class="w-full px-3 sm:w-1/2">
-                      <div class="mb-5">
+                      <div>
                         <label
-                          for="lName"
+                          for="pNumber"
                           class="mb-3 block text-base font-medium text-[#07074D]"
                         >
-                          Last Name
+                          Phone number
                         </label>
-                        <input
-                          ref={lNameRef}
-                          type="text"
-                          name="lName"
-                          id="lName"
-                          placeholder="Last Name"
-                          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                        />
+                        <Phone>
+                          <Phone.Number
+                            ref={phoneRef}
+                            className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                          />
+                        </Phone>
                       </div>
                     </div>
                   </div>
-
-                  <div class="mb-5">
-                    <label class="mb-3 block text-base font-medium text-[#07074D]">
-                      Email
-                    </label>
-                    <div class="flex items-center space-x-6">
-                      <div class="flex items-center w-full">
-                        <input
-                          ref={emailRef}
-                          type="text"
-                          name="email"
-                          id="email"
-                          placeholder="Email"
-                          class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-5">
-                    <div class="-mx-3 flex flex-wrap">
-                      <div class="w-full px-3 sm:w-1/2">
-                        <div>
-                          <label
-                            for="cCode"
-                            class="mb-3 block text-base font-medium text-[#07074D]"
-                          >
-                            Country Code
-                          </label>
-                          <Phone>
-                            <Phone.Country
-                              ref={countryRef}
-                              onChange={(e) => setCountryCode(e.target.value)}
-                              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                            />
-                          </Phone>
-                        </div>
-                      </div>
-                      <div class="w-full px-3 sm:w-1/2">
-                        <div>
-                          <label
-                            for="pNumber"
-                            class="mb-3 block text-base font-medium text-[#07074D]"
-                          >
-                            Phone number
-                          </label>
-                          <Phone>
-                            <Phone.Number
-                              ref={phoneRef}
-                              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                            />
-                          </Phone>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-5">
-                    <label class="mb-3 block text-base font-medium text-[#07074D]">
-                      Email
-                    </label>
-                    <div class="flex items-center space-x-6">
-                      <div
-                        className="w-full border"
-                        name="rolesDropDown"
-                        id="rolesDropDown"
+                </div>
+                <div class="mb-5">
+                  <label class="mb-3 block text-base font-medium text-[#07074D]">
+                    Role
+                  </label>
+                  <div class="flex items-center space-x-6">
+                    <div
+                      className="w-full border"
+                      name="rolesDropDown"
+                      id="rolesDropDown"
+                    >
+                      <Select
+                        size="lg"
+                        label="Select Role"
+                        onChange={(value) => setRoles(value)}
                       >
-                        <Select
-                          size="lg"
-                          label="Select Role"
-                          onChange={(value) => setRoles(value)}
-                        >
-                          {roles.map((role) => (
-                            <Option key={role.id}>{role.name}</Option>
-                          ))}
-                        </Select>
-                      </div>
+                        {roles.map((role) => (
+                          <Option key={role.id}>{role.name}</Option>
+                        ))}
+                      </Select>
                     </div>
                   </div>
                 </div>
@@ -181,27 +179,27 @@ const ProfileInfo = ({ onSubmit }) => {
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="-mx-3 flex flex-wrap w-full">
-          <div class="w-full px-3 sm:w-1/2 ">
-            <div class="mb-5 ">
-              <button
-                onClick={() => handleOpen(null)}
-                className="btn btn-secondary btn-sm w-full mx-auto"
-              >
-                Cancel
-              </button>
-            </div>
+      <div class="-mx-3 flex flex-wrap w-full mt-10">
+        <div class="w-full px-3 sm:w-1/2 ">
+          <div class="mb-5 ">
+            <button
+              onClick={() => handleOpen(null)}
+              className="btn btn-secondary btn-sm w-full mx-auto"
+            >
+              Cancel
+            </button>
           </div>
-          <div class="w-full px-3 sm:w-1/2">
-            <div class="mb-5">
-              <button
-                onClick={(e) => handleSubmit(e)}
-                className="btn btn-secondary btn-sm w-full mx-auto"
-              >
-                Save
-              </button>
-            </div>
+        </div>
+        <div class="w-full px-3 sm:w-1/2">
+          <div class="mb-5">
+            <button
+              onClick={(e) => handleSubmit(e)}
+              className="btn btn-secondary btn-sm w-full mx-auto"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>

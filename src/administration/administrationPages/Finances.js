@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getFinances } from "../../api/finances";
-
+import { Select, Option } from "@material-tailwind/react";
 const BalanceCard = ({ balance }) => {
   return (
     <div className="flex justify-between mb-4">
@@ -16,7 +16,6 @@ const Finances = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [result, setResult] = useState();
   const [selectedOption, setSelectedOption] = useState("");
-
   const options = ["Deposit", "Rent", "Other"];
 
   const handleDropDown = (event) => {
@@ -42,6 +41,12 @@ const Finances = () => {
       console.error("Error fetching finances:", error);
     }
   };
+
+  const filteredFinances = finances.filter((finance) =>
+    `${finance.customer.firstName} ${finance.customer.surname} ${finance.customer.email}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
 
   const handleCheckboxChange = (index) => {
     const newFinances = [...finances];
@@ -85,7 +90,7 @@ const Finances = () => {
       <BalanceCard balance={result} />
 
       <div className="-mx-3 flex flex-wrap items-center">
-        <div className="w-full sm:w-1/2 px-3">
+        <div class="w-full px-3 sm:w-1/3">
           <div className="mb-5">
             <label htmlFor="table-search" className="sr-only">
               Search
@@ -117,28 +122,46 @@ const Finances = () => {
             </div>
           </div>
         </div>
-        <div className="w-full sm:w-1/2 text-right">
-			<div className="flex -mt-4 ml-24 justify-between ">
-		<div>
-            <select value={selectedOption} onChange={handleDropDown}>
-              <option value="">Month</option>
-              {options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+
+        <div className="w-full sm:w-1/2 text-center">
+          <div className="flex -mt-4 ml-24 justify-between ">
+            <div className="w-full">
+              <Select
+                value={selectedOption}
+                onChange={handleDropDown}
+                size="lg"
+                label="Select Month"
+              >
+                {options.map((option) => (
+                  <Option
+                    key={option}
+                    value={option}
+                    className="flex items-center gap-2"
+                  >
+                    {option}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+            <div className="w-full">
+              <Select
+                value={selectedOption}
+                onChange={handleDropDown}
+                size="lg"
+                label="Select Finance Type"
+              >
+                {options.map((option) => (
+                  <Option
+                    key={option}
+                    value={option}
+                    className="flex items-center gap-2"
+                  >
+                    {option}
+                  </Option>
+                ))}
+              </Select>
+            </div>
           </div>
-          <div>
-            <select value={selectedOption} onChange={handleDropDown}>
-              <option value="">Finance Type</option>
-              {options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div></div>
         </div>
       </div>
 
@@ -175,9 +198,9 @@ const Finances = () => {
             </tr>
           </thead>
           <tbody>
-            {finances.map((finance, index) => (
+            {filteredFinances.map((finance, index, customer) => (
               <tr
-                key={finance.id}
+                key={finance}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <td
