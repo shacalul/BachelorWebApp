@@ -2,7 +2,7 @@ import api from "./api";
 
 export function getCategories() {
   return api
-    .get(`/categories`)
+    .get(`/roomcategories`)
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
@@ -12,7 +12,7 @@ export function getCategories() {
 
 export function getCategory(id) {
   return api
-    .get(`/categories/${id}`)
+    .get(`/roomcategories/${id}`)
     .then((response) => response.data)
     .catch((error) => {
       console.error(error);
@@ -22,7 +22,7 @@ export function getCategory(id) {
 
 export function createCategory(categoryData, accessToken) {
   return api
-    .post("/categories", categoryData, {
+    .post("/roomcategories", categoryData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -36,7 +36,7 @@ export function createCategory(categoryData, accessToken) {
 
 export function updateCategory(categoryData, accessToken) {
   return api
-    .put(`/categories`, categoryData, {
+    .put(`/roomcategories`, categoryData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -50,7 +50,7 @@ export function updateCategory(categoryData, accessToken) {
 
 export function deleteCategory(id, accessToken) {
   return api
-    .delete(`/categories/${id}`, {
+    .delete(`/roomcategories/${id}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

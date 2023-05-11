@@ -1,11 +1,7 @@
 import React from "react";
-
+import CategoryDataComponent from "../administrationComponents/CategoryDataComponent";
 const Categories = () => {
-  return (
-    <>
-      <h2>Categories</h2>
-    </>
-  );
+  return <CategoryDataComponent />;
 };
 
 export default Categories;

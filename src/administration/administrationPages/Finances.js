@@ -122,44 +122,37 @@ const Finances = () => {
             </div>
           </div>
         </div>
-
         <div className="w-full sm:w-1/2 text-center">
-          <div className="flex -mt-4 ml-24 justify-between ">
-            <div className="w-full">
-              <Select
-                value={selectedOption}
-                onChange={handleDropDown}
-                size="lg"
-                label="Select Month"
-              >
-                {options.map((option) => (
-                  <Option
-                    key={option}
-                    value={option}
-                    className="flex items-center gap-2"
-                  >
-                    {option}
-                  </Option>
-                ))}
-              </Select>
+          <div className="flex  ml-24 justify-between ">
+            <div className="mb-5">
+              <div className="w-full border ">
+                <Select size="lg" label="Select Month">
+                  {options.map((option) => (
+                    <Option
+                      key={option}
+                      value={option}
+                      className="flex items-center gap-2"
+                    >
+                      {option}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
             </div>
-            <div className="w-full">
-              <Select
-                value={selectedOption}
-                onChange={handleDropDown}
-                size="lg"
-                label="Select Finance Type"
-              >
-                {options.map((option) => (
-                  <Option
-                    key={option}
-                    value={option}
-                    className="flex items-center gap-2"
-                  >
-                    {option}
-                  </Option>
-                ))}
-              </Select>
+            <div className="mb-5">
+              <div className="w-full border ">
+                <Select size="lg" label="Select Finance Type">
+                  {options.map((option) => (
+                    <Option
+                      key={option}
+                      value={option}
+                      className="flex items-center gap-2"
+                    >
+                      {option}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
             </div>
           </div>
         </div>
