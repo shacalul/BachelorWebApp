@@ -10,3 +10,12 @@ export function getFinances() {
     });
 }
 
+export function getFinanceCategories() {
+  return api
+    .get(`/financeCategories`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+}
