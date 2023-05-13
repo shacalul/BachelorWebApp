@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getFinances } from "../../api/finances";
+
+import { getFinanceCategories } from "../../api/finances";
 import { Select, Option } from "@material-tailwind/react";
 const BalanceCard = ({ balance }) => {
   return (
@@ -16,17 +18,37 @@ const Finances = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [result, setResult] = useState();
   const [selectedOption, setSelectedOption] = useState("");
-  const options = ["Deposit", "Rent", "Other"];
 
-  const handleDropDown = (event) => {
-    setSelectedOption(event.target.value);
+  const [financeCategories, setfinanceCategories] = useState([]);
+
+  const [filteredFinances, setFilteredFinances] = useState([]);
+  const options = ["Deposit", "Rent", "Cool"];
+
+  const handleDropDown = (value) => {
+    console.log(value);
+    setSelectedOption(value);
+    setFilteredFinances(
+      finances.filter(
+        (allKindsFinances) => allKindsFinances.financeCategory.name === value
+      )
+    );
   };
 
   useEffect(() => {
     fetchFinances();
+    fetchFinanceCategories();
     getTotalBalance();
   }, []);
   //when finance change get new balance with use effect
+
+  const fetchFinanceCategories = async () => {
+    try {
+      const financeCategory = await getFinanceCategories();
+      setfinanceCategories(financeCategory.map((category) => category.name));
+    } catch (error) {
+      console.error("Error fetching finance categories:", error);
+    }
+  };
 
   const fetchFinances = async () => {
     try {
@@ -37,16 +59,18 @@ const Finances = () => {
         isChecked: false,
       }));
       setFinances(financesWithChecked);
+
+      setFilteredFinances(financesWithChecked);
     } catch (error) {
       console.error("Error fetching finances:", error);
     }
   };
 
-  const filteredFinances = finances.filter((finance) =>
-    `${finance.customer.firstName} ${finance.customer.surname} ${finance.customer.email}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
+  // const filteredFinances = finances.filter((finance) =>
+  //   `${finance.customer.firstName} ${finance.customer.surname} ${finance.customer.email}`
+  //     .toLowerCase()
+  //     .includes(searchQuery.toLowerCase())
+  // );
 
   const handleCheckboxChange = (index) => {
     const newFinances = [...finances];
@@ -141,14 +165,19 @@ const Finances = () => {
             </div>
             <div className="mb-5">
               <div className="w-full border ">
-                <Select size="lg" label="Select Finance Type">
-                  {options.map((option) => (
+                <Select
+                  size="lg"
+                  value={selectedOption}
+                  onChange={handleDropDown}
+                  label="Select Finance Type"
+                >
+                  {financeCategories.map((category,i) => (
                     <Option
-                      key={option}
-                      value={option}
+                      key={i}
+                      value={category}
                       className="flex items-center gap-2"
                     >
-                      {option}
+                      {category}
                     </Option>
                   ))}
                 </Select>
