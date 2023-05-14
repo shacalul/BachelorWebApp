@@ -88,14 +88,7 @@ const App = () => {
                 </Layout>
               }
             />
-            <Route
-              path="/BachelorWebApp/invoices"
-              element={
-                
-                  <Invoices />
-                
-              }
-            />
+            <Route path="/BachelorWebApp/invoices" element={<Invoices />} />
             <Route
               path="/BachelorWebApp/checkout"
               element={
@@ -112,7 +105,10 @@ const App = () => {
               path="/BachelorWebApp/administrationSignup"
               element={<AdministrationSignUp />}
             />
-            <Route path="BachelorWebApp/admin/*" element={<AdminApp />}></Route>
+            <Route
+              path="/BachelorWebApp/admin/*"
+              element={<AdminApp />}
+            ></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
