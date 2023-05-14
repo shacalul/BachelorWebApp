@@ -5,7 +5,7 @@ const Signup = () => {
     const navigate = useNavigate();
 
   function handleClick() {
-    navigate("/administrationSignin");
+    navigate("/BachelorWebApp/administrationSignin");
   }
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full">

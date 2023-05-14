@@ -90,7 +90,7 @@ export default function InfoModal({ firstName }) {
                   onClick={() => {
                     if (isChecked) {
                       handleOpen();
-                      navigate("/checkout");
+                      navigate("/BachelorWebApp/checkout");
                     }
                   }}
                   className={`btn btn-secondary btn-sm w-full mx-auto ${

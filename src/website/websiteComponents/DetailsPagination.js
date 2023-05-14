@@ -129,7 +129,7 @@ const DetailsPagination = () => {
               </div>
               <button
                 onClick={() => {
-                  navigate("/bookaroom");
+                  navigate("/BachelorWebApp/bookaroom");
                 }}
                 className="btn btn-large btn-primary w-full h-[60px] border border-gray-200 rounded-lg"
               >

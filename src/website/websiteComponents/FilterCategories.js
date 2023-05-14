@@ -20,7 +20,7 @@ const FilterCategories = () => {
         </div>
         <button
           onClick={() => {
-            navigate("/bookaroom");
+            navigate("/BachelorWebApp/bookaroom");
           }}
           className={`btn btn-primary`}
         >

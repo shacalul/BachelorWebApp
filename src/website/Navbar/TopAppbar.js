@@ -52,7 +52,7 @@ const TopAppBar = ({ currentPage }) => {
     },
     {
       name: "Administration",
-      link: "/administrationSignin",
+      link: "/BachelorWebApp/administrationSignin",
     },
   ];
 

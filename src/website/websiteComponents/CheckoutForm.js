@@ -4,7 +4,7 @@ const CheckoutForm = () => {
   const navigate = useNavigate();
 
   function handleClick() {
-    navigate("/administrationSignin");
+    navigate("/BachelorWebApp/administrationSignin");
   }
   return (
     <div class="relative mx-auto w-full bg-white">

@@ -32,14 +32,14 @@ const App = () => {
     return (
       <AdminLayout>
         <Routes>
-          <Route path="" element={<Index />} />
-          <Route path="/tenants" element={<Tenants />} />
-          <Route path="/invoices" element={<Invoices />} />
-          <Route path="/finances" element={<Finances />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/administrators" element={<Administrators />} />
-          <Route path="/categories" element={<Categories />} />
+          <Route path="/BachelorWebApp" element={<Index />} />
+          <Route path="/BachelorWebApp/tenants" element={<Tenants />} />
+          <Route path="/BachelorWebApp/invoices" element={<Invoices />} />
+          <Route path="/BachelorWebApp/finances" element={<Finances />} />
+          <Route path="/BachelorWebApp/profile" element={<Profile />} />
+          <Route path="/BachelorWebApp/calendar" element={<Calendar />} />
+          <Route path="/BachelorWebApp/administrators" element={<Administrators />} />
+          <Route path="/BachelorWebApp/categories" element={<Categories />} />
         </Routes>
       </AdminLayout>
     );
@@ -51,7 +51,7 @@ const App = () => {
           <ScrollToTop />
           <Routes>
             <Route
-              path="/"
+              path="/BachelorWebApp"
               element={
                 <Layout currentPage={window.location.pathname}>
                   <Home />
@@ -59,7 +59,7 @@ const App = () => {
               }
             />
             <Route
-              path="/category/:id"
+              path="/BachelorWebApp/category/:id"
               element={
                 <Layout currentPage={window.location.pathname}>
                   <CategoryDetails />
@@ -67,7 +67,7 @@ const App = () => {
               }
             />
             <Route
-              path="/contact"
+              path="/BachelorWebApp/contact"
               element={
                 <Layout currentPage={window.location.pathname}>
                   <Contact />
@@ -75,7 +75,7 @@ const App = () => {
               }
             />
             <Route
-              path="/bookaroom"
+              path="/BachelorWebApp/bookaroom"
               element={
                 <Layout currentPage={window.location.pathname}>
                   <BookRoom />
@@ -83,7 +83,7 @@ const App = () => {
               }
             />
             <Route
-              path="/checkout"
+              path="/BachelorWebApp/checkout"
               element={
                 <Layout currentPage={window.location.pathname}>
                   <Checkout />
@@ -91,11 +91,11 @@ const App = () => {
               }
             />
             <Route
-              path="/administrationSignin"
+              path="/BachelorWebApp/administrationSignin"
               element={<AdministrationSignin />}
             />
             <Route
-              path="/administrationSignup"
+              path="/BachelorWebApp/administrationSignup"
               element={<AdministrationSignUp />}
             />
             <Route path="/admin/*" element={<AdminApp />}></Route>
