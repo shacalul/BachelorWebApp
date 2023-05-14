@@ -19,3 +19,13 @@ export function getFinanceCategories() {
       throw error;
     });
 }
+
+export function createFinance(invoiceData) {
+  return api
+    .post("/finances", invoiceData)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+}

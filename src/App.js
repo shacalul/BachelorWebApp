@@ -38,8 +38,14 @@ const App = () => {
           <Route path="/BachelorWebApp/admin/finances" element={<Finances />} />
           <Route path="/BachelorWebApp/admin/profile" element={<Profile />} />
           <Route path="/BachelorWebApp/admin/calendar" element={<Calendar />} />
-          <Route path="/BachelorWebApp/admin/administrators" element={<Administrators />} />
-          <Route path="/BachelorWebApp/admin/categories" element={<Categories />} />
+          <Route
+            path="/BachelorWebApp/admin/administrators"
+            element={<Administrators />}
+          />
+          <Route
+            path="/BachelorWebApp/admin/categories"
+            element={<Categories />}
+          />
         </Routes>
       </AdminLayout>
     );
@@ -80,6 +86,14 @@ const App = () => {
                 <Layout currentPage={window.location.pathname}>
                   <BookRoom />
                 </Layout>
+              }
+            />
+            <Route
+              path="/BachelorWebApp/invoices"
+              element={
+                
+                  <Invoices />
+                
               }
             />
             <Route

@@ -110,11 +110,11 @@ const Finances = () => {
 
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
-      <h2 class="h2 text-center ">Finances</h2>
+      <h2 className="h2 text-center ">Finances</h2>
       <BalanceCard balance={result} />
 
       <div className="-mx-3 flex flex-wrap items-center">
-        <div class="w-full px-3 sm:w-1/3">
+        <div className="w-full px-3 sm:w-1/3">
           <div className="mb-5">
             <label htmlFor="table-search" className="sr-only">
               Search
@@ -227,9 +227,9 @@ const Finances = () => {
               >
                 <td
                   scope="row"
-                  class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
+                  className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  <div class="text-base font-semibold">{finance.name}</div>
+                  <div className="text-base font-semibold">{finance.name}</div>
                 </td>
                 <td className="px-6 py-4">{finance.amountOfMoney}</td>
                 <td className="px-6 py-4">{finance.financeCategory.name}</td>
