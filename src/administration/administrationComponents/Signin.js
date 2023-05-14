@@ -5,11 +5,11 @@ const Signin = () => {
 	const navigate = useNavigate();
 
 	function handlelogInClick() {
-		navigate('/admin/');
+		navigate('/BachelorWebApp/admin/');
 	}
 
 	function handleClick() {
-		navigate('/administrationSignup');
+		navigate('/BachelorWebApp/administrationSignup');
 	}
 	return (
 		<div className='grid grid-cols-1 sm:grid-cols-2 h-screen w-full'>

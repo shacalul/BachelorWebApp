@@ -36,19 +36,19 @@ const TopAppBar = ({ currentPage }) => {
   const Links = [
     {
       name: "Home",
-      link: "/",
+      link: "/BachelorWebApp",
     },
     {
       name: "Rooms & Categories",
-      link: "/",
+      link: "/BachelorWebApp",
     },
     {
       name: "Book a room",
-      link: "/bookaroom",
+      link: "/BachelorWebApp/bookaroom",
     },
     {
       name: "Contact",
-      link: "/contact",
+      link: "/BachelorWebApp/contact",
     },
     {
       name: "Administration",

@@ -32,14 +32,14 @@ const App = () => {
     return (
       <AdminLayout>
         <Routes>
-          <Route path="/BachelorWebApp" element={<Index />} />
-          <Route path="/BachelorWebApp/tenants" element={<Tenants />} />
-          <Route path="/BachelorWebApp/invoices" element={<Invoices />} />
-          <Route path="/BachelorWebApp/finances" element={<Finances />} />
-          <Route path="/BachelorWebApp/profile" element={<Profile />} />
-          <Route path="/BachelorWebApp/calendar" element={<Calendar />} />
-          <Route path="/BachelorWebApp/administrators" element={<Administrators />} />
-          <Route path="/BachelorWebApp/categories" element={<Categories />} />
+          <Route path="/BachelorWebApp/admin" element={<Index />} />
+          <Route path="/BachelorWebApp/admin/tenants" element={<Tenants />} />
+          <Route path="/BachelorWebApp/admin/invoices" element={<Invoices />} />
+          <Route path="/BachelorWebApp/admin/finances" element={<Finances />} />
+          <Route path="/BachelorWebApp/admin/profile" element={<Profile />} />
+          <Route path="/BachelorWebApp/admin/calendar" element={<Calendar />} />
+          <Route path="/BachelorWebApp/admin/administrators" element={<Administrators />} />
+          <Route path="/BachelorWebApp/admin/categories" element={<Categories />} />
         </Routes>
       </AdminLayout>
     );
@@ -98,7 +98,7 @@ const App = () => {
               path="/BachelorWebApp/administrationSignup"
               element={<AdministrationSignUp />}
             />
-            <Route path="/admin/*" element={<AdminApp />}></Route>
+            <Route path="BachelorWebApp/admin/*" element={<AdminApp />}></Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

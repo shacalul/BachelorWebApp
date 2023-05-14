@@ -16,7 +16,7 @@ const SideBaradministration = () => {
         <ul className="space-y-2 font-medium">
           <li>
             <NavLink
-              to="/"
+              to="/BachelorWebApp/admin"
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <span className="ml-3">Dashboard</span>
@@ -25,7 +25,7 @@ const SideBaradministration = () => {
 
           <li>
             <NavLink
-              to="/admin/tenants"
+              to="/BachelorWebApp/admin/tenants"
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <span className="flex-1 ml-3 whitespace-nowrap">Tenants</span>
@@ -33,7 +33,7 @@ const SideBaradministration = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/invoices"
+              to="/BachelorWebApp/admin/invoices"
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <span className="flex-1 ml-3 whitespace-nowrap">Invoices</span>
@@ -41,7 +41,7 @@ const SideBaradministration = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/Finances"
+              to="/BachelorWebApp/admin/Finances"
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <span className="flex-1 ml-3 whitespace-nowrap">Finances</span>
@@ -49,7 +49,7 @@ const SideBaradministration = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/profile"
+              to="/BachelorWebApp/admin/profile"
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
@@ -57,7 +57,7 @@ const SideBaradministration = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/administrators"
+              to="/BachelorWebApp/admin/administrators"
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <span className="flex-1 ml-3 whitespace-nowrap">Employees</span>
@@ -65,7 +65,7 @@ const SideBaradministration = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/categories"
+              to="/BachelorWebApp/admin/categories"
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <span className="flex-1 ml-3 whitespace-nowrap">Categories</span>
@@ -73,7 +73,7 @@ const SideBaradministration = () => {
           </li>
           <li>
             <NavLink
-              to="/signout"
+              to="/BachelorWebApp/signout"
               onClick={(e) => handleSignout(e)}
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
