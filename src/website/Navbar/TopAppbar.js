@@ -18,7 +18,7 @@ const TopAppBar = ({ currentPage }) => {
   }, []);
 
   useEffect(() => {
-    if (currentPage === "/checkoutform") {
+    if (currentPage === "/BachelorWebApp/checkoutform") {
       setHideTopAppBar(true);
     } else {
       setHideTopAppBar(false);
@@ -26,7 +26,10 @@ const TopAppBar = ({ currentPage }) => {
   }, [currentPage]);
 
   const headerBgColor = useMemo(() => {
-    if (currentPage === "/contact" || currentPage === "/bookaroom") {
+    if (
+      currentPage === "/BachelorWebApp/contact" ||
+      currentPage === "/BachelorWebApp/bookaroom"
+    ) {
       return "bg-black py-6 shadow-lg";
     } else {
       return "bg-transparent py-8";
@@ -40,7 +43,7 @@ const TopAppBar = ({ currentPage }) => {
     },
     {
       name: "Rooms & Categories",
-      link: "/BachelorWebApp",
+      link: "/",
     },
     {
       name: "Book a room",
@@ -52,7 +55,7 @@ const TopAppBar = ({ currentPage }) => {
     },
     {
       name: "Administration",
-      link: "/BachelorWebApp/administrationSignin",
+      link: "/BachelorWebApp/adminsignin",
     },
   ];
 

@@ -5,17 +5,10 @@ const getUserFromLocalStorage = () => {
 	return user ? JSON.parse(user) : null;
 };
 
-const saveUserToLocalStorage = (user) => {
-	localStorage.setItem('user', JSON.stringify(user));
-};
-
-const clearLocalStorage = () => {
-	localStorage.clear();
-};
-
 const initialState = {
 	name: 'auth',
 	user: getUserFromLocalStorage(),
+	isLoggedIn: getUserFromLocalStorage() !== null,
 };
 
 export const authSlice = createSlice({
@@ -23,16 +16,21 @@ export const authSlice = createSlice({
 	initialState,
 	reducers: {
 		login: (state, action) => {
-			const { user } = action.payload;
-			saveUserToLocalStorage(user);
-			state.user = user;
+			localStorage.setItem('user', JSON.stringify(action.payload));
+			state.user = action.payload;
+			state.isLoggedIn = true; // Set isLoggedIn to true on login
 		},
 		logout: (state) => {
-			clearLocalStorage();
+			localStorage.removeItem('user');
 			state.user = null;
+			state.isLoggedIn = false; // Set isLoggedIn to false on logout
+		},
+		updateUser: (state, action) => {
+			localStorage.setItem('user', JSON.stringify(action.payload));
+			state.user = action.payload;
 		},
 	},
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, updateUser } = authSlice.actions;
 export default authSlice.reducer;

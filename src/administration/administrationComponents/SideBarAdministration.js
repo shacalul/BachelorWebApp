@@ -1,10 +1,23 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-const SideBaradministration = () => {
+import { logout } from "../../store/reducers/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+
+const SideBarAdministration = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   const handleSignout = (e) => {
     e.preventDefault();
+
+    // console.log(window.location.href);
+
+    localStorage.setItem("lastPage", window.location.href);
+
     // signout using redux
+    dispatch(logout());
+
+    window.location.href = "/BachelorWebApp/adminsignin";
   };
   return (
     <aside
@@ -14,14 +27,16 @@ const SideBaradministration = () => {
     >
       <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
         <ul className="space-y-2 font-medium">
-          <li>
-            <NavLink
-              to="/BachelorWebApp/admin"
-              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              <span className="ml-3">Dashboard</span>
-            </NavLink>
-          </li>
+          {user && user.roleId !== 3 && (
+            <li>
+              <NavLink
+                to="/BachelorWebApp"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <span className="ml-3">Dashboard</span>
+              </NavLink>
+            </li>
+          )}
 
           <li>
             <NavLink
@@ -31,22 +46,26 @@ const SideBaradministration = () => {
               <span className="flex-1 ml-3 whitespace-nowrap">Tenants</span>
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to="/BachelorWebApp/admin/invoices"
-              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              <span className="flex-1 ml-3 whitespace-nowrap">Invoices</span>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/BachelorWebApp/admin/Finances"
-              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              <span className="flex-1 ml-3 whitespace-nowrap">Finances</span>
-            </NavLink>
-          </li>
+          {user && user.roleId !== 3 && (
+            <li>
+              <NavLink
+                to="/BachelorWebApp/admin/invoices"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <span className="flex-1 ml-3 whitespace-nowrap">Invoices</span>
+              </NavLink>
+            </li>
+          )}
+          {user && user.roleId !== 3 && (
+            <li>
+              <NavLink
+                to="/BachelorWebApp/admin/finances"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <span className="flex-1 ml-3 whitespace-nowrap">Finances</span>
+              </NavLink>
+            </li>
+          )}
           <li>
             <NavLink
               to="/BachelorWebApp/admin/profile"
@@ -63,17 +82,21 @@ const SideBaradministration = () => {
               <span className="flex-1 ml-3 whitespace-nowrap">Employees</span>
             </NavLink>
           </li>
+          {user && user.roleId !== 3 && (
+            <li>
+              <NavLink
+                to="/BachelorWebApp/admin/categories"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Categories
+                </span>
+              </NavLink>
+            </li>
+          )}
           <li>
             <NavLink
-              to="/BachelorWebApp/admin/categories"
-              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              <span className="flex-1 ml-3 whitespace-nowrap">Categories</span>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/BachelorWebApp/signout"
+              to="/BachelorWebApp/admin/signout"
               onClick={(e) => handleSignout(e)}
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
@@ -86,4 +109,4 @@ const SideBaradministration = () => {
   );
 };
 
-export default SideBaradministration;
+export default SideBarAdministration;

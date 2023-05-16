@@ -32,20 +32,14 @@ const App = () => {
     return (
       <AdminLayout>
         <Routes>
-          <Route path="/BachelorWebApp/admin" element={<Index />} />
-          <Route path="/BachelorWebApp/admin/tenants" element={<Tenants />} />
-          <Route path="/BachelorWebApp/admin/invoices" element={<Invoices />} />
-          <Route path="/BachelorWebApp/admin/finances" element={<Finances />} />
-          <Route path="/BachelorWebApp/admin/profile" element={<Profile />} />
-          <Route path="/BachelorWebApp/admin/calendar" element={<Calendar />} />
-          <Route
-            path="/BachelorWebApp/admin/administrators"
-            element={<Administrators />}
-          />
-          <Route
-            path="/BachelorWebApp/admin/categories"
-            element={<Categories />}
-          />
+          <Route path="" element={<Index />} />
+          <Route path="/tenants" element={<Tenants />} />
+          <Route path="/invoices" element={<Invoices />} />
+          <Route path="/finances" element={<Finances />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/administrators" element={<Administrators />} />
+          <Route path="/categories" element={<Categories />} />
         </Routes>
       </AdminLayout>
     );
@@ -98,11 +92,11 @@ const App = () => {
               }
             />
             <Route
-              path="/BachelorWebApp/administrationSignin"
+              path="/BachelorWebApp/adminsignin"
               element={<AdministrationSignin />}
             />
             <Route
-              path="/BachelorWebApp/administrationSignup"
+              path="/BachelorWebApp/adminsignup"
               element={<AdministrationSignUp />}
             />
             <Route

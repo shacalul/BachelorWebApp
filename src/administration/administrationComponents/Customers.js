@@ -8,8 +8,11 @@ import {
 import './Customers.css';
 import AddTenantsModal from './AddTenantsModal';
 import EditTenantsModal from './EditTenantsModal';
+
+import { useSelector } from 'react-redux';
 import DeleteModal from './DeleteModal';
 const Customers = () => {
+	const user = useSelector((state) => state.auth.user);
 	const [customers, setCustomers] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
 	const [isEditing, setIsEditing] = useState(false);
@@ -133,6 +136,7 @@ const Customers = () => {
 				<div className='w-full sm:w-1/2 px-3 text-right'>
 					<div className='mb-5'>
 						<AddTenantsModal
+							disabled={user && user.roleId === 3}
 							onSubmit={submitHandler}
 							style={{ overflowY: 'scroll' }}
 						/>
@@ -177,8 +181,13 @@ const Customers = () => {
 
 								<td>
 									<div class='inline-flex'>
-										<EditTenantsModal />
-										<DeleteModal id={customer.id} />
+										<EditTenantsModal
+											disabled={user && user.roleId === 3 ? true : false}
+										/>
+										<DeleteModal
+											disabled={user && user.roleId === 3 ? true : false}
+											id={customer.id}
+										/>
 									</div>
 								</td>
 							</tr>
