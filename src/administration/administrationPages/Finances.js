@@ -25,6 +25,7 @@ const Finances = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
 
   const months = [
+    "All",
     "January",
     "February",
     "March",
@@ -41,15 +42,19 @@ const Finances = () => {
 
   const handleMonthChange = (value) => {
     setSelectedMonth(value);
-    setFilteredFinances(
-      finances.filter((item) => {
-        const date = new Date(item.dueDate);
-        const monthName = date.toLocaleString("en-US", { month: "long" });
+    if (value === "All") {
+      setFilteredFinances(finances);
+    } else {
+      setFilteredFinances(
+        finances.filter((item) => {
+          const date = new Date(item.dueDate);
+          const monthName = date.toLocaleString("en-US", { month: "long" });
 
-        console.log(monthName);
-        return monthName === value;
-      })
-    );
+          console.log(monthName);
+          return monthName === value;
+        })
+      );
+    }
   };
 
   const handleDropDown = (value) => {
