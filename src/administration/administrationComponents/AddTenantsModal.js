@@ -67,13 +67,6 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
 			idNumber: nationalIdRadioRef.current.checked
 				? idRef.current.value
 				: 'null',
-			// university: universityRef.current.value,
-			// studyProg: studyProgRef.current.value,
-			// startOfProg: startOfProg,
-			// endOfProg: endOfProg,
-			// roomCategory: roomCategory,
-			// arrivalDate: arrivalDate,
-			// departureDate: departureDate,
 		};
 
 		onSubmit(payload);

@@ -1,11 +1,7 @@
-import React from "react";
-import BookRoomForm from "../websiteComponents/BookRoomForm";
+import React from 'react';
+import BookRoomForm from '../websiteComponents/BookRoomForm';
 const BookRoom = () => {
-  
-
-  return (
-   <BookRoomForm/>
-  );
+	return <BookRoomForm />;
 };
 
 export default BookRoom;

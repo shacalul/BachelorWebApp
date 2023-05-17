@@ -1,21 +1,137 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Phone } from "react-telephone";
+import { getCountryCallingCode } from "libphonenumber-js";
 import { useCountries } from "use-react-countries";
 import { Select, Option } from "@material-tailwind/react";
 import { arrivalList } from "./Arrival";
 import { departureList } from "./Departure";
 import { categoryData } from "../data/CategoryData";
-import InfoModal from './InfoModal'
+import InfoModal from "./InfoModal";
+
+import {
+  getCustomers,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
+} from "../../api/customers";
+import {
+  deleteRoomBookings,
+  createRoomBookings,
+  getRoomBookings,
+  updateRoomBookings,
+} from "../../api/roombookings";
+import { getRooms } from "../../api/rooms";
 const BookRoomForm = () => {
   const { countries } = useCountries();
-  const [firstName, setFirstName] = useState("");
 
-  const handleFirstNameChange = (event) => {
-    setFirstName(event.target.value);
+  const [customers, setCustomers] = useState([]);
+  const [newId, setNewId] = useState(0);
+  const [rooms, setRooms] = useState([]);
+  const [size, setSize] = useState(null);
+  const [isChecked, setIsChecked] = useState(false);
+  const handleOpen = (value) => setSize(value);
+  const [countryCode, setCountryCode] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [country, setCountry] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const fNameRef = useRef();
+  const lNameRef = useRef();
+  const emailRef = useRef();
+  const phoneRef = useRef();
+  const nationalRef = useRef();
+  const countyCodeRef = useRef();
+  const countryRef = useRef();
+  const cityRef = useRef();
+  const postCodeRef = useRef();
+  const streetNameRef = useRef();
+  const streetNumberRef = useRef();
+  const nationalIdRadioRef = useRef();
+  const idRef = useRef();
+  const roomIdRef = useRef();
+  const arrivalRef = useRef();
+  const departureRef = useRef();
+
+  // load current customers
+  useEffect(() => {
+    fetchCustomers();
+    fetchRooms();
+  }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      const data = await getCustomers();
+      setCustomers(data);
+    } catch (error) {
+      console.error("Error fetching customers:", error);
+    }
+  };
+
+  const fetchRooms = async () => {
+    try {
+      const data = await getRooms();
+      setRooms(data);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    setLoading(true);
+
+    // Create the customer payload
+    const greatestId = customers.reduce(
+      (maxId, user) => Math.max(maxId, user.id),
+      0
+    );
+    const customerPayload = {
+      id: greatestId + 1,
+      firstName: fNameRef.current.value,
+      surname: lNameRef.current.value,
+      email: emailRef.current.value,
+      phoneNumber:
+        "+" +
+        getCountryCallingCode(countryCode.toUpperCase()) +
+        phoneRef.current.value,
+      nationality: nationality,
+      country: country,
+      streetName: streetNameRef.current.value,
+      streetNumber: streetNumberRef.current.value,
+      postalCode: postCodeRef.current.value,
+      city: cityRef.current.value,
+      passportNumber: nationalIdRadioRef.current.checked
+        ? null
+        : idRef.current.value,
+      idNumber: nationalIdRadioRef.current.checked ? idRef.current.value : null,
+    };
+
+    for (let key in customerPayload) {
+      if (customerPayload[key] === null) {
+        delete customerPayload[key];
+      }
+    }
+
+    // Create the customer
+    const createdCustomer = await createCustomer(customerPayload);
+    const customerId = createdCustomer.id;
+
+    // Create the room booking payload
+    const roomBookingPayload = {
+      customerId: customerId,
+      roomId: roomIdRef.current.value,
+      arrival: arrivalRef.current.value,
+      departure: departureRef.current.value,
+    };
+
+    // Create the room booking
+    const createdRoomBooking = await createRoomBookings(roomBookingPayload);
+
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen" style={{overflowY:'scroll'}}>
+    <div className="min-h-screen" style={{ overflowY: "scroll" }}>
       <div class="flex items-center justify-center p-10 py-10">
         <div class="mx-auto w-full max-w-[550px]">
           <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
@@ -35,12 +151,11 @@ const BookRoomForm = () => {
                     First Name
                   </label>
                   <input
+                    ref={fNameRef}
                     type="text"
                     name="firstName"
                     id="firstName"
                     placeholder="First Name"
-                    value={firstName}
-                    onChange={handleFirstNameChange}
                     class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                   />
                 </div>
@@ -55,6 +170,7 @@ const BookRoomForm = () => {
                     Last Name
                   </label>
                   <input
+                    ref={lNameRef}
                     type="text"
                     name="lName"
                     id="lName"
@@ -72,6 +188,7 @@ const BookRoomForm = () => {
               <div class="flex items-center space-x-6">
                 <div class="flex items-center w-full">
                   <input
+                    ref={emailRef}
                     type="text"
                     name="email"
                     id="email"
@@ -92,7 +209,10 @@ const BookRoomForm = () => {
                       Country Code
                     </label>
                     <Phone>
-                      <Phone.Country className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                      <Phone.Country
+                        onChange={(e) => setCountryCode(e.target.value)}
+                        className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                      />
                     </Phone>
                   </div>
                 </div>
@@ -105,7 +225,10 @@ const BookRoomForm = () => {
                       Phone number
                     </label>
                     <Phone>
-                      <Phone.Number className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                      <Phone.Number
+                        ref={phoneRef}
+                        className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                      />
                     </Phone>
                   </div>
                 </div>
@@ -121,13 +244,7 @@ const BookRoomForm = () => {
                     <Select
                       size="lg"
                       label="Select Nationality"
-                      selected={(element) =>
-                        element &&
-                        React.cloneElement(element, {
-                          className:
-                            "flex items-center px-0 gap-2 pointer-events-none",
-                        })
-                      }
+                      onChange={(value) => setNationality(value)}
                     >
                       {countries.map(({ name, flags }) => (
                         <Option
@@ -156,13 +273,7 @@ const BookRoomForm = () => {
                     <Select
                       size="lg"
                       label="Select Country"
-                      selected={(element) =>
-                        element &&
-                        React.cloneElement(element, {
-                          className:
-                            "flex items-center px-0 gap-2 pointer-events-none",
-                        })
-                      }
+                      onChange={(value) => setCountry(value)}
                     >
                       {countries.map(({ name, flags }) => (
                         <Option
@@ -193,6 +304,7 @@ const BookRoomForm = () => {
                     City
                   </label>
                   <input
+                    ref={cityRef}
                     type="text"
                     name="city"
                     id="city"
@@ -210,6 +322,7 @@ const BookRoomForm = () => {
                     Postcode
                   </label>
                   <input
+                    ref={postCodeRef}
                     type="text"
                     name="pCode"
                     id="pCode"
@@ -228,6 +341,7 @@ const BookRoomForm = () => {
                     Street Name
                   </label>
                   <input
+                    ref={streetNameRef}
                     type="text"
                     name="sName"
                     id="sName"
@@ -245,6 +359,7 @@ const BookRoomForm = () => {
                     Street Number
                   </label>
                   <input
+                    ref={streetNumberRef}
                     type="text"
                     name="sNumber"
                     id="sNumber"
@@ -265,6 +380,7 @@ const BookRoomForm = () => {
                     name="radio1"
                     id="nationalIDNumber"
                     class="h-5 w-5"
+                    ref={nationalIdRadioRef}
                   />
                   <label
                     for="nationalIDNumber1"
@@ -293,6 +409,7 @@ const BookRoomForm = () => {
               <div class="flex items-center space-x-6">
                 <div class="flex items-center w-full">
                   <input
+                    ref={idRef}
                     type="text"
                     name="Personal Identification"
                     id="personalIdentification"
@@ -303,103 +420,28 @@ const BookRoomForm = () => {
               </div>
             </div>
 
-            <div class="-mx-3 flex flex-wrap">
-              <div class="w-full px-3 sm:w-1/2">
-                <div class="mb-5">
-                  <label class="mb-3 block text-base font-medium text-[#07074D]">
-                    University
-                  </label>
-                  <div class="flex items-center space-x-6">
-                    <div class="flex items-center w-full">
-                      <input
-                        type="text"
-                        name="university"
-                        id="university"
-                        placeholder="University"
-                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="w-full px-3 sm:w-1/2">
-                <div class="mb-5">
-                  <label class="mb-3 block text-base font-medium text-[#07074D]">
-                    Study programme
-                  </label>
-                  <div class="flex items-center space-x-6">
-                    <div class="flex items-center w-full">
-                      <input
-                        type="text"
-                        name="sProgramme"
-                        id="sProgramme"
-                        placeholder="Study programme"
-                        class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="-mx-3 flex flex-wrap">
-              <div className="w-full px-3 sm:w-1/2">
-                <div className="mb-5">
-                  <label
-                    className="mb-3 block text-base font-medium text-[#07074D]"
-                    htmlFor="sProgram"
-                  >
-                    Start Of Programme
-                  </label>
-                  <div className="w-full border " name="sProgram" id="sProgram">
-                    <Select size="lg" label="Select Date">
-                      {arrivalList.map((option) => (
-                        <Option key={option.value} value={option.value}>
-                          {option.name}
-                        </Option>
-                      ))}
-                    </Select>
-                  </div>
-                </div>
-              </div>
-              <div className="w-full px-3 sm:w-1/2">
-                <div className="mb-5">
-                  <label
-                    className="mb-3 block text-base font-medium text-[#07074D]"
-                    htmlFor="eProgram"
-                  >
-                    End Of Programme
-                  </label>
-                  <div className="w-full border " name="eProgram" id="eProgram">
-                    <Select size="lg" label="Select Date">
-                      {departureList.map((option) => (
-                        <Option key={option.value} value={option.value}>
-                          {option.name}
-                        </Option>
-                      ))}
-                    </Select>
-                  </div>
-                </div>
-              </div>
-            </div>
             <div class="mb-5">
               <label
                 class="mb-3 block text-base font-medium text-[#07074D]"
-                for="roomCategoryDropDown"
+                for="roomNumberDropDown"
               >
-                Room Category
+                Room Number
               </label>
               <div
                 className="w-full border "
-                name="roomCategoryDropDown"
-                id="roomCategoryDropDown"
+                name="roomNumberDropDown"
+                id="roomNumberDropDown"
               >
-                <Select size="lg" label="Select Room Category">
-                  {categoryData.map((category) => (
-                    <Option key={category.id}>{category.name}</Option>
+                <Select size="lg" label="Select Room Number" ref={roomIdRef}>
+                  {rooms.map((room) => (
+                    <Option key={room.id} value={room.number}>
+                      {room.number}
+                    </Option>
                   ))}
                 </Select>
               </div>
             </div>
+
             <div class="-mx-3 flex flex-wrap">
               <div className="w-full px-3 sm:w-1/2">
                 <div className="mb-5">
@@ -414,7 +456,7 @@ const BookRoomForm = () => {
                     name="arrivalDepartureDropDown"
                     id="arrivalDepartureDropDown"
                   >
-                    <Select size="lg" label="Select Date">
+                    <Select size="lg" label="Select Date" ref={arrivalRef}>
                       {arrivalList.map((option) => (
                         <Option key={option.value} value={option.value}>
                           {option.name}
@@ -437,7 +479,7 @@ const BookRoomForm = () => {
                     name="departureDepartureDropDown"
                     id="departureDepartureDropDown"
                   >
-                    <Select size="lg" label="Select Date">
+                    <Select size="lg" label="Select Date" ref={departureRef}>
                       {departureList.map((option) => (
                         <Option key={option.value} value={option.value}>
                           {option.name}
@@ -449,7 +491,11 @@ const BookRoomForm = () => {
               </div>
             </div>
 
-            <InfoModal firstName={firstName} />
+            <InfoModal
+              loading={loading}
+              onClick={handleSubmit}
+              firstName={fNameRef.current && fNameRef.current.value}
+            />
           </div>
         </div>
       </div>
