@@ -22,7 +22,35 @@ const Finances = () => {
   const [financeCategories, setfinanceCategories] = useState([]);
 
   const [filteredFinances, setFilteredFinances] = useState([]);
-  const options = ["Deposit", "Rent", "Cool"];
+  const [selectedMonth, setSelectedMonth] = useState("");
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const handleMonthChange = (value) => {
+    setSelectedMonth(value);
+    setFilteredFinances(
+      finances.filter((item) => {
+        const date = new Date(item.dueDate);
+        const monthName = date.toLocaleString("en-US", { month: "long" });
+
+        console.log(monthName);
+        return monthName === value;
+      })
+    );
+  };
 
   const handleDropDown = (value) => {
     console.log(value);
@@ -56,6 +84,7 @@ const Finances = () => {
       // Initialize checked state for each finance object
       const financesWithChecked = data.map((finance) => ({
         ...finance,
+        date: new Date(finance.dueDate),
         isChecked: false,
       }));
       setFinances(financesWithChecked);
@@ -150,14 +179,19 @@ const Finances = () => {
           <div className="flex  ml-24 justify-between ">
             <div className="mb-5">
               <div className="w-full border ">
-                <Select size="lg" label="Select Month">
-                  {options.map((option) => (
+                <Select
+                  size="lg"
+                  label="Select Month"
+                  value={selectedMonth}
+                  onChange={handleMonthChange}
+                >
+                  {months.map((month, index) => (
                     <Option
-                      key={option}
-                      value={option}
+                      key={index}
+                      value={month}
                       className="flex items-center gap-2"
                     >
-                      {option}
+                      {month}
                     </Option>
                   ))}
                 </Select>
@@ -171,7 +205,7 @@ const Finances = () => {
                   onChange={handleDropDown}
                   label="Select Finance Type"
                 >
-                  {financeCategories.map((category,i) => (
+                  {financeCategories.map((category, i) => (
                     <Option
                       key={i}
                       value={category}
@@ -236,7 +270,12 @@ const Finances = () => {
                 <td className="px-6 py-4">
                   {finance.customer.firstName} {finance.customer.surname}
                 </td>
-                <td className="px-6 py-4">{finance.date}</td>
+                <td className="px-6 py-4">
+                  {finance.date.toLocaleString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </td>
                 <td className="px-6 py-4">
                   <input
                     type="checkbox"
