@@ -82,6 +82,14 @@ const SideBarAdministration = () => {
               <span className="flex-1 ml-3 whitespace-nowrap">Employees</span>
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/BachelorWebApp/admin/roombookings"
+              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <span className="flex-1 ml-3 whitespace-nowrap">Bookings</span>
+            </NavLink>
+          </li>
           {user && user.roleId !== 3 && (
             <li>
               <NavLink
