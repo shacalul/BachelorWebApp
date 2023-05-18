@@ -26,6 +26,7 @@ import Finances from "./administration/administrationPages/Finances";
 import Index from "./administration/administrationPages/Index";
 import Administrators from "./administration/administrationPages/Administrators";
 import Categories from "./administration/administrationPages/Categories";
+import RoomBookings from "./administration/administrationPages/RoomBookings";
 
 const App = () => {
   const AdminApp = () => {
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/administrators" element={<Administrators />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/roombookings" element={<RoomBookings />} />
         </Routes>
       </AdminLayout>
     );
