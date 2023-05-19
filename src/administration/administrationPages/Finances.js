@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getFinances } from "../../api/finances";
 
-import { getFinanceCategories } from "../../api/finances";
+import { getFinanceCategories,updateFinance } from "../../api/finances";
 import { Select, Option } from "@material-tailwind/react";
 const BalanceCard = ({ balance }) => {
   return (
@@ -13,7 +13,7 @@ const BalanceCard = ({ balance }) => {
 };
 
 const Finances = () => {
-  const [isCheckedAll, setIsCheckedAll] = useState(false);
+  const [isPaidAll, setisPaidAll] = useState(false);
   const [finances, setFinances] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [result, setResult] = useState();
@@ -70,8 +70,11 @@ const Finances = () => {
   useEffect(() => {
     fetchFinances();
     fetchFinanceCategories();
-    getTotalBalance();
   }, []);
+
+  useEffect(() => {
+    getTotalBalance();
+  }, [filteredFinances]);
   //when finance change get new balance with use effect
 
   const fetchFinanceCategories = async () => {
@@ -90,7 +93,7 @@ const Finances = () => {
       const financesWithChecked = data.map((finance) => ({
         ...finance,
         date: new Date(finance.dueDate),
-        isChecked: false,
+        isPaid: false,
       }));
       setFinances(financesWithChecked);
 
@@ -107,37 +110,40 @@ const Finances = () => {
   // );
 
   const handleCheckboxChange = (index) => {
-    const newFinances = [...finances];
-    newFinances[index].isChecked = !newFinances[index].isChecked;
-    setFinances(newFinances);
+    const newFinances = [...filteredFinances];
+    newFinances[index].isPaid = !newFinances[index].isPaid;
+    updateFinance(newFinances[index]);
+    setFilteredFinances(newFinances);
     let truevalue = true;
-    finances.forEach((finance) => {
-      if (!finance.isChecked) {
+    filteredFinances.forEach((finance) => {
+      if (!finance.isPaid) {
         truevalue = false;
       }
     });
-    setIsCheckedAll(truevalue);
+    setisPaidAll(truevalue);
   };
 
   const handleCheckAllChange = () => {
-    const newFinances = finances.map((finance) => ({
+    const newFinances = filteredFinances.map((finance) => ({
       ...finance,
-      isChecked: !finance.isChecked,
+      isPaid: !finance.isPaid,
     }));
-    setFinances(newFinances);
+    setFilteredFinances(newFinances);
     let truevalue = true;
-    finances.forEach((finance) => {
-      if (finance.isChecked) {
+    filteredFinances.forEach((finance) => {
+      if (finance.isPaid) {
         truevalue = false;
       }
     });
-    setIsCheckedAll(truevalue);
+    setisPaidAll(truevalue);
   };
 
   const getTotalBalance = () => {
     let result = 0;
-    finances.forEach((finance) => {
-      result += parseInt(finance.amountOfMoney);
+    filteredFinances.forEach((finance) => {
+      if (finance.isPaid) {
+        result += parseInt(finance.amountOfMoney);
+      }
     });
     setResult(result);
   };
@@ -173,7 +179,7 @@ const Finances = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for tenants..."
+                placeholder="Search tenants..."
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
@@ -250,7 +256,7 @@ const Finances = () => {
                 <div className="flex items-center">
                   <input
                     type="checkbox"
-                    checked={isCheckedAll}
+                    checked={isPaidAll}
                     onChange={() => handleCheckAllChange()}
                   />
                   <span className="ml-2">Balance all</span>
@@ -259,9 +265,9 @@ const Finances = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredFinances.map((finance, index, customer) => (
+            {filteredFinances.map((finance, index) => (
               <tr
-                key={finance}
+                key={index}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <td
@@ -284,7 +290,7 @@ const Finances = () => {
                 <td className="px-6 py-4">
                   <input
                     type="checkbox"
-                    checked={finance.isChecked}
+                    checked={finance.isPaid}
                     onChange={() => handleCheckboxChange(index)}
                   />
                 </td>

@@ -102,7 +102,7 @@ const Invoices = () => {
               <div className="relative w-full border">
                 <Select
                   size="lg"
-                  label="Select Month"
+                  label="Select Category"
                   className="leading-7 text-sm text-gray-600"
                   type="text"
                   id="category"
@@ -140,7 +140,7 @@ const Invoices = () => {
             <div className="p-2 w-full">
               <div className="relative">
                 <Input
-                  label="Tenant email"
+                  label="Tenant name"
                   htmlFor="email"
                   type="email"
                   id="email"
