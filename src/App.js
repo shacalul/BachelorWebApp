@@ -33,14 +33,12 @@ const App = () => {
     return (
       <AdminLayout>
         <Routes>
-          <Route path="" element={<Index />} />
+          <Route path="/dashboard" element={<Index />} />
           <Route path="/tenants" element={<Tenants />} />
           <Route path="/invoices" element={<Invoices />} />
           <Route path="/finances" element={<Finances />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/calendar" element={<Calendar />} />
           <Route path="/administrators" element={<Administrators />} />
-
           <Route path="/roombookings" element={<RoomBookings />} />
         </Routes>
       </AdminLayout>
