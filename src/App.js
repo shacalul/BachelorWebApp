@@ -40,7 +40,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/administrators" element={<Administrators />} />
-          <Route path="/categories" element={<Categories />} />
+
           <Route path="/roombookings" element={<RoomBookings />} />
         </Routes>
       </AdminLayout>

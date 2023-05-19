@@ -126,7 +126,6 @@ const BookRoomForm = () => {
 
     // Create the room booking
     const createdRoomBooking = await createRoomBookings(roomBookingPayload);
-
     setLoading(false);
   };
 
