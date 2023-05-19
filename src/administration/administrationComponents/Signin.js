@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getAdministrators } from "../../api/administrators";
 
 import { login } from "../../store/reducers/authSlice";
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useDispatch } from "react-redux";
 const Signin = () => {
   const dispatch = useDispatch();
@@ -45,7 +45,9 @@ const Signin = () => {
       window.location.href = "/BachelorWebApp/admin/profile";
     }
   }
-
+  const handleGoBack = () => {
+    navigate("/BachelorWebApp");
+  };
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full">
       <div className="hidden sm:block">
@@ -54,6 +56,10 @@ const Signin = () => {
       <div class="flex flex-col items-center justify-center px-6 pt-8 dark:bg-gray-900 ">
         <div class="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-gray-800">
           <div className="text-center 2xl:mb-10 mb-4">
+            <ArrowBackIcon
+              className="absolute top-4 left-4 cursor-pointer"
+              onClick={handleGoBack}
+            />
             <h4 className="text-2xl font-bold text-gray-900 dark:text-white">
               Sign in
             </h4>
