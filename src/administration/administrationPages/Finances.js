@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getFinances } from "../../api/finances";
 
-import { getFinanceCategories,updateFinance } from "../../api/finances";
+import { getFinanceCategories, updateFinance } from "../../api/finances";
 import { Select, Option } from "@material-tailwind/react";
 const BalanceCard = ({ balance }) => {
   return (
@@ -270,12 +270,7 @@ const Finances = () => {
                 key={index}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                <td
-                  scope="row"
-                  className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  <div className="text-base font-semibold">{finance.name}</div>
-                </td>
+                <td className="px-6 py-4">{finance.name}</td>
                 <td className="px-6 py-4">{finance.amountOfMoney}</td>
                 <td className="px-6 py-4">{finance.financeCategory.name}</td>
                 <td className="px-6 py-4">

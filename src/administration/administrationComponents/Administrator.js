@@ -130,13 +130,8 @@ const Administrator = () => {
                 key={administrator.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                <td
-                  scope="row"
-                  class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  <div class="text-base font-semibold">
-                    {administrator.firstName} {administrator.surname}
-                  </div>
+                <td className="px-6 py-4">
+                  {administrator.firstName} {administrator.surname}
                 </td>
                 <td className="px-6 py-4">{administrator.email}</td>
                 <td className="px-6 py-4">{administrator.phone}</td>

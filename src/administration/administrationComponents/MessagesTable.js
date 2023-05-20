@@ -7,14 +7,8 @@ const MessagesTable = () => {
   const user = useSelector((state) => state.auth.user);
 
   const [messages, setMessages] = useState([]);
-  const [selectedMessage, setSelectedMessage] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [formData, setFormData] = useState({
-    email: "",
-    subject: "",
-    message: "",
-  });
 
   const [dataUpdated, setDataUpdated] = useState(false);
 
@@ -38,12 +32,6 @@ const MessagesTable = () => {
     } catch (error) {
       console.error("Error deleting message:", error);
     }
-  };
-
-  const resetForm = () => {
-    setIsEditing(false);
-    setSelectedMessage(null);
-    setFormData({ email: "", subject: "", message: "" });
   };
 
   const filteredMessages = messages.filter((message) =>
@@ -120,7 +108,7 @@ const MessagesTable = () => {
                 <td>
                   <div className="px-6 py-4">
                     <button
-                      className="text-red-500 hover:text-red-600"
+                      className={`text-white bg-[#fca5a5] hover:bg-[#f87171] focus:outline-none focus:ring-4 focus:ring-red-300  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 font-bold py-2 px-4 rounded-r `}
                       onClick={() => handleDelete(message.id)}
                       disabled={user && user.roleId !== 1}
                     >
