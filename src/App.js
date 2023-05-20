@@ -41,7 +41,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/administrators" element={<Administrators />} />
           <Route path="/roombookings" element={<RoomBookings />} />
-          <Route path="/messages" element={<Messages />} />
+          <Route path="/messagesdata" element={<Messages />} />
         </Routes>
       </AdminLayout>
     );

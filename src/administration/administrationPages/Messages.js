@@ -1,7 +1,12 @@
 import React from "react";
+import MessagesTable from "../administrationComponents/MessagesTable";
 
 const Messages = () => {
-  return <p>Messages</p>;
+  return (
+    <>
+      <MessagesTable />
+    </>
+  );
 };
 
 export default Messages;
