@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
-  getRoomBookings,
   deleteRoomBookings,
   createRoomBookings,
+  getRoomBookings,
+  updateRoomBookings,
 } from "../../api/roombookings";
 import { getCustomers } from "../../api/customers";
 import { getRooms } from "../../api/rooms";
 import { useSelector } from "react-redux";
 import AddBookingModal from "./AddBookingModal";
-import axios from "axios";
 
 const RoomBookingsComp = () => {
   const user = useSelector((state) => state.auth.user);
@@ -16,7 +16,7 @@ const RoomBookingsComp = () => {
   const [customers, setCustomers] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [nextRoomBookingId, setNextRoomBookingId] = useState(0); // Step 1: Initialize nextRoomBookingId state variable
+  const [nextRoomBookingId, setNextRoomBookingId] = useState(0);
 
   const [dataUpdated, setDataUpdated] = useState(false);
 
@@ -34,7 +34,7 @@ const RoomBookingsComp = () => {
         (maxId, booking) => Math.max(maxId, booking.id),
         0
       );
-      setNextRoomBookingId(greatestId + 1); // Step 2: Set the nextRoomBookingId based on the highest room booking ID
+      setNextRoomBookingId(greatestId + 1);
     } catch (error) {
       console.error("Error fetching room bookings:", error);
     }

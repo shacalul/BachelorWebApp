@@ -1,4 +1,4 @@
-import { React, Fragment, useState, useRef } from "react";
+import { React, Fragment, useState, useRef, useEffect } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { useCountries } from "use-react-countries";
 import { Phone } from "react-telephone";
@@ -6,24 +6,37 @@ import { getCountryCallingCode } from "libphonenumber-js";
 import { Select, Option } from "@material-tailwind/react";
 import { arrivalList } from "../../website/websiteComponents/Arrival";
 import { departureList } from "../../website/websiteComponents/Departure";
-import { categoryData } from "../../website/data/CategoryData";
+import {
+  getCustomers,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
+} from "../../api/customers";
+import {
+  deleteRoomBookings,
+  createRoomBookings,
+  getRoomBookings,
+  updateRoomBookings,
+} from "../../api/roombookings";
+import { getRooms } from "../../api/rooms";
 const AddTenantsModal = ({ onSubmit, disabled }) => {
+  const { countries } = useCountries();
+  const [customers, setCustomers] = useState([]);
+  const [newId, setNewId] = useState(0);
+  const [rooms, setRooms] = useState([]);
   const [size, setSize] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const handleOpen = (value) => setSize(value);
-  const { countries } = useCountries();
   const [countryCode, setCountryCode] = useState("");
   const [nationality, setNationality] = useState("");
   const [country, setCountry] = useState("");
+  const [roomBookings, setRoomBookings] = useState([]);
+  const [dataIsUpdated, setDataIsUpdated] = useState(false);
 
-  const [startOfProg, setStartOfProg] = useState("");
-  const [endOfProg, setEndOfProg] = useState("");
-
-  const [roomCategory, setRoomCategory] = useState("");
-
-  const [arrivalDate, setArrivalDate] = useState("");
-  const [departureDate, setDepartureDate] = useState("");
-
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [startRentDate, setStartRentDate] = useState(null);
+  const [endRentDate, setEndRentDate] = useState(null);
+  const [loading, setLoading] = useState(false);
   const fNameRef = useRef();
   const lNameRef = useRef();
   const emailRef = useRef();
@@ -37,24 +50,96 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
   const streetNumberRef = useRef();
   const nationalIdRadioRef = useRef();
   const idRef = useRef();
-  const passportRef = useRef();
-  const universityRef = useRef();
-  const studyProgRef = useRef();
-  const startOfProgRef = useRef();
-  const endOfProgRef = useRef();
-  const roomCatRef = useRef();
-  const arrivalDateRef = useRef();
-  const departureDateRef = useRef();
+  const roomIdRef = useRef();
+  const arrivalRef = useRef();
+  const departureRef = useRef();
 
-  const handleSubmit = (e) => {
-    const payload = {
+  // load current customers
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log(roomBookings);
+    console.log(rooms);
+    // if(roomBookings && roomBookings.length > 0){
+    // 	const updated = rooms.map(room=>{
+    // 		if(room.id===roomBookings.)
+    // 	})
+    // }
+  }, [dataIsUpdated]);
+
+  // const fetchCustomers = async () => {
+  // 	try {
+  // 		const data = await getCustomers();
+  // 		setCustomers(data);
+  // 	} catch (error) {
+  // 		console.error('Error fetching customers:', error);
+  // 	}
+  // };
+
+  // const fetchRooms = async () => {
+  // 	try {
+  // 		const data = await getRooms();
+  // 		setRooms(data);
+  // 	} catch (error) {
+  // 		console.error('Error fetching rooms:', error);
+  // 	}
+  // };
+
+  // const fetchRoomBookings = async () => {
+  // 	try {
+  // 		const data = await getRoomBookings();
+  // 		setRoomBookings(data);
+  // 		setDataIsUpdated(!dataIsUpdated);
+  // 	} catch (error) {
+  // 		console.error('Error fetching room bookings:', error);
+  // 	}
+  // };
+
+  const fetchData = async () => {
+    try {
+      // customers
+      const customersData = await getCustomers();
+      setCustomers(customersData);
+      const bookingsData = await getRoomBookings();
+      const roomsData = await getRooms();
+
+      // modifying to disable rooms which are already booked
+      roomsData.forEach((room) => {
+        room.booked = bookingsData.some(
+          (booking) => booking.roomId === room.id
+        );
+        if (!room.booked) {
+          room.booked = false;
+        }
+      });
+
+      console.log("modified", roomsData);
+
+      setRooms(roomsData);
+
+      setRoomBookings(bookingsData);
+      // setRooms(roomsData);
+    } catch (error) {
+      console.error("Error fetching room bookings:", error);
+    }
+  };
+  const handleSubmit = async (e) => {
+    setLoading(true);
+
+    // Create the customer payload
+    const greatestId = customers.reduce(
+      (maxId, user) => Math.max(maxId, user.id),
+      0
+    );
+
+    const customerPayload = {
+      id: greatestId + 1,
       firstName: fNameRef.current.value,
       surname: lNameRef.current.value,
       email: emailRef.current.value,
-      phoneNumber:
-        "+" +
-        getCountryCallingCode(countryCode.toUpperCase()) +
-        phoneRef.current.value,
+      phoneNumber: phoneRef.current.value,
       nationality: nationality,
       country: country,
       streetName: streetNameRef.current.value,
@@ -62,17 +147,61 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
       postalCode: postCodeRef.current.value,
       city: cityRef.current.value,
       passportNumber: nationalIdRadioRef.current.checked
-        ? ""
+        ? null
         : idRef.current.value,
-      idNumber: nationalIdRadioRef.current.checked
-        ? idRef.current.value
-        : "null",
+      idNumber: nationalIdRadioRef.current.checked ? idRef.current.value : null,
     };
 
-    onSubmit(payload);
-    handleOpen(null);
-  };
+    for (let key in customerPayload) {
+      if (customerPayload[key] === null) {
+        delete customerPayload[key];
+      }
+    }
 
+    // Create the customer
+
+    //
+    console.log(customerPayload);
+
+    const createdCustomer = await createCustomer(customerPayload);
+    console.log(createdCustomer);
+    // console.log(createdCustomer);
+
+    const customerId = createdCustomer.id;
+
+    // Create the room booking payload
+    const greatestBookingId = roomBookings.reduce(
+      (maxId, booking) => Math.max(maxId, booking.id),
+      0
+    );
+
+    const roomBookingPayload = {
+      id: greatestBookingId + 1,
+      customerId: customerId && customerId.toString(),
+      roomId: selectedRoomId && selectedRoomId,
+      startRentDate: startRentDate && startRentDate.toISOString(),
+      endRentDate: endRentDate && endRentDate.toISOString(),
+    };
+
+    console.log(roomBookingPayload);
+
+    // Create the room booking
+    const createdRoomBooking = await createRoomBookings(roomBookingPayload);
+    const latestBookings = await getRoomBookings();
+
+    const modifiedRooms = getModifiedRooms(latestBookings, rooms);
+
+    console.log(modifiedRooms);
+
+    setRooms((prev) => [...modifiedRooms]);
+
+    console.log(createdRoomBooking);
+
+    alert(
+      `Congratulations ${fNameRef.current.value}! Your room has been booked!`
+    );
+    window.location.reload();
+  };
   return (
     <Fragment>
       <div>
@@ -165,7 +294,6 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
                               </label>
                               <Phone>
                                 <Phone.Country
-                                  ref={countryRef}
                                   onChange={(e) =>
                                     setCountryCode(e.target.value)
                                   }
@@ -200,18 +328,9 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
                             </label>
                             <div className="w-full">
                               <Select
-                                ref={nationalRef}
-                                onChange={(value) => setNationality(value)}
                                 size="lg"
                                 label="Select Nationality"
-
-                                // selected={(element) =>
-                                // 	element &&
-                                // 	React.cloneElement(element, {
-                                // 		className:
-                                // 			'flex items-center px-0 gap-2 pointer-events-none',
-                                // 	})
-                                // }
+                                onChange={(value) => setNationality(value)}
                               >
                                 {countries.map(({ name, flags }) => (
                                   <Option
@@ -238,16 +357,9 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
                             </label>
                             <div className="w-full">
                               <Select
-                                onChange={(value) => setCountry(value)}
                                 size="lg"
                                 label="Select Country"
-                                // selected={(element) =>
-                                // 	element &&
-                                // 	React.cloneElement(element, {
-                                // 		className:
-                                // 			'flex items-center px-0 gap-2 pointer-events-none',
-                                // 	})
-                                // }
+                                onChange={(value) => setCountry(value)}
                               >
                                 {countries.map(({ name, flags }) => (
                                   <Option
@@ -351,8 +463,7 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
                           <div class="flex items-center">
                             <input
                               type="radio"
-                              value="idNumber"
-                              name="id"
+                              name="radio1"
                               id="nationalIDNumber"
                               class="h-5 w-5"
                               ref={nationalIdRadioRef}
@@ -367,8 +478,7 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
                           <div class="flex items-center">
                             <input
                               type="radio"
-                              value="passportNumber"
-                              name="id"
+                              name="radio1"
                               id="passportNumber"
                               class="h-5 w-5"
                             />
@@ -395,194 +505,100 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
                           </div>
                         </div>
                       </div>
-                      {/* 
-											<div class='-mx-3 flex flex-wrap'>
-												<div class='w-full px-3 sm:w-1/2'>
-													<div class='mb-5'>
-														<label class='mb-3 block text-base font-medium text-[#07074D]'>
-															University
-														</label>
-														<div class='flex items-center space-x-6'>
-															<div class='flex items-center w-full'>
-																<input
-																	ref={universityRef}
-																	type='text'
-																	name='university'
-																	id='university'
-																	placeholder='University'
-																	class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-																/>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class='w-full px-3 sm:w-1/2'>
-													<div class='mb-5'>
-														<label class='mb-3 block text-base font-medium text-[#07074D]'>
-															Study programme
-														</label>
-														<div class='flex items-center space-x-6'>
-															<div class='flex items-center w-full'>
-																<input
-																	ref={studyProgRef}
-																	type='text'
-																	name='sProgramme'
-																	id='sProgramme'
-																	placeholder='Study programme'
-																	class='w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'
-																/>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class='-mx-3 flex flex-wrap'>
-												<div className='w-full px-3 sm:w-1/2'>
-													<div className='mb-5'>
-														<label
-															className='mb-3 block text-base font-medium text-[#07074D]'
-															htmlFor='sProgram'
-														>
-															Start Of Programme
-														</label>
-														<div
-															className='w-full border '
-															name='sProgram'
-															id='sProgram'
-														>
-															<Select
-																size='lg'
-																label='Select Date'
-																onChange={(value) => setStartOfProg(value)}
-															>
-																{arrivalList.map((option) => (
-																	<Option
-																		key={option.value}
-																		value={option.value}
-																	>
-																		{option.name}
-																	</Option>
-																))}
-															</Select>
-														</div>
-													</div>
-												</div>
-												<div className='w-full px-3 sm:w-1/2'>
-													<div className='mb-5'>
-														<label
-															className='mb-3 block text-base font-medium text-[#07074D]'
-															htmlFor='eProgram'
-														>
-															End Of Programme
-														</label>
-														<div
-															className='w-full border '
-															name='eProgram'
-															id='eProgram'
-														>
-															<Select
-																size='lg'
-																label='Select Date'
-																onChange={(value) => setEndOfProg(value)}
-															>
-																{departureList.map((option) => (
-																	<Option
-																		key={option.value}
-																		value={option.value}
-																	>
-																		{option.name}
-																	</Option>
-																))}
-															</Select>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class='mb-5'>
-												<label
-													class='mb-3 block text-base font-medium text-[#07074D]'
-													for='roomCategoryDropDown'
-												>
-													Room Category
-												</label>
-												<div
-													className='w-full border '
-													name='roomCategoryDropDown'
-													id='roomCategoryDropDown'
-												>
-													<Select
-														size='lg'
-														label='Select Room Category'
-														onChange={(value) => setRoomCategory(value)}
-													>
-														{categoryData.map((category) => (
-															<Option key={category.id}>{category.name}</Option>
-														))}
-													</Select>
-												</div>
-											</div>
-											<div class='-mx-3 flex flex-wrap'>
-												<div className='w-full px-3 sm:w-1/2'>
-													<div className='mb-5'>
-														<label
-															className='mb-3 block text-base font-medium text-[#07074D]'
-															htmlFor='arrivalDepartureDropDown'
-														>
-															Arrival Date
-														</label>
-														<div
-															className='w-full border '
-															name='arrivalDepartureDropDown'
-															id='arrivalDepartureDropDown'
-														>
-															<Select
-																size='lg'
-																label='Select Date'
-																onChange={(value) => setArrivalDate(value)}
-															>
-																{arrivalList.map((option) => (
-																	<Option
-																		key={option.value}
-																		value={option.value}
-																	>
-																		{option.name}
-																	</Option>
-																))}
-															</Select>
-														</div>
-													</div>
-												</div>
-												<div className='w-full px-3 sm:w-1/2'>
-													<div className='mb-5'>
-														<label
-															className='mb-3 block text-base font-medium text-[#07074D]'
-															htmlFor='departureDepartureDropDown'
-														>
-															Departure Date
-														</label>
-														<div
-															className='w-full border '
-															name='departureDepartureDropDown'
-															id='departureDepartureDropDown'
-														>
-															<Select
-																size='lg'
-																label='Select Date'
-																onChange={(value) => setDepartureDate(value)}
-															>
-																{departureList.map((option) => (
-																	<Option
-																		key={option.value}
-																		value={option.value}
-																	>
-																		{option.name}
-																	</Option>
-																))}
-															</Select>
-														</div>
-													</div>
-												</div>
-											</div> */}
+
+                      <div class="mb-5">
+                        <label
+                          class="mb-3 block text-base font-medium text-[#07074D]"
+                          for="roomNumberDropDown"
+                        >
+                          Room Number
+                        </label>
+                        <div
+                          className="w-full border "
+                          name="roomNumberDropDown"
+                          id="roomNumberDropDown"
+                        >
+                          <Select
+                            size="lg"
+                            label="Select Room Number"
+                            onChange={(value) => setSelectedRoomId(value)}
+                          >
+                            {rooms.map((room) => (
+                              <Option
+                                key={room.id}
+                                value={room.id}
+                                disabled={room.booked}
+                                title={room.booked ? "Already booked" : ""}
+                              >
+                                {room.number}
+                              </Option>
+                            ))}
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div class="-mx-3 flex flex-wrap">
+                        <div className="w-full px-3 sm:w-1/2">
+                          <div className="mb-5">
+                            <label
+                              className="mb-3 block text-base font-medium text-[#07074D]"
+                              htmlFor="arrivalDepartureDropDown"
+                            >
+                              Arrival Date
+                            </label>
+                            <div
+                              className="w-full border "
+                              name="arrivalDepartureDropDown"
+                              id="arrivalDepartureDropDown"
+                            >
+                              <Select
+                                size="lg"
+                                label="Select Date"
+                                onChange={(value) => setStartRentDate(value)}
+                              >
+                                {arrivalList.map((option) => (
+                                  <Option
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.name}
+                                  </Option>
+                                ))}
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-full px-3 sm:w-1/2">
+                          <div className="mb-5">
+                            <label
+                              className="mb-3 block text-base font-medium text-[#07074D]"
+                              htmlFor="departureDepartureDropDown"
+                            >
+                              Departure Date
+                            </label>
+                            <div
+                              className="w-full border "
+                              name="departureDepartureDropDown"
+                              id="departureDepartureDropDown"
+                            >
+                              <Select
+                                size="lg"
+                                label="Select Date"
+                                onChange={(value) => setEndRentDate(value)}
+                              >
+                                {departureList.map((option) => (
+                                  <Option
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.name}
+                                  </Option>
+                                ))}
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -605,7 +621,8 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
             <div class="w-full px-3 sm:w-1/2">
               <div class="mb-5">
                 <button
-                  onClick={(e) => handleSubmit(e)}
+                  loading={loading}
+                  onClick={handleSubmit}
                   className="btn btn-secondary btn-sm w-full mx-auto"
                 >
                   Confirm
@@ -619,3 +636,12 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
   );
 };
 export default AddTenantsModal;
+function getModifiedRooms(bookingsData, roomsData) {
+  roomsData.forEach((room) => {
+    room.booked = bookingsData.some((booking) => booking.roomId === room.id);
+    if (!room.booked) {
+      room.booked = false;
+    }
+  });
+  return roomsData;
+}

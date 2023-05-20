@@ -3,6 +3,7 @@ import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 
 import { CategoryContext } from "../../website/context/CategoryContext";
 import { Select, Option } from "@material-tailwind/react";
+
 export function getArrivalDates() {
   const availableMonths = [2, 8];
   const now = new Date();
@@ -11,10 +12,9 @@ export function getArrivalDates() {
   const arrivalDates = [];
   for (let year = currentYear; year <= currentYear + 2; year++) {
     availableMonths.forEach((month) => {
-      const arrivalDay = month === 2 ? 3 : 1; // Set the arrival day based on the month
+      const arrivalDay = month === 2 ? 3 : 1;
       const arrivalDate = new Date(year, month - 1, arrivalDay);
       if (arrivalDate >= now) {
-        // Add the arrival date only if it's in the future
         arrivalDates.push(arrivalDate);
       }
     });
