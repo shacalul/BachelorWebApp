@@ -6,7 +6,7 @@ import { EffectFade, Autoplay } from "swiper";
 import firstImage from "../../assets/carouselImages/carouselFirst.jpg";
 import secondImage from "../../assets/carouselImages/carouselSecond.jpg";
 import thirdImage from "../../assets/carouselImages/carouselThird.jpg";
-
+import { animateScroll } from "react-scroll";
 const slides = [
   {
     title: "Student Village Kamtjatka",
@@ -24,6 +24,15 @@ const slides = [
     btnText: "See our categories",
   },
 ];
+const scrollToCategories = () => {
+  const categoriesElement = document.getElementById("categories");
+  const offsetTop = categoriesElement.offsetTop;
+
+  window.scrollTo({
+    top: offsetTop,
+    behavior: "smooth",
+  });
+};
 const HomeCarousel = () => {
   return (
     <Swiper
@@ -48,7 +57,10 @@ const HomeCarousel = () => {
               <h1 className="text-[32px] font-primary uppercase tracking-[2px] max-w-[920px] lg:text-[68px] leading-tight mb-6">
                 {title}
               </h1>
-              <button className="btn btn-lg btn-primary mx-auto">
+              <button
+                className="btn btn-lg btn-primary mx-auto"
+                onClick={scrollToCategories}
+              >
                 {btnText}
               </button>
             </div>

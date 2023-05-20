@@ -2,8 +2,7 @@ import React from "react";
 
 //components imports
 import Layout from "./website/Layout/Layout";
-import TopAppbar from "./website/Navbar/TopAppbar";
-import BottomAppbar from "./website/Navbar/BottomAppBar";
+
 import ScrollToTop from "./website/websiteComponents/ScrollToTop";
 //pages imports
 import Home from "./website/websitePages/Home";
@@ -21,11 +20,11 @@ import AdminLayout from "./administration/administrationPages/AdminLayout";
 import Invoices from "./administration/administrationPages/Invoices";
 import Tenants from "./administration/administrationPages/Tenants";
 import Profile from "./administration/administrationPages/Profile";
-import Calendar from "./administration/administrationPages/Calendar";
+
 import Finances from "./administration/administrationPages/Finances";
 import Index from "./administration/administrationPages/Index";
 import Administrators from "./administration/administrationPages/Administrators";
-import Categories from "./administration/administrationPages/Categories";
+
 import RoomBookings from "./administration/administrationPages/RoomBookings";
 import Messages from "./administration/administrationPages/Messages";
 
@@ -60,6 +59,7 @@ const App = () => {
                 </Layout>
               }
             />
+
             <Route
               path="/BachelorWebApp/category/:id"
               element={

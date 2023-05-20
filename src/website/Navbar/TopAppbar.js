@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { NavLink } from "react-router-dom";
-
+import { animateScroll } from "react-scroll";
 const TopAppBar = ({ currentPage }) => {
   const [topAppBar, setTopAppBar] = useState(false);
   const [hideTopAppBar, setHideTopAppBar] = useState(false);
@@ -16,7 +16,15 @@ const TopAppBar = ({ currentPage }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const scrollToCategories = () => {
+    const categoriesElement = document.getElementById("categories");
+    const offsetTop = categoriesElement.offsetTop;
 
+    window.scrollTo({
+      top: offsetTop,
+      behavior: "smooth",
+    });
+  };
   useEffect(() => {
     if (currentPage === "/BachelorWebApp/checkoutform") {
       setHideTopAppBar(true);
@@ -43,7 +51,8 @@ const TopAppBar = ({ currentPage }) => {
     },
     {
       name: "Rooms & Categories",
-      link: "/",
+      link: "/BachelorWebApp",
+      onClick: scrollToCategories,
     },
     {
       name: "Book a room",
@@ -72,9 +81,15 @@ const TopAppBar = ({ currentPage }) => {
             topAppBar ? "text-primary" : "text-white"
           } flex gap-x-4 font-tertiary tracking-[3px] text-[15px] items-center uppercase lg:gap-x-8`}
         >
-          {Links.map((link) => (
-            <li key={link.name} className="hover:text-accent transition">
-              <NavLink to={link.link}>{link.name}</NavLink>
+          {Links.map((link, index) => (
+            <li key={index}>
+              <NavLink
+                to={link.link}
+                onClick={link.onClick} // Attach onClick event to the NavLink
+                activeClassName="active"
+              >
+                {link.name}
+              </NavLink>
             </li>
           ))}
         </ul>

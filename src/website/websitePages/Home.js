@@ -3,6 +3,7 @@ import React from "react";
 import Categories from "../websiteComponents/Categories";
 import FilterCategories from "../websiteComponents/FilterCategories";
 import HomeCarousel from "../websiteComponents/HomeCarousel";
+
 const Home = () => {
   return (
     <>
