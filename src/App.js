@@ -27,6 +27,7 @@ import Index from "./administration/administrationPages/Index";
 import Administrators from "./administration/administrationPages/Administrators";
 import Categories from "./administration/administrationPages/Categories";
 import RoomBookings from "./administration/administrationPages/RoomBookings";
+import Messages from "./administration/administrationPages/Messages";
 
 const App = () => {
   const AdminApp = () => {
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/administrators" element={<Administrators />} />
           <Route path="/roombookings" element={<RoomBookings />} />
+          <Route path="/messages" element={<Messages />} />
         </Routes>
       </AdminLayout>
     );
