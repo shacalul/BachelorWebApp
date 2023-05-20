@@ -89,17 +89,6 @@ const MessagesTable = () => {
             </div>
           </div>
         </div>
-        <div className="w-full sm:w-1/2 px-3 text-right">
-          <div className="mb-5">
-            <button
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-              onClick={() => resetForm()}
-              disabled={user && user.roleId !== 1}
-            >
-              Add Message
-            </button>
-          </div>
-        </div>
       </div>
       <div className="min-w-full">
         <table className="min-w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">

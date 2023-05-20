@@ -14,16 +14,8 @@ import DeleteModal from "./DeleteModal";
 const Customers = () => {
   const user = useSelector((state) => state.auth.user);
   const [customers, setCustomers] = useState([]);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [formData, setFormData] = useState({
-    firstName: "",
-    surname: "",
-    email: "",
-    phone: "",
-    nationality: "",
-  });
 
   const [dataUpdated, setDataUpdated] = useState(false);
 
@@ -40,53 +32,6 @@ const Customers = () => {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      if (isEditing) {
-        await updateCustomer({ ...formData, id: selectedCustomer.id });
-      } else {
-        await createCustomer(formData);
-      }
-      fetchCustomers();
-      resetForm();
-    } catch (error) {
-      console.error("Error submitting customer:", error);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await deleteCustomer(id);
-      fetchCustomers();
-    } catch (error) {
-      console.error("Error deleting customer:", error);
-    }
-  };
-
-  const resetForm = () => {
-    setIsEditing(false);
-    setSelectedCustomer(null);
-    setFormData({
-      firstName: "",
-      surname: "",
-      email: "",
-      phone: "",
-      nationality: "",
-    });
-  };
-
-  const handleEdit = (customer) => {
-    setIsEditing(true);
-    setSelectedCustomer(customer);
-    setFormData({
-      firstName: customer.firstName,
-      surname: customer.surname,
-      email: customer.email,
-      phone: customer.phoneNumber,
-      nationality: customer.nationality,
-    });
-  };
   const submitHandler = async (payload) => {
     const response = await createCustomer(payload);
     if (response) {
@@ -190,7 +135,10 @@ const Customers = () => {
                         disabled={user && user.roleId === 3 ? true : false}
                       />
                       <DeleteModal
-                        disabled={user && user.roleId === 3 ? true : false}
+                        onDeleteComplet={(value) =>
+                          setDataUpdated(!dataUpdated)
+                        }
+                        disabled={user && user.roleId !== 1}
                         id={customer.id}
                       />
                     </div>
