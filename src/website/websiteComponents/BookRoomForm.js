@@ -6,6 +6,7 @@ import { Select, Option } from "@material-tailwind/react";
 import { arrivalList } from "./Arrival";
 import { departureList } from "./Departure";
 import { categoryData } from "../data/CategoryData";
+
 import InfoModal from "./InfoModal";
 
 import {
@@ -202,9 +203,10 @@ const BookRoomForm = () => {
 
     console.log(createdRoomBooking);
 
-    setLoading(false);
-
-    alert(`Congts ${fNameRef.current.value}! Your room has been booked!`);
+    alert(
+      `Congratulations ${fNameRef.current.value}! Your room has been booked!`
+    );
+    window.location.reload();
   };
 
   return (
