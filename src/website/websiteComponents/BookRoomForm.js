@@ -33,6 +33,12 @@ const BookRoomForm = () => {
   const [countryCode, setCountryCode] = useState("");
   const [nationality, setNationality] = useState("");
   const [country, setCountry] = useState("");
+  const [roomBookings, setRoomBookings] = useState([]);
+  const [dataIsUpdated, setDataIsUpdated] = useState(false);
+
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [startRentDate, setStartRentDate] = useState(null);
+  const [endRentDate, setEndRentDate] = useState(null);
 
   const [loading, setLoading] = useState(false);
 
@@ -55,28 +61,75 @@ const BookRoomForm = () => {
 
   // load current customers
   useEffect(() => {
-    fetchCustomers();
-    fetchRooms();
+    fetchData();
   }, []);
 
-  const fetchCustomers = async () => {
+  useEffect(() => {
+    console.log(roomBookings);
+    console.log(rooms);
+    // if(roomBookings && roomBookings.length > 0){
+    // 	const updated = rooms.map(room=>{
+    // 		if(room.id===roomBookings.)
+    // 	})
+    // }
+  }, [dataIsUpdated]);
+
+  // const fetchCustomers = async () => {
+  // 	try {
+  // 		const data = await getCustomers();
+  // 		setCustomers(data);
+  // 	} catch (error) {
+  // 		console.error('Error fetching customers:', error);
+  // 	}
+  // };
+
+  // const fetchRooms = async () => {
+  // 	try {
+  // 		const data = await getRooms();
+  // 		setRooms(data);
+  // 	} catch (error) {
+  // 		console.error('Error fetching rooms:', error);
+  // 	}
+  // };
+
+  // const fetchRoomBookings = async () => {
+  // 	try {
+  // 		const data = await getRoomBookings();
+  // 		setRoomBookings(data);
+  // 		setDataIsUpdated(!dataIsUpdated);
+  // 	} catch (error) {
+  // 		console.error('Error fetching room bookings:', error);
+  // 	}
+  // };
+
+  const fetchData = async () => {
     try {
-      const data = await getCustomers();
-      setCustomers(data);
+      // customers
+      const customersData = await getCustomers();
+      setCustomers(customersData);
+      const bookingsData = await getRoomBookings();
+      const roomsData = await getRooms();
+
+      // modifying to disable rooms which are already booked
+      roomsData.forEach((room) => {
+        room.booked = bookingsData.some(
+          (booking) => booking.roomId === room.id
+        );
+        if (!room.booked) {
+          room.booked = false;
+        }
+      });
+
+      console.log("modified", roomsData);
+
+      setRooms(roomsData);
+
+      setRoomBookings(bookingsData);
+      // setRooms(roomsData);
     } catch (error) {
-      console.error("Error fetching customers:", error);
+      console.error("Error fetching room bookings:", error);
     }
   };
-
-  const fetchRooms = async () => {
-    try {
-      const data = await getRooms();
-      setRooms(data);
-    } catch (error) {
-      console.error("Error fetching rooms:", error);
-    }
-  };
-
   const handleSubmit = async (e) => {
     setLoading(true);
 
@@ -85,15 +138,13 @@ const BookRoomForm = () => {
       (maxId, user) => Math.max(maxId, user.id),
       0
     );
+
     const customerPayload = {
       id: greatestId + 1,
       firstName: fNameRef.current.value,
       surname: lNameRef.current.value,
       email: emailRef.current.value,
-      phoneNumber:
-        "+" +
-        getCountryCallingCode(countryCode.toUpperCase()) +
-        phoneRef.current.value,
+      phoneNumber: phoneRef.current.value,
       nationality: nationality,
       country: country,
       streetName: streetNameRef.current.value,
@@ -113,20 +164,47 @@ const BookRoomForm = () => {
     }
 
     // Create the customer
+
+    //
+    console.log(customerPayload);
+
     const createdCustomer = await createCustomer(customerPayload);
+    console.log(createdCustomer);
+    // console.log(createdCustomer);
+
     const customerId = createdCustomer.id;
 
     // Create the room booking payload
+    const greatestBookingId = roomBookings.reduce(
+      (maxId, booking) => Math.max(maxId, booking.id),
+      0
+    );
+
     const roomBookingPayload = {
-      customerId: customerId,
-      roomId: roomIdRef.current.value,
-      arrival: arrivalRef.current.value,
-      departure: departureRef.current.value,
+      id: greatestBookingId + 1,
+      customerId: customerId && customerId.toString(),
+      roomId: selectedRoomId && selectedRoomId,
+      startRentDate: startRentDate && startRentDate.toISOString(),
+      endRentDate: endRentDate && endRentDate.toISOString(),
     };
+
+    console.log(roomBookingPayload);
 
     // Create the room booking
     const createdRoomBooking = await createRoomBookings(roomBookingPayload);
+    const latestBookings = await getRoomBookings();
+
+    const modifiedRooms = getModifiedRooms(latestBookings, rooms);
+
+    console.log(modifiedRooms);
+
+    setRooms((prev) => [...modifiedRooms]);
+
+    console.log(createdRoomBooking);
+
     setLoading(false);
+
+    alert(`Congts ${fNameRef.current.value}! Your room has been booked!`);
   };
 
   return (
@@ -431,9 +509,18 @@ const BookRoomForm = () => {
                 name="roomNumberDropDown"
                 id="roomNumberDropDown"
               >
-                <Select size="lg" label="Select Room Number" ref={roomIdRef}>
+                <Select
+                  size="lg"
+                  label="Select Room Number"
+                  onChange={(value) => setSelectedRoomId(value)}
+                >
                   {rooms.map((room) => (
-                    <Option key={room.id} value={room.number}>
+                    <Option
+                      key={room.id}
+                      value={room.id}
+                      disabled={room.booked}
+                      title={room.booked ? "Already booked" : ""}
+                    >
                       {room.number}
                     </Option>
                   ))}
@@ -455,7 +542,11 @@ const BookRoomForm = () => {
                     name="arrivalDepartureDropDown"
                     id="arrivalDepartureDropDown"
                   >
-                    <Select size="lg" label="Select Date" ref={arrivalRef}>
+                    <Select
+                      size="lg"
+                      label="Select Date"
+                      onChange={(value) => setStartRentDate(value)}
+                    >
                       {arrivalList.map((option) => (
                         <Option key={option.value} value={option.value}>
                           {option.name}
@@ -478,7 +569,11 @@ const BookRoomForm = () => {
                     name="departureDepartureDropDown"
                     id="departureDepartureDropDown"
                   >
-                    <Select size="lg" label="Select Date" ref={departureRef}>
+                    <Select
+                      size="lg"
+                      label="Select Date"
+                      onChange={(value) => setEndRentDate(value)}
+                    >
                       {departureList.map((option) => (
                         <Option key={option.value} value={option.value}>
                           {option.name}
@@ -503,3 +598,28 @@ const BookRoomForm = () => {
 };
 
 export default BookRoomForm;
+
+function getModifiedRooms(bookingsData, roomsData) {
+  roomsData.forEach((room) => {
+    room.booked = bookingsData.some((booking) => booking.roomId === room.id);
+    if (!room.booked) {
+      room.booked = false;
+    }
+  });
+  return roomsData;
+}
+
+/*
+
+
+{
+    "id":2,
+    "roomId": "2",
+    "customerId": "120",
+    "startRentDate": "2023-11-08T00:00:00",
+    "endRentDate": "2023-12-08T00:00:00"
+  
+}
+
+
+*/
