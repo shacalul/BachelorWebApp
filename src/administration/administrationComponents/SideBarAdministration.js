@@ -100,6 +100,14 @@ const SideBarAdministration = () => {
           </li>
           <li>
             <NavLink
+              to="/BachelorWebApp/admin/roles"
+              className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <span className="flex-1 ml-3 whitespace-nowrap">Roles</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
               to="/BachelorWebApp/admin/signout"
               onClick={(e) => handleSignout(e)}
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"

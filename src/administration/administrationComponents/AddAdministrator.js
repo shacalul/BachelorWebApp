@@ -1,12 +1,14 @@
-import { React, Fragment, useState, useRef } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { Phone } from "react-telephone";
 import { getCountryCallingCode } from "libphonenumber-js";
+import { getRoles } from "../../api/roles";
 
 const AddAdministrator = ({ onSubmit, disabled }) => {
   const [size, setSize] = useState(null);
   const handleOpen = (value) => setSize(value);
   const [countryCode, setCountryCode] = useState("");
+  const [roles, setRoles] = useState([]);
 
   const fNameRef = useRef();
   const lNameRef = useRef();
@@ -15,6 +17,19 @@ const AddAdministrator = ({ onSubmit, disabled }) => {
   const countryRef = useRef();
   const passwordRef = useRef();
   const employeeRoleRef = useRef();
+
+  useEffect(() => {
+    fetchRoles();
+  }, []);
+
+  const fetchRoles = async () => {
+    try {
+      const roles = await getRoles();
+      setRoles(roles);
+    } catch (error) {
+      console.error("Error fetching roles:", error);
+    }
+  };
 
   const handleSubmit = (e) => {
     const payload = {
@@ -29,7 +44,6 @@ const AddAdministrator = ({ onSubmit, disabled }) => {
     onSubmit(payload);
     handleOpen(null);
   };
-
   return (
     <Fragment>
       <div>
@@ -119,19 +133,11 @@ const AddAdministrator = ({ onSubmit, disabled }) => {
                         <div class="w-full px-3 sm:w-1/2">
                           <div class="mb-5">
                             <label
-                              for="fName"
+                              for="fRole"
                               class="mb-3 block text-base font-medium text-[#07074D]"
                             >
                               Select Employe Role
                             </label>
-                            {/* <input
-														
-															type='text'
-															name='firstName'
-															id='firstName'
-															placeholder='First Name'
-															
-														/> */}
 
                             <select
                               name="employeeRole"
@@ -139,9 +145,11 @@ const AddAdministrator = ({ onSubmit, disabled }) => {
                               ref={employeeRoleRef}
                               className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                             >
-                              <option value="1">Manager</option>
-                              <option value="2">Administrator</option>
-                              <option value="3">Handy Man</option>
+                              {roles.map((role) => (
+                                <option value={role.id} key={role.id}>
+                                  {role.name}
+                                </option>
+                              ))}
                             </select>
                           </div>
                         </div>

@@ -27,7 +27,7 @@ import Administrators from "./administration/administrationPages/Administrators"
 
 import RoomBookings from "./administration/administrationPages/RoomBookings";
 import Messages from "./administration/administrationPages/Messages";
-
+import Roles from "./administration/administrationPages/Roles";
 const App = () => {
   const AdminApp = () => {
     return (
@@ -41,6 +41,7 @@ const App = () => {
           <Route path="/administrators" element={<Administrators />} />
           <Route path="/roombookings" element={<RoomBookings />} />
           <Route path="/messagesdata" element={<Messages />} />
+          <Route path="/roles" element={<Roles />} />
         </Routes>
       </AdminLayout>
     );

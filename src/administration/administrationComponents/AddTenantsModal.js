@@ -19,6 +19,7 @@ import {
   updateRoomBookings,
 } from "../../api/roombookings";
 import { getRooms } from "../../api/rooms";
+
 const AddTenantsModal = ({ onSubmit, disabled }) => {
   const { countries } = useCountries();
   const [customers, setCustomers] = useState([]);
