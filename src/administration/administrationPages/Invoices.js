@@ -9,6 +9,7 @@ import { Input, Textarea } from "@material-tailwind/react";
 
 const Invoices = () => {
   const [searchValue, setSearchValue] = useState("");
+  const [searchedTeanant, setSearchedTeanant] = useState("");
   const [matchingTenants, setMatchingTenants] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false); //state variable for dropdown
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -22,20 +23,37 @@ const Invoices = () => {
     setMessage(value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Prepare the finance data
     const financeData = {
-      category: selectedCategory.id,
-      amountOfMoney: amount,
-      customerId: searchValue.id,
+      name: "Invoice",
+      financeCategoryId: selectedCategory.id,
+      amountOfMoney: amount + "",
+      customerId: searchedTeanant.id,
       dueDate: selectedDate,
       description: message,
     };
-
-    console.log(createFinance([financeData]));
+    try {
+      const result = await createFinance([financeData]);
+      // Success case
+      alert("Success");
+      clearForm();
+      console.log(result); // You can access the result data if needed
+    } catch (error) {
+      // Error case
+      alert("Error");
+      console.error(error);
+    }
   };
 
+  const clearForm = () => {
+    setSelectedCategory("");
+    setSelectedDate(null);
+    setSearchValue("");
+    setMessage("");
+    setAmount("");
+  };
   const handleAmountChange = (e) => {
     const value = e.target.value;
     setAmount(value.replace(/[^0-9]/g, "")); // Remove non-numeric characters
@@ -77,16 +95,16 @@ const Invoices = () => {
   };
 
   const handleTenantSelect = (tenant) => {
-    setSearchValue(`${tenant.firstName} ${tenant.surname}`);
+    setSearchValue(tenant.firstName + " " + tenant.surname);
+    setSearchedTeanant(tenant);
     // Handle tenant selection logic here
     setShowDropdown(false); // Hide the dropdown after selecting a tenant
-    console.log("Selected tenant:", tenant);
   };
 
   const fetchFinanceCategories = async () => {
     try {
       const financeCategories = await getFinanceCategories();
-      setFinanceCategories(financeCategories.map((category) => category.name));
+      setFinanceCategories(financeCategories);
     } catch (error) {
       console.error("Error fetching finance categories:", error);
     }
@@ -107,16 +125,16 @@ const Invoices = () => {
                   type="text"
                   id="category"
                   name="category"
-                  value={selectedCategory}
+                  value={selectedCategory.name}
                 >
                   {financeCategories.map((category) => (
                     <Option
                       key={category.id}
-                      value={category}
+                      value={category.name}
                       className="cursor-pointer hover:bg-gray-200 px-4 py-2"
                       onClick={() => handleCategorySelect(category)}
                     >
-                      {category}
+                      {category.name}
                     </Option>
                   ))}
                 </Select>
