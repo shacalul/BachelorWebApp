@@ -1,8 +1,11 @@
 import { React, Fragment, useState } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 
-import { deleteCustomer } from "../../api/customers";
-import { getRoomBookings, deleteRoomBookings } from "../../api/roombookings";
+import { deleteCustomer } from "../../../../api/customers";
+import {
+  getRoomBookings,
+  deleteRoomBookings,
+} from "../../../../api/roombookings";
 const DeleteModal = ({ id, disabled, onDeleteComplet }) => {
   const [size, setSize] = useState(null);
   const handleOpen = (value) => setSize(value);

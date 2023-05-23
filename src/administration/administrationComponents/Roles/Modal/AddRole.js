@@ -1,6 +1,6 @@
 import { React, Fragment, useState, useRef, useEffect } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
-import { getRoles, createRole } from "../../api/roles";
+import { getRoles, createRole } from "../../../../api/roles";
 const AddRole = ({ onSubmit, disabled }) => {
   const [size, setSize] = useState(null);
   const handleOpen = (value) => setSize(value);

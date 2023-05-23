@@ -1,9 +1,9 @@
 import React, { useRef } from "react";
-import sideImage from "../../assets/carouselImages/carouselThird.jpg";
+import sideImage from "../../../assets/carouselImages/carouselThird.jpg";
 import { useNavigate } from "react-router-dom";
-import { getAdministrators } from "../../api/administrators";
+import { getAdministrators } from "../../../api/administrators";
 
-import { login } from "../../store/reducers/authSlice";
+import { login } from "../../../store/reducers/authSlice";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useDispatch } from "react-redux";
 const Signin = () => {

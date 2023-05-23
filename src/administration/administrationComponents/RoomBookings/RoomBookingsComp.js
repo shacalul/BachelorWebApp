@@ -4,11 +4,11 @@ import {
   createRoomBookings,
   getRoomBookings,
   updateRoomBookings,
-} from "../../api/roombookings";
-import { getCustomers } from "../../api/customers";
-import { getRooms } from "../../api/rooms";
+} from "../../../api/roombookings";
+import { getCustomers } from "../../../api/customers";
+import { getRooms } from "../../../api/rooms";
 import { useSelector } from "react-redux";
-import AddBookingModal from "./AddBookingModal";
+import AddBookingModal from "./Modal/AddBookingModal";
 
 const RoomBookingsComp = () => {
   const user = useSelector((state) => state.auth.user);

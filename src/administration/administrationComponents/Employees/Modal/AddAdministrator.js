@@ -2,7 +2,7 @@ import React, { Fragment, useState, useRef, useEffect } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { Phone } from "react-telephone";
 import { getCountryCallingCode } from "libphonenumber-js";
-import { getRoles } from "../../api/roles";
+import { getRoles } from "../../../../api/roles";
 
 const AddAdministrator = ({ onSubmit, disabled }) => {
   const [size, setSize] = useState(null);

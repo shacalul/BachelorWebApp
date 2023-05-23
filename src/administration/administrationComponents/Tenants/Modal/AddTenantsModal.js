@@ -4,21 +4,21 @@ import { useCountries } from "use-react-countries";
 import { Phone } from "react-telephone";
 import { getCountryCallingCode } from "libphonenumber-js";
 import { Select, Option } from "@material-tailwind/react";
-import { arrivalList } from "../../website/websiteComponents/Arrival";
-import { departureList } from "../../website/websiteComponents/Departure";
+import { arrivalList } from "../../../../website/websiteComponents/Arrival";
+import { departureList } from "../../../../website/websiteComponents/Departure";
 import {
   getCustomers,
   createCustomer,
   updateCustomer,
   deleteCustomer,
-} from "../../api/customers";
+} from "../../../../api/customers";
 import {
   deleteRoomBookings,
   createRoomBookings,
   getRoomBookings,
   updateRoomBookings,
-} from "../../api/roombookings";
-import { getRooms } from "../../api/rooms";
+} from "../../../../api/roombookings";
+import { getRooms } from "../../../../api/rooms";
 
 const AddTenantsModal = ({ onSubmit, disabled }) => {
   const { countries } = useCountries();

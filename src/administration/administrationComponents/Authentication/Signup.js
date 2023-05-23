@@ -1,5 +1,5 @@
 import React from "react";
-import sideImage from "../../assets/carouselImages/carouselThird.jpg";
+import sideImage from "../../../assets/carouselImages/carouselThird.jpg";
 import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const navigate = useNavigate();

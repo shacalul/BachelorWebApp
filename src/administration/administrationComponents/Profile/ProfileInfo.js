@@ -8,11 +8,11 @@ import {
   createRoles,
   updateRoles,
   deleteRoles,
-} from "../../api/roles";
+} from "../../../api/roles";
 
 import { useSelector, useDispatch } from "react-redux";
-import { updateAdministrator } from "../../api/administrators";
-import { updateUser } from "../../store/reducers/authSlice";
+import { updateAdministrator } from "../../../api/administrators";
+import { updateUser } from "../../../store/reducers/authSlice";
 const ProfileInfo = ({ onSubmit }) => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();

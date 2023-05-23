@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import RoomBookingsComp from "../administrationComponents/RoomBookingsComp";
+import RoomBookingsComp from "../administrationComponents/RoomBookings/RoomBookingsComp";
 
 const RoomBookings = () => {
   return (

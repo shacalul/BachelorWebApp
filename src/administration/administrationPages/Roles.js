@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import RolesTable from "../administrationComponents/RolesTable";
+import RolesTable from "../administrationComponents/Roles/RolesTable";
 const Roles = () => {
   return (
     <div>

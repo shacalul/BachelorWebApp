@@ -1,6 +1,6 @@
 import React from "react";
 
-import Customers from "../administrationComponents/Customers";
+import Customers from "../administrationComponents/Tenants/Customers";
 const Tenants = () => {
   return (
     <>

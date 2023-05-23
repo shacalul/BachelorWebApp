@@ -3,9 +3,9 @@ import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { useCountries } from "use-react-countries";
 import { Phone } from "react-telephone";
 import { Select, Option } from "@material-tailwind/react";
-import { arrivalList } from "../../website/websiteComponents/Arrival";
-import { departureList } from "../../website/websiteComponents/Departure";
-import { categoryData } from "../../website/data/CategoryData";
+import { arrivalList } from "../../../../website/websiteComponents/Arrival";
+import { departureList } from "../../../../website/websiteComponents/Departure";
+import { categoryData } from "../../../../website/data/CategoryData";
 const EditTenantsModal = ({ disabled }) => {
   const [size, setSize] = useState(null);
   const [isChecked, setIsChecked] = useState(false);

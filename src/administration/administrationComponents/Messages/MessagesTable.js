@@ -1,47 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { getRoles, createRole } from "../../api/roles";
-import AddRole from "./AddRole";
+import { getMessages, deleteMessage } from "../../../api/messages";
 
 import { useSelector } from "react-redux";
-import DeleteRoleModal from "./DeleteRoleModal";
-const RolesTable = () => {
+
+const MessagesTable = () => {
   const user = useSelector((state) => state.auth.user);
-  const [roles, setRoles] = useState([]);
+
+  const [messages, setMessages] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState("");
 
   const [dataUpdated, setDataUpdated] = useState(false);
 
   useEffect(() => {
-    fetchRoles();
+    fetchMessages();
   }, [dataUpdated]);
 
-  const fetchRoles = async () => {
+  const fetchMessages = async () => {
     try {
-      const data = await getRoles();
-      setRoles(data);
+      const data = await getMessages();
+      setMessages(data);
     } catch (error) {
-      console.error("Error fetching roles:", error);
+      console.error("Error fetching messages:", error);
     }
   };
 
-  const submitHandler = async (payload) => {
-    const response = await createRole(payload);
-    if (response) {
-      setDataUpdated(!dataUpdated);
-    } else {
-      alert("error creating role");
+  const handleDelete = async (id) => {
+    try {
+      await deleteMessage(id);
+      fetchMessages();
+    } catch (error) {
+      console.error("Error deleting message:", error);
     }
   };
 
-  const filteredRole = roles.filter((role) =>
-    `${role.id} ${role.name}  `
+  const filteredMessages = messages.filter((message) =>
+    `${message.email} ${message.subject} ${message.message}`
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
+
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
-      <h2 class="h2 text-center ">Roles</h2>
+      <h2 className="h2 text-center">Messages</h2>
 
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full sm:w-1/2 px-3">
@@ -69,20 +70,11 @@ const RolesTable = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for roles..."
+                placeholder="Search for messages..."
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
             </div>
-          </div>
-        </div>
-        <div className="w-full sm:w-1/2 px-3 text-right">
-          <div className="mb-5">
-            <AddRole
-              disabled={user && user.roleId === 3}
-              onSubmit={submitHandler}
-              style={{ overflowY: "scroll" }}
-            />
           </div>
         </div>
       </div>
@@ -91,44 +83,41 @@ const RolesTable = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Id
+                Email
               </th>
               <th scope="col" className="px-6 py-3">
-                Roles
+                Subject
               </th>
               <th scope="col" className="px-6 py-3">
-                Employees
+                Message
               </th>
-              <th scope="col" className="px-6 py-3 ">
+              <th scope="col" className="px-6 py-3">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {filteredRole.map((role) => {
-              return (
-                <tr
-                  key={role.id}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                >
-                  <td className="px-6 py-4">{role.id}</td>
-                  <td className="px-6 py-4">{role.name}</td>
-                  <td className="px-6 py-4">Number</td>
-
-                  <td>
-                    <div class="inline-flex">
-                      <DeleteRoleModal
-                        onDeleteComplet={(value) =>
-                          setDataUpdated(!dataUpdated)
-                        }
-                        disabled={user && user.roleId !== 1}
-                        id={role.id}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+            {filteredMessages.map((message) => (
+              <tr
+                key={message.id}
+                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              >
+                <td className="px-6 py-4">{message.email}</td>
+                <td className="px-6 py-4">{message.subject}</td>
+                <td className="px-6 py-4">{message.message}</td>
+                <td>
+                  <div className="px-6 py-4">
+                    <button
+                      className={`text-white bg-[#fca5a5] hover:bg-[#f87171] focus:outline-none focus:ring-4 focus:ring-red-300  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 font-bold py-2 px-4 rounded-r `}
+                      onClick={() => handleDelete(message.id)}
+                      disabled={user && user.roleId !== 1}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -136,4 +125,4 @@ const RolesTable = () => {
   );
 };
 
-export default RolesTable;
+export default MessagesTable;

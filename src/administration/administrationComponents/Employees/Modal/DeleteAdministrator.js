@@ -1,53 +1,30 @@
-import React, { Fragment, useState } from "react";
+import { React, Fragment, useState } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
-import {
-  getAdministrators,
-  deleteAdministrator,
-} from "../../api/administrators";
-import { deleteRole } from "../../api/roles";
 
-const DeleteRoleModal = ({ id, disabled, onDeleteComplete }) => {
+import { deleteAdministrator } from "../../../../api/administrators";
+
+const DeleteAdministrator = ({ id, disabled, onDeleteComplet }) => {
   const [size, setSize] = useState(null);
   const handleOpen = (value) => setSize(value);
-
-  const message = `Are you sure you want to delete this role? This action cannot be undone and will also remove the employees who have this role from our system.
+  const message = `Are you sure you want to delete this administrator? This action will remove their information from our system and cannot be undone.
   
   If you are ready to proceed, please click 'Confirm'. Otherwise, click 'Cancel' or simply close this modal.
   `;
-
-  const formattedMessage = message.split("\n").map((para, index) => (
-    <p key={index} className="mb-4">
-      {para}
-    </p>
-  ));
+  const formattedMessage = message
+    .split("\n")
+    .map((para) => <p className="mb-4">{para}</p>);
 
   const handleDelete = async () => {
-    console.log("Deleting role with ID:", id);
-
+    console.log("Deleting administrator with ID:", id);
     try {
-      const administrators = await getAdministrators();
-
-      const administratorsToRemove = administrators.filter(
-        (administrator) => administrator.roleId === id
-      );
-
-      const deleteResponse = await deleteRole(id);
-      console.log("Role deleted. Response:", deleteResponse);
-
-      const deletePromises = administratorsToRemove.map((administrator) =>
-        deleteAdministrator(administrator.id)
-      );
-
-      await Promise.all(deletePromises);
-      console.log("Administrators with the role removed successfully.");
-      window.location.reload();
-      onDeleteComplete(true);
+      const response = await deleteAdministrator(id);
+      onDeleteComplet(true);
+      console.log("Response:", response);
       handleOpen(null);
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
   return (
     <Fragment>
       <div>
@@ -62,11 +39,13 @@ const DeleteRoleModal = ({ id, disabled, onDeleteComplete }) => {
         </button>
       </div>
       <Dialog open={size === "sm"} size={size} handler={handleOpen}>
-        <DialogBody divider>{formattedMessage}</DialogBody>
+        <DialogBody divider>
+          <p>{formattedMessage}</p> <span>{id}</span>
+        </DialogBody>
         <DialogFooter>
-          <div className="-mx-3 flex flex-wrap w-full">
-            <div className="w-full px-3 sm:w-1/2">
-              <div className="mb-5">
+          <div class="-mx-3 flex flex-wrap w-full">
+            <div class="w-full px-3 sm:w-1/2 ">
+              <div class="mb-5 ">
                 <button
                   onClick={() => handleOpen(null)}
                   className="btn btn-secondary btn-sm w-full mx-auto"
@@ -75,8 +54,8 @@ const DeleteRoleModal = ({ id, disabled, onDeleteComplete }) => {
                 </button>
               </div>
             </div>
-            <div className="w-full px-3 sm:w-1/2">
-              <div className="mb-5">
+            <div class="w-full px-3 sm:w-1/2">
+              <div class="mb-5">
                 <button
                   className="btn btn-secondary btn-sm w-full mx-auto"
                   onClick={handleDelete}
@@ -91,5 +70,4 @@ const DeleteRoleModal = ({ id, disabled, onDeleteComplete }) => {
     </Fragment>
   );
 };
-
-export default DeleteRoleModal;
+export default DeleteAdministrator;

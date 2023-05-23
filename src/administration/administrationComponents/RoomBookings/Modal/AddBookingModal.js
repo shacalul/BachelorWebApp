@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useRef, useContext } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 
-import { CategoryContext } from "../../website/context/CategoryContext";
+import { CategoryContext } from "../../../../website/context/CategoryContext";
 import { Select, Option } from "@material-tailwind/react";
 
 export function getArrivalDates() {

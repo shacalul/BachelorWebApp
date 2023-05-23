@@ -1,5 +1,5 @@
 import React from "react";
-import MessagesTable from "../administrationComponents/MessagesTable";
+import MessagesTable from "../administrationComponents/Messages/MessagesTable";
 
 const Messages = () => {
   return (

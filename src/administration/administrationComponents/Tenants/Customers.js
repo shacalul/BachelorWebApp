@@ -1,48 +1,54 @@
 import React, { useState, useEffect } from "react";
-import { getMessages, deleteMessage } from "../../api/messages";
+import {
+  getCustomers,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
+} from "../../../api/customers";
+import "./Customers.css";
+import AddTenantsModal from "./Modal/AddTenantsModal";
+import EditTenantsModal from "./Modal/EditTenantsModal";
 
 import { useSelector } from "react-redux";
-
-const MessagesTable = () => {
+import DeleteModal from "./Modal/DeleteModal";
+const Customers = () => {
   const user = useSelector((state) => state.auth.user);
-
-  const [messages, setMessages] = useState([]);
+  const [customers, setCustomers] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState("");
 
   const [dataUpdated, setDataUpdated] = useState(false);
 
   useEffect(() => {
-    fetchMessages();
+    fetchCustomers();
   }, [dataUpdated]);
 
-  const fetchMessages = async () => {
+  const fetchCustomers = async () => {
     try {
-      const data = await getMessages();
-      setMessages(data);
+      const data = await getCustomers();
+      setCustomers(data);
     } catch (error) {
-      console.error("Error fetching messages:", error);
+      console.error("Error fetching customers:", error);
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await deleteMessage(id);
-      fetchMessages();
-    } catch (error) {
-      console.error("Error deleting message:", error);
+  const submitHandler = async (payload) => {
+    const response = await createCustomer(payload);
+    if (response) {
+      setDataUpdated(!dataUpdated);
+    } else {
+      alert("error creating customer");
     }
   };
 
-  const filteredMessages = messages.filter((message) =>
-    `${message.email} ${message.subject} ${message.message}`
+  const filteredCustomers = customers.filter((customer) =>
+    `${customer.firstName} ${customer.surname} ${customer.email} ${customer.phone_number} `
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
-
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
-      <h2 className="h2 text-center">Messages</h2>
+      <h2 class="h2 text-center ">Tenants</h2>
 
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full sm:w-1/2 px-3">
@@ -70,11 +76,20 @@ const MessagesTable = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for messages..."
+                placeholder="Search for tenants..."
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
             </div>
+          </div>
+        </div>
+        <div className="w-full sm:w-1/2 px-3 text-right">
+          <div className="mb-5">
+            <AddTenantsModal
+              disabled={user && user.roleId === 3}
+              onSubmit={submitHandler}
+              style={{ overflowY: "scroll" }}
+            />
           </div>
         </div>
       </div>
@@ -83,13 +98,13 @@ const MessagesTable = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
+                Name
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Email
               </th>
               <th scope="col" className="px-6 py-3">
-                Subject
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Message
+                Phone
               </th>
               <th scope="col" className="px-6 py-3">
                 Actions
@@ -97,27 +112,35 @@ const MessagesTable = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredMessages.map((message) => (
-              <tr
-                key={message.id}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-              >
-                <td className="px-6 py-4">{message.email}</td>
-                <td className="px-6 py-4">{message.subject}</td>
-                <td className="px-6 py-4">{message.message}</td>
-                <td>
-                  <div className="px-6 py-4">
-                    <button
-                      className={`text-white bg-[#fca5a5] hover:bg-[#f87171] focus:outline-none focus:ring-4 focus:ring-red-300  dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 font-bold py-2 px-4 rounded-r `}
-                      onClick={() => handleDelete(message.id)}
-                      disabled={user && user.roleId !== 1}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+            {filteredCustomers.map((customer) => {
+              console.log(customer.phoneNumber); // Log the phone number
+              return (
+                <tr
+                  key={customer.id}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
+                  <td className="px-6 py-4">
+                    {customer.firstName} {customer.surname}
+                  </td>
+                  <td className="px-6 py-4">{customer.email}</td>
+                  <td className="px-6 py-4">{customer.phoneNumber}</td>
+                  <td>
+                    <div class="inline-flex">
+                      <EditTenantsModal
+                        disabled={user && user.roleId === 3 ? true : false}
+                      />
+                      <DeleteModal
+                        onDeleteComplet={(value) =>
+                          setDataUpdated(!dataUpdated)
+                        }
+                        disabled={user && user.roleId !== 1}
+                        id={customer.id}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -125,4 +148,4 @@ const MessagesTable = () => {
   );
 };
 
-export default MessagesTable;
+export default Customers;

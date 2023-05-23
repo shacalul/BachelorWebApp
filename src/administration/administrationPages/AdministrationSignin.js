@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Signin from "../administrationComponents/Signin";
+import Signin from "../administrationComponents/Authentication/Signin";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

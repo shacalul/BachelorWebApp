@@ -1,54 +1,75 @@
 import React, { useState, useEffect } from "react";
 import {
-  getCustomers,
-  createCustomer,
-  updateCustomer,
-  deleteCustomer,
-} from "../../api/customers";
-import "./Customers.css";
-import AddTenantsModal from "./AddTenantsModal";
-import EditTenantsModal from "./EditTenantsModal";
+  getAdministrators,
+  createAdministrator,
+} from "../../../api/administrators";
+import { getRoles } from "../../../api/roles";
+import DeleteAdministrator from "./Modal/DeleteAdministrator";
+import AddAdministrator from "./Modal/AddAdministrator";
 
 import { useSelector } from "react-redux";
-import DeleteModal from "./DeleteModal";
-const Customers = () => {
-  const user = useSelector((state) => state.auth.user);
-  const [customers, setCustomers] = useState([]);
 
+const Administrator = () => {
+  const user = useSelector((state) => state.auth.user);
+
+  const [administrators, setAdministrators] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [roles, setRoles] = useState([]);
 
   const [dataUpdated, setDataUpdated] = useState(false);
 
   useEffect(() => {
-    fetchCustomers();
+    fetchAdministrators();
+    fetchRoles();
   }, [dataUpdated]);
 
-  const fetchCustomers = async () => {
+  const fetchAdministrators = async () => {
     try {
-      const data = await getCustomers();
-      setCustomers(data);
+      const data = await getAdministrators();
+      setAdministrators(data);
     } catch (error) {
-      console.error("Error fetching customers:", error);
+      console.error("Error fetching administrators:", error);
+    }
+  };
+
+  const fetchRoles = async () => {
+    try {
+      const roles = await getRoles();
+      setRoles(roles);
+    } catch (error) {
+      console.error("Error fetching roles:", error);
     }
   };
 
   const submitHandler = async (payload) => {
-    const response = await createCustomer(payload);
+    const greatestId = administrators.reduce(
+      (maxId, user) => Math.max(maxId, user.id),
+      0
+    );
+
+    console.log(greatestId);
+    const updatedPayload = {
+      ...payload,
+      id: greatestId + 1,
+    };
+
+    const response = await createAdministrator(updatedPayload);
     if (response) {
       setDataUpdated(!dataUpdated);
     } else {
-      alert("error creating customer");
+      alert("error creating administrator");
     }
   };
 
-  const filteredCustomers = customers.filter((customer) =>
-    `${customer.firstName} ${customer.surname} ${customer.email} ${customer.phone_number} `
+  const filteredAdministrators = administrators.filter((administrator) =>
+    `${administrator.firstName} ${administrator.surname} ${administrator.email} ${administrator.phone_number}`
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
+
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
-      <h2 class="h2 text-center ">Tenants</h2>
+      <h2 class="h2 text-center ">Employees</h2>
 
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full sm:w-1/2 px-3">
@@ -76,7 +97,7 @@ const Customers = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for tenants..."
+                placeholder="Search for employees..."
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
@@ -85,10 +106,10 @@ const Customers = () => {
         </div>
         <div className="w-full sm:w-1/2 px-3 text-right">
           <div className="mb-5">
-            <AddTenantsModal
-              disabled={user && user.roleId === 3}
+            <AddAdministrator
               onSubmit={submitHandler}
               style={{ overflowY: "scroll" }}
+              disabled={user && user.roleId !== 1}
             />
           </div>
         </div>
@@ -107,34 +128,39 @@ const Customers = () => {
                 Phone
               </th>
               <th scope="col" className="px-6 py-3">
+                Role
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {filteredCustomers.map((customer) => {
-              console.log(customer.phoneNumber); // Log the phone number
+            {filteredAdministrators.map((administrator) => {
+              const role = roles.find(
+                (role) => role.id === administrator.roleId
+              );
+              const roleName = role ? role.name : "";
+
               return (
                 <tr
-                  key={customer.id}
+                  key={administrator.id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
                   <td className="px-6 py-4">
-                    {customer.firstName} {customer.surname}
+                    {administrator.firstName} {administrator.surname}
                   </td>
-                  <td className="px-6 py-4">{customer.email}</td>
-                  <td className="px-6 py-4">{customer.phoneNumber}</td>
+                  <td className="px-6 py-4">{administrator.email}</td>
+                  <td className="px-6 py-4">{administrator.phone}</td>
+                  <td className="px-6 py-4">{roleName}</td>
                   <td>
-                    <div class="inline-flex">
-                      <EditTenantsModal
-                        disabled={user && user.roleId === 3 ? true : false}
-                      />
-                      <DeleteModal
+                    <div className="inline-flex">
+                      <DeleteAdministrator
                         onDeleteComplet={(value) =>
                           setDataUpdated(!dataUpdated)
                         }
                         disabled={user && user.roleId !== 1}
-                        id={customer.id}
+                        id={administrator.id}
                       />
                     </div>
                   </td>
@@ -148,4 +174,4 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default Administrator;

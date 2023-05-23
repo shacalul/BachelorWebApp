@@ -1,5 +1,5 @@
 import React from "react";
-import Administrator from "../administrationComponents/Administrator";
+import Administrator from "../administrationComponents/Employees/Administrator";
 const Administrators = () => {
   return (
     <>

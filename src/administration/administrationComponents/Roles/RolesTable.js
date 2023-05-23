@@ -1,75 +1,47 @@
 import React, { useState, useEffect } from "react";
-import {
-  getAdministrators,
-  createAdministrator,
-} from "../../api/administrators";
-import { getRoles } from "../../api/roles";
-import DeleteAdministrator from "./DeleteAdministrator";
-import AddAdministrator from "./AddAdministrator";
+import { getRoles, createRole } from "../../../api/roles";
+import AddRole from "./Modal/AddRole";
 
 import { useSelector } from "react-redux";
-
-const Administrator = () => {
+import DeleteRoleModal from "./Modal/DeleteRoleModal";
+const RolesTable = () => {
   const user = useSelector((state) => state.auth.user);
-
-  const [administrators, setAdministrators] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [roles, setRoles] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [dataUpdated, setDataUpdated] = useState(false);
 
   useEffect(() => {
-    fetchAdministrators();
     fetchRoles();
   }, [dataUpdated]);
 
-  const fetchAdministrators = async () => {
-    try {
-      const data = await getAdministrators();
-      setAdministrators(data);
-    } catch (error) {
-      console.error("Error fetching administrators:", error);
-    }
-  };
-
   const fetchRoles = async () => {
     try {
-      const roles = await getRoles();
-      setRoles(roles);
+      const data = await getRoles();
+      setRoles(data);
     } catch (error) {
       console.error("Error fetching roles:", error);
     }
   };
 
   const submitHandler = async (payload) => {
-    const greatestId = administrators.reduce(
-      (maxId, user) => Math.max(maxId, user.id),
-      0
-    );
-
-    console.log(greatestId);
-    const updatedPayload = {
-      ...payload,
-      id: greatestId + 1,
-    };
-
-    const response = await createAdministrator(updatedPayload);
+    const response = await createRole(payload);
     if (response) {
       setDataUpdated(!dataUpdated);
     } else {
-      alert("error creating administrator");
+      alert("error creating role");
     }
   };
 
-  const filteredAdministrators = administrators.filter((administrator) =>
-    `${administrator.firstName} ${administrator.surname} ${administrator.email} ${administrator.phone_number}`
+  const filteredRole = roles.filter((role) =>
+    `${role.id} ${role.name}  `
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
-
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
-      <h2 class="h2 text-center ">Employees</h2>
+      <h2 class="h2 text-center ">Roles</h2>
 
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full sm:w-1/2 px-3">
@@ -97,7 +69,7 @@ const Administrator = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for employees..."
+                placeholder="Search for roles..."
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
@@ -106,10 +78,10 @@ const Administrator = () => {
         </div>
         <div className="w-full sm:w-1/2 px-3 text-right">
           <div className="mb-5">
-            <AddAdministrator
+            <AddRole
+              disabled={user && user.roleId === 3}
               onSubmit={submitHandler}
               style={{ overflowY: "scroll" }}
-              disabled={user && user.roleId !== 1}
             />
           </div>
         </div>
@@ -119,48 +91,38 @@ const Administrator = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Name
+                Id
               </th>
               <th scope="col" className="px-6 py-3">
-                Email
+                Roles
               </th>
               <th scope="col" className="px-6 py-3">
-                Phone
+                Employees
               </th>
-              <th scope="col" className="px-6 py-3">
-                Role
-              </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 ">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {filteredAdministrators.map((administrator) => {
-              const role = roles.find(
-                (role) => role.id === administrator.roleId
-              );
-              const roleName = role ? role.name : "";
-
+            {filteredRole.map((role) => {
               return (
                 <tr
-                  key={administrator.id}
+                  key={role.id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
-                  <td className="px-6 py-4">
-                    {administrator.firstName} {administrator.surname}
-                  </td>
-                  <td className="px-6 py-4">{administrator.email}</td>
-                  <td className="px-6 py-4">{administrator.phone}</td>
-                  <td className="px-6 py-4">{roleName}</td>
+                  <td className="px-6 py-4">{role.id}</td>
+                  <td className="px-6 py-4">{role.name}</td>
+                  <td className="px-6 py-4">Number</td>
+
                   <td>
-                    <div className="inline-flex">
-                      <DeleteAdministrator
+                    <div class="inline-flex">
+                      <DeleteRoleModal
                         onDeleteComplet={(value) =>
                           setDataUpdated(!dataUpdated)
                         }
                         disabled={user && user.roleId !== 1}
-                        id={administrator.id}
+                        id={role.id}
                       />
                     </div>
                   </td>
@@ -174,4 +136,4 @@ const Administrator = () => {
   );
 };
 
-export default Administrator;
+export default RolesTable;
