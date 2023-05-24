@@ -1,61 +1,117 @@
-import React from "react";
-import Dropdown from "components/dropdown";
-import { AiOutlineUser } from "react-icons/ai";
-import { BsThreeDots } from "react-icons/bs";
-import { FiSettings } from "react-icons/fi";
-import { AiOutlineShop } from "react-icons/ai";
-import { TiLightbulb } from "react-icons/ti";
+import React, { useState, useEffect } from "react";
+import { getCustomers } from "../../api/customers";
+import { getAdministrators } from "../../api/administrators";
+import { getFinances } from "../../api/finances";
 
-function CardMenu(props) {
-  const { transparent } = props;
-  const [open, setOpen] = React.useState(false);
+const CardMenu = () => {
+  const [customers, setCustomers] = useState([]);
+  const [administrators, setAdministrators] = useState([]);
+  const [dataUpdated, setDataUpdated] = useState(false);
+  const [totalBalance, setTotalBalance] = useState(0);
+  const [finances, setFinances] = useState([]);
+
+  useEffect(() => {
+    fetchCustomers();
+    fetchAdministrators();
+    fetchFinances();
+  }, [dataUpdated]);
+
+  const fetchCustomers = async () => {
+    try {
+      const data = await getCustomers();
+      setCustomers(data);
+    } catch (error) {
+      console.error("Error fetching customers:", error);
+    }
+  };
+
+  const fetchAdministrators = async () => {
+    try {
+      const data = await getAdministrators();
+      setAdministrators(data);
+    } catch (error) {
+      console.error("Error fetching administrators:", error);
+    }
+  };
+
+  const handleCalculateBalance = () => {
+    let result = finances.reduce((total, finance) => {
+      return total + parseInt(finance.amountOfMoney);
+    }, 0);
+    setTotalBalance(result);
+  };
+
+  const fetchFinances = async () => {
+    try {
+      const data = await getFinances();
+      setFinances(data);
+    } catch (error) {
+      console.error("Error fetching finances:", error);
+    }
+  };
+
+  const totalTenants = customers.length;
+  const totalEmployees = administrators.length;
+
+  useEffect(() => {
+    handleCalculateBalance();
+  }, [finances]);
+
   return (
-    <Dropdown
-      button={
-        <button
-          onClick={() => setOpen(!open)}
-          open={open}
-          className={`flex items-center text-xl hover:cursor-pointer ${
-            transparent
-              ? "bg-none text-white hover:bg-none active:bg-none"
-              : "bg-lightPrimary p-2 text-brand-500 hover:bg-gray-100 dark:bg-navy-700 dark:text-white dark:hover:bg-white/20 dark:active:bg-white/10"
-          } linear justify-center rounded-lg font-bold transition duration-200`}
-        >
-          <BsThreeDots className="h-6 w-6" />
-        </button>
-      }
-      animation={"origin-top-right transition-all duration-300 ease-in-out"}
-      classNames={`${transparent ? "top-8" : "top-11"} right-0 w-max`}
-      children={
-        <div className="z-50 w-max rounded-xl bg-white py-3 px-4 text-sm shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="hover:text-black flex cursor-pointer items-center gap-2 text-gray-600 hover:font-medium">
-            <span>
-              <AiOutlineUser />
-            </span>
-            Panel 1
-          </p>
-          <p className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
-            <span>
-              <AiOutlineShop />
-            </span>
-            Panel 2
-          </p>
-          <p className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
-            <span>
-              <TiLightbulb />
-            </span>
-            Panel 3
-          </p>
-          <p className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
-            <span>
-              <FiSettings />
-            </span>
-            Panel 4
-          </p>
+    <div className="flex items-center justify-center mr-[-30%] ml-5 mt-5">
+      <div className="w-full md:w-1/3 px-2">
+        <div className="rounded-lg shadow-sm mb-4">
+          <div className="rounded-lg bg-white shadow-lg md:shadow-xl relative overflow-hidden">
+            <div className="px-3 pt-8 pb-10 text-center relative z-10">
+              <h4 className="text-sm uppercase text-gray-500 leading-tight">
+                Tenants
+              </h4>
+              <h3 className="text-3xl text-gray-700 font-semibold leading-tight my-3">
+                {totalTenants}
+              </h3>
+            </div>
+            <div className="absolute bottom-0 inset-x-0">
+              <canvas id="chart1" height="70"></canvas>
+            </div>
+          </div>
         </div>
-      }
-    />
+      </div>
+      <div className="w-full md:w-1/3 px-2 ">
+        <div className="rounded-lg shadow-sm mb-4">
+          <div className="rounded-lg bg-white shadow-lg md:shadow-xl relative overflow-hidden">
+            <div className="px-3 pt-8 pb-10 text-center relative z-10">
+              <h4 className="text-sm uppercase text-gray-500 leading-tight">
+                Employees
+              </h4>
+              <h3 className="text-3xl text-gray-700 font-semibold leading-tight my-3">
+                {totalEmployees}
+              </h3>
+            </div>
+            <div className="absolute bottom-0 inset-x-0">
+              <canvas id="chart2" height="70"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full md:w-1/3 px-2">
+        <div className="rounded-lg shadow-sm mb-4">
+          <div className="rounded-lg bg-white shadow-lg md:shadow-xl relative overflow-hidden">
+            <div className="px-3 pt-8 pb-10 text-center relative z-10">
+              <h4 className="text-sm uppercase text-gray-500 leading-tight">
+                Balance
+              </h4>
+              <h3 className="text-3xl text-gray-700 font-semibold leading-tight my-3">
+                {totalBalance} DKK
+              </h3>
+            </div>
+            <div className="absolute bottom-0 inset-x-0">
+              <canvas id="chart3" height="70"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
 export default CardMenu;
