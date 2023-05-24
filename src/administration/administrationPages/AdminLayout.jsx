@@ -5,7 +5,6 @@ import SideBarAdministration from "../administrationComponents/SideBarAdministra
 const AdminLayout = ({ children }) => {
   return (
     <>
-      {/* Card widget */}
       <SideBarAdministration />
 
       <div

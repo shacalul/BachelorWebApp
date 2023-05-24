@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { getCustomers } from "../../api/customers";
-import { getAdministrators } from "../../api/administrators";
-import { getFinances } from "../../api/finances";
+import { getCustomers } from "../../../api/customers";
+import { getAdministrators } from "../../../api/administrators";
+import { getFinances, getFinanceCategories } from "../../../api/finances";
+import { getRoomBookings } from "../../../api/roombookings";
+import { getRooms } from "../../../api/rooms";
 
 const CardMenu = () => {
   const [customers, setCustomers] = useState([]);
@@ -9,11 +11,18 @@ const CardMenu = () => {
   const [dataUpdated, setDataUpdated] = useState(false);
   const [totalBalance, setTotalBalance] = useState(0);
   const [finances, setFinances] = useState([]);
+  const [filteredFinances, setFilteredFinances] = useState([]);
+  const [financeCategories, setFinanceCategories] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const [roomBookings, setRoomBookings] = useState([]);
 
   useEffect(() => {
     fetchCustomers();
     fetchAdministrators();
     fetchFinances();
+    fetchFinanceCategories();
+    fetchRoomBookings();
+    fetchRooms();
   }, [dataUpdated]);
 
   const fetchCustomers = async () => {
@@ -44,9 +53,47 @@ const CardMenu = () => {
   const fetchFinances = async () => {
     try {
       const data = await getFinances();
-      setFinances(data);
+      const financesWithChecked = data.map((finance) => ({
+        ...finance,
+        date: new Date(finance.dueDate),
+        isPaid: false,
+      }));
+      setFinances(financesWithChecked);
+
+      const sortedFinances = financesWithChecked.sort(
+        (a, b) => b.date - a.date
+      );
+      const latestFinances = sortedFinances.slice(0, 5);
+      setFilteredFinances(latestFinances);
     } catch (error) {
       console.error("Error fetching finances:", error);
+    }
+  };
+
+  const fetchFinanceCategories = async () => {
+    try {
+      const financeCategories = await getFinanceCategories();
+      setFinanceCategories(financeCategories);
+    } catch (error) {
+      console.error("Error fetching finance categories:", error);
+    }
+  };
+
+  const fetchRooms = async () => {
+    try {
+      const data = await getRooms();
+      setRooms(data);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    }
+  };
+
+  const fetchRoomBookings = async () => {
+    try {
+      const data = await getRoomBookings();
+      setRoomBookings(data);
+    } catch (error) {
+      console.error("Error fetching room bookings:", error);
     }
   };
 
@@ -58,9 +105,9 @@ const CardMenu = () => {
   }, [finances]);
 
   return (
-    <div className="flex items-center justify-center mr-[-30%] ml-5 mt-5">
-      <div className="w-full md:w-1/3 px-2">
-        <div className="rounded-lg shadow-sm mb-4">
+    <div className="flex items-center justify-center mt-5">
+      <div className="w-full md:w-2/5 px-2">
+        <div className="rounded-lg shadow-sm mb-4 mx-auto max-w-xs">
           <div className="rounded-lg bg-white shadow-lg md:shadow-xl relative overflow-hidden">
             <div className="px-3 pt-8 pb-10 text-center relative z-10">
               <h4 className="text-sm uppercase text-gray-500 leading-tight">
@@ -76,8 +123,8 @@ const CardMenu = () => {
           </div>
         </div>
       </div>
-      <div className="w-full md:w-1/3 px-2 ">
-        <div className="rounded-lg shadow-sm mb-4">
+      <div className="w-full md:w-2/5 px-2">
+        <div className="rounded-lg shadow-sm mb-4 mx-auto max-w-xs">
           <div className="rounded-lg bg-white shadow-lg md:shadow-xl relative overflow-hidden">
             <div className="px-3 pt-8 pb-10 text-center relative z-10">
               <h4 className="text-sm uppercase text-gray-500 leading-tight">
@@ -93,8 +140,8 @@ const CardMenu = () => {
           </div>
         </div>
       </div>
-      <div className="w-full md:w-1/3 px-2">
-        <div className="rounded-lg shadow-sm mb-4">
+      <div className="w-full md:w-2/5 px-2">
+        <div className="rounded-lg shadow-sm mb-4 mx-auto max-w-xs">
           <div className="rounded-lg bg-white shadow-lg md:shadow-xl relative overflow-hidden">
             <div className="px-3 pt-8 pb-10 text-center relative z-10">
               <h4 className="text-sm uppercase text-gray-500 leading-tight">
