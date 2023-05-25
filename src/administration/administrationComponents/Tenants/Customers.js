@@ -128,6 +128,7 @@ const Customers = () => {
                     <div class="inline-flex">
                       <EditTenantsModal
                         disabled={user && user.roleId === 3 ? true : false}
+                        customer={customer}
                       />
                       <DeleteModal
                         onDeleteComplet={(value) =>

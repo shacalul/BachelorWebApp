@@ -6,11 +6,12 @@ import { Select, Option } from "@material-tailwind/react";
 import { arrivalList } from "../../../../website/websiteComponents/Arrival";
 import { departureList } from "../../../../website/websiteComponents/Departure";
 import { categoryData } from "../../../../website/data/CategoryData";
-const EditTenantsModal = ({ disabled }) => {
+const EditTenantsModal = ({ disabled, customer }) => {
   const [size, setSize] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const handleOpen = (value) => setSize(value);
   const { countries } = useCountries();
+  const tenant = customer;
   return (
     <Fragment>
       <div>
@@ -45,6 +46,7 @@ const EditTenantsModal = ({ disabled }) => {
                         <input
                           type="text"
                           name="firstName"
+                          value={tenant.firstName}
                           id="firstName"
                           placeholder="First Name"
                           class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
@@ -61,6 +63,7 @@ const EditTenantsModal = ({ disabled }) => {
                         <input
                           type="text"
                           name="lName"
+                          value={tenant.surname}
                           id="lName"
                           placeholder="Last Name"
                           class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
@@ -76,6 +79,7 @@ const EditTenantsModal = ({ disabled }) => {
                             <input
                               type="text"
                               name="email"
+                              value={customer.email}
                               id="email"
                               placeholder="Email"
                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
