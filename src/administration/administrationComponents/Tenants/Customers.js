@@ -8,21 +8,16 @@ import {
 import "./Customers.css";
 import AddTenantsModal from "./Modal/AddTenantsModal";
 import EditTenantsModal from "./Modal/EditTenantsModal";
-
 import { useSelector } from "react-redux";
 import DeleteModal from "./Modal/DeleteModal";
 const Customers = () => {
   const user = useSelector((state) => state.auth.user);
   const [customers, setCustomers] = useState([]);
-
   const [searchQuery, setSearchQuery] = useState("");
-
   const [dataUpdated, setDataUpdated] = useState(false);
-
   useEffect(() => {
     fetchCustomers();
   }, [dataUpdated]);
-
   const fetchCustomers = async () => {
     try {
       const data = await getCustomers();
@@ -31,7 +26,6 @@ const Customers = () => {
       console.error("Error fetching customers:", error);
     }
   };
-
   const submitHandler = async (payload) => {
     const response = await createCustomer(payload);
     if (response) {
@@ -40,7 +34,6 @@ const Customers = () => {
       alert("error creating customer");
     }
   };
-
   const filteredCustomers = customers.filter((customer) =>
     `${customer.firstName} ${customer.surname} ${customer.email} ${customer.phone_number} `
       .toLowerCase()
@@ -49,7 +42,6 @@ const Customers = () => {
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
       <h2 class="h2 text-center ">Tenants</h2>
-
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full sm:w-1/2 px-3">
           <div className="mb-5">
@@ -86,7 +78,7 @@ const Customers = () => {
         <div className="w-full sm:w-1/2 px-3 text-right">
           <div className="mb-5">
             <AddTenantsModal
-              disabled={user && user.roleId > 2}
+              disabled={user && user.roleId === 3}
               onSubmit={submitHandler}
               style={{ overflowY: "scroll" }}
             />
@@ -126,16 +118,17 @@ const Customers = () => {
                   <td className="px-6 py-4">{customer.phoneNumber}</td>
                   <td>
                     <div class="inline-flex">
-                      {console.log("user.roleId:", user && user.roleId)}
-                      <EditTenantsModal disabled={user && user.roleId > 2} />
+                      <EditTenantsModal
+                        disabled={user && user.roleId === 3 ? true : false}
+                        customer={customer}
+                      />
                       <DeleteModal
                         onDeleteComplet={(value) =>
                           setDataUpdated(!dataUpdated)
                         }
-                        disabled={user && user.roleId > 2}
+                        disabled={user && user.roleId !== 1}
                         id={customer.id}
                       />
-                      {console.log("After DeleteModal")}
                     </div>
                   </td>
                 </tr>
@@ -147,5 +140,4 @@ const Customers = () => {
     </div>
   );
 };
-
 export default Customers;

@@ -1,4 +1,4 @@
-import { React, Fragment, useState } from "react";
+import { React, Fragment, useState, useEffect } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { useCountries } from "use-react-countries";
 import { Phone } from "react-telephone";
@@ -6,12 +6,101 @@ import { Select, Option } from "@material-tailwind/react";
 import { arrivalList } from "../../../../website/websiteComponents/Arrival";
 import { departureList } from "../../../../website/websiteComponents/Departure";
 import { categoryData } from "../../../../website/data/CategoryData";
+import { getRoomBookings } from "../../../../api/roombookings";
+import { getRooms } from "../../../../api/rooms";
+import { getCustomers } from "../../../../api/customers";
 const EditTenantsModal = ({ disabled, customer }) => {
   const [size, setSize] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
   const handleOpen = (value) => setSize(value);
   const { countries } = useCountries();
   const tenant = customer;
+  const [firstName, setFirstName] = useState(tenant.firstName);
+  const [lastName, setLastName] = useState(tenant.surname);
+  const [email, setEmail] = useState(customer.email);
+  const [phone, setPhone] = useState(customer.phoneNumber);
+  const [departure, setDeparture] = useState(customer.endRentDate);
+  const [roomBookings, setRoomBookings] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [customers, setCustomers] = useState("");
+
+  const [departureOptions, setDepartureOptions] = useState([]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const customersData = await getCustomers();
+      setCustomers(customersData);
+      const bookingsData = await getRoomBookings();
+      const roomsData = await getRooms();
+
+      const customerBookings = bookingsData.filter(
+        (booking) => booking.customerId === customer.id
+      );
+
+      const departureOptions = customerBookings.map((booking) => ({
+        value: booking.endRentDate,
+        name: booking.endRentDate,
+      }));
+
+      setDepartureOptions(departureOptions);
+
+      const customerBooking = customerBookings.find(
+        (booking) => booking.customerId === customer.id
+      );
+      const departureDate = customerBooking ? customerBooking.endRentDate : "";
+
+      setDeparture(departureDate);
+
+      roomsData.forEach((room) => {
+        room.booked = bookingsData.some(
+          (booking) => booking.roomId === room.id
+        );
+        if (!room.booked) {
+          room.booked = false;
+        }
+      });
+
+      setRooms(roomsData);
+      setRoomBookings(bookingsData);
+    } catch (error) {
+      console.error("Error fetching room bookings:", error);
+    }
+  };
+
+  const handleOpenDep = (value) => {
+    setDeparture(value);
+  };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   const payload = {
+  //     firstName: firstName,
+  //     surname: lastName,
+  //     email: email,
+  //     phone: phone,
+  //     roleId: roleId,
+  //     id: user.id,
+  //     password: password,
+  //   };
+
+  //   console.log(payload);
+
+  //   try {
+  //     const response = await updateAdministrator(user.id, payload);
+  //     console.log(response);
+
+  //     dispatch(updateUser(payload));
+  //     handleOpen(null);
+  //   } catch (error) {
+  //     console.error("Error updating administrator:", error);
+  //   }
+  // };
+
   return (
     <Fragment>
       <div>
@@ -35,7 +124,6 @@ const EditTenantsModal = ({ disabled, customer }) => {
                   <div class="mx-auto w-full max-w-[550px]">
                     <div class="py-4 lg:py-2 px-4 mx-auto max-w-screen-md">
                       <h2 class="h2 text-center ">Edit Tenant</h2>
-
                       <div class="mb-5">
                         <label
                           for="fName"
@@ -46,13 +134,12 @@ const EditTenantsModal = ({ disabled, customer }) => {
                         <input
                           type="text"
                           name="firstName"
-                          value={tenant.firstName}
+                          value={firstName}
                           id="firstName"
                           placeholder="First Name"
                           class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
                       </div>
-
                       <div class="mb-5">
                         <label
                           for="lName"
@@ -63,13 +150,12 @@ const EditTenantsModal = ({ disabled, customer }) => {
                         <input
                           type="text"
                           name="lName"
-                          value={tenant.surname}
+                          value={lastName}
                           id="lName"
                           placeholder="Last Name"
                           class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
                       </div>
-
                       <div class="mb-5">
                         <label class="mb-3 block text-base font-medium text-[#07074D]">
                           Email
@@ -79,7 +165,7 @@ const EditTenantsModal = ({ disabled, customer }) => {
                             <input
                               type="text"
                               name="email"
-                              value={customer.email}
+                              value={email}
                               id="email"
                               placeholder="Email"
                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
@@ -88,17 +174,6 @@ const EditTenantsModal = ({ disabled, customer }) => {
                         </div>
                       </div>
                       <div class="mb-5">
-                        <div>
-                          <label
-                            for="cCode"
-                            class="mb-3 block text-base font-medium text-[#07074D]"
-                          >
-                            Country Code
-                          </label>
-                          <Phone>
-                            <Phone.Country className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                          </Phone>
-                        </div>
                         <div class="mt-5">
                           <label
                             for="pNumber"
@@ -106,65 +181,70 @@ const EditTenantsModal = ({ disabled, customer }) => {
                           >
                             Phone number
                           </label>
-                          <Phone>
-                            <Phone.Number className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                          </Phone>
+                          <div class="flex items-center space-x-6">
+                            <div class="flex items-center w-full">
+                              <input
+                                type="text"
+                                name="phone"
+                                value={phone}
+                                id="phone"
+                                placeholder="Phone"
+                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
 
                       <div class="mb-5">
                         <label
                           class="mb-3 block text-base font-medium text-[#07074D]"
-                          for="roomCategoryDropDown"
-                        >
-                          Room Category
-                        </label>
-                        <div
-                          className="w-full border "
-                          name="roomCategoryDropDown"
-                          id="roomCategoryDropDown"
-                        >
-                          <Select size="lg" label="Select Room Category">
-                            {categoryData.map((category) => (
-                              <Option key={category.id}>{category.name}</Option>
-                            ))}
-                          </Select>
-                        </div>
-                      </div>
-                      <div class="mb-5">
-                        <label
-                          class="mb-3 block text-base font-medium text-[#07074D]"
-                          for="roomCategoryDropDown"
+                          for="roomNumberDropDown"
                         >
                           Room Number
                         </label>
                         <div
                           className="w-full border "
-                          name="roomCategoryDropDown"
-                          id="roomCategoryDropDown"
+                          name="roomNumberDropDown"
+                          id="roomNumberDropDown"
                         >
-                          <Select size="lg" label="Select Room Number">
-                            {categoryData.map((category) => (
-                              <Option key={category.id}>{category.name}</Option>
+                          <Select
+                            size="lg"
+                            label="Select Room Number"
+                            onChange={(value) => setSelectedRoomId(value)}
+                          >
+                            {rooms.map((room) => (
+                              <Option
+                                key={room.id}
+                                value={room.id}
+                                disabled={room.booked}
+                                title={room.booked ? "Already booked" : ""}
+                              >
+                                {room.number}
+                              </Option>
                             ))}
                           </Select>
                         </div>
                       </div>
-
                       <div className="mb-5">
                         <label
                           className="mb-3 block text-base font-medium text-[#07074D]"
                           htmlFor="departureDepartureDropDown"
                         >
-                          Departure Date
+                          Departure Date ({departure})
                         </label>
                         <div
                           className="w-full border "
                           name="departureDepartureDropDown"
                           id="departureDepartureDropDown"
                         >
-                          <Select size="lg" label="Select Date">
-                            {departureList.map((option) => (
+                          <Select
+                            size="lg"
+                            value={departure}
+                            onChange={(value) => setDeparture(value)}
+                            label="Departure date"
+                          >
+                            {departureOptions.map((option) => (
                               <Option key={option.value} value={option.value}>
                                 {option.name}
                               </Option>
