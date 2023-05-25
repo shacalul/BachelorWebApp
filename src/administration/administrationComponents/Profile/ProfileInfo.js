@@ -25,7 +25,7 @@ const ProfileInfo = ({ onSubmit }) => {
   const [firstName, setFirstName] = useState(user.firstName || "");
   const [lastName, setLastName] = useState(user.surname || "");
   const [email, setEmail] = useState(user.email || "");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(user.password || "");
   const [phone, setPhone] = useState(user.phone || "");
   const [roleId, setRoleId] = useState(user.roleId || "");
 
@@ -60,6 +60,7 @@ const ProfileInfo = ({ onSubmit }) => {
       phone: phone,
       roleId: roleId,
       id: user.id,
+      password: password,
     };
 
     console.log(payload);
