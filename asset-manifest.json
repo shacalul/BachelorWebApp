@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/BachelorWebApp/static/css/main.36fefc02.css",
-    "main.js": "/BachelorWebApp/static/js/main.c5b6e0d8.js",
+    "main.css": "/BachelorWebApp/static/css/main.a845211c.css",
+    "main.js": "/BachelorWebApp/static/js/main.47c8fb29.js",
     "static/media/carouselFirst.jpg": "/BachelorWebApp/static/media/carouselFirst.39c5e94be76679290b45.jpg",
     "static/media/carouselThird.jpg": "/BachelorWebApp/static/media/carouselThird.711622b9baea1fe39a13.jpg",
     "static/media/carouselSecond.jpg": "/BachelorWebApp/static/media/carouselSecond.5b97d277dabec0c6b238.jpg",
     "index.html": "/BachelorWebApp/index.html",
-    "main.36fefc02.css.map": "/BachelorWebApp/static/css/main.36fefc02.css.map",
-    "main.c5b6e0d8.js.map": "/BachelorWebApp/static/js/main.c5b6e0d8.js.map"
+    "main.a845211c.css.map": "/BachelorWebApp/static/css/main.a845211c.css.map",
+    "main.47c8fb29.js.map": "/BachelorWebApp/static/js/main.47c8fb29.js.map"
   },
   "entrypoints": [
-    "static/css/main.36fefc02.css",
-    "static/js/main.c5b6e0d8.js"
+    "static/css/main.a845211c.css",
+    "static/js/main.47c8fb29.js"
   ]
 }
