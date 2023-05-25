@@ -86,7 +86,7 @@ const Customers = () => {
         <div className="w-full sm:w-1/2 px-3 text-right">
           <div className="mb-5">
             <AddTenantsModal
-              disabled={user && user.roleId === 3}
+              disabled={user && user.roleId > 2}
               onSubmit={submitHandler}
               style={{ overflowY: "scroll" }}
             />
@@ -126,16 +126,16 @@ const Customers = () => {
                   <td className="px-6 py-4">{customer.phoneNumber}</td>
                   <td>
                     <div class="inline-flex">
-                      <EditTenantsModal
-                        disabled={user && user.roleId === 3 ? true : false}
-                      />
+                      {console.log("user.roleId:", user && user.roleId)}
+                      <EditTenantsModal disabled={user && user.roleId > 2} />
                       <DeleteModal
                         onDeleteComplet={(value) =>
                           setDataUpdated(!dataUpdated)
                         }
-                        disabled={user && user.roleId !== 1}
+                        disabled={user && user.roleId > 2}
                         id={customer.id}
                       />
+                      {console.log("After DeleteModal")}
                     </div>
                   </td>
                 </tr>
