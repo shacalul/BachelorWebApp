@@ -244,7 +244,7 @@ const EditTenantsModal = ({ disabled, customer }) => {
                             onChange={(value) => setDeparture(value)}
                             label="Departure date"
                           >
-                            {departureOptions.map((option) => (
+                            {departureList.map((option) => (
                               <Option key={option.value} value={option.value}>
                                 {option.name}
                               </Option>
