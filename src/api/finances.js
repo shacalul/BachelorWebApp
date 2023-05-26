@@ -31,11 +31,20 @@ export function createFinance(invoiceData) {
 }
 
 export function updateFinance(financeData) {
-	return api
-		.put(`/finances/${financeData.id}`, financeData)
-		.then((response) => response.data)
-		.catch((error) => {
-			console.error(error);
-			throw error;
-		});
+  return api
+    .put(`/finances/${financeData.id}`, financeData)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+}
+export function deleteFinance(id) {
+  return api
+    .delete(`/finances/${id}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
 }

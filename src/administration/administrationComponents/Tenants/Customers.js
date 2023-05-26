@@ -9,7 +9,7 @@ import "./Customers.css";
 import AddTenantsModal from "./Modal/AddTenantsModal";
 import EditTenantsModal from "./Modal/EditTenantsModal";
 import { useSelector } from "react-redux";
-import DeleteModal from "./Modal/DeleteModal";
+//import DeleteModal from "./Modal/DeleteModal";
 const Customers = () => {
   const user = useSelector((state) => state.auth.user);
   const [customers, setCustomers] = useState([]);
@@ -116,20 +116,20 @@ const Customers = () => {
                   </td>
                   <td className="px-6 py-4">{customer.email}</td>
                   <td className="px-6 py-4">{customer.phoneNumber}</td>
-                  <td>
-                    <div class="inline-flex">
+                  <td className="px-6 py-4">
+                    <div className="w-full">
                       <EditTenantsModal
-                        disabled={user && user.roleId === 3 ? true : false}
+                        disabled={user && user.roleId > 2}
                         customer={customer}
                       />
-                      <DeleteModal
-                        onDeleteComplet={(value) =>
+                    </div>
+                    {/* <DeleteModal
+                        onDeleteComplete={(value) =>
                           setDataUpdated(!dataUpdated)
                         }
-                        disabled={user && user.roleId !== 1}
+                        disabled={user && user.roleId > 2}
                         id={customer.id}
-                      />
-                    </div>
+                      /> */}
                   </td>
                 </tr>
               );
