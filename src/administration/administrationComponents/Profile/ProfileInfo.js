@@ -212,6 +212,7 @@ const ProfileInfo = ({ onSubmit }) => {
                       label="Select Role"
                       value={roleId}
                       onChange={(e) => setRoleId(e.target.value)}
+                      disabled
                     >
                       {roles.map((role) => (
                         <Option value={role.id} key={role.id}>
