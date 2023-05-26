@@ -5,6 +5,7 @@ import {
   updateCustomer,
   deleteCustomer,
 } from "../../../api/customers";
+import { getRoomBookings } from "../../../api/roombookings";
 import "./Customers.css";
 import AddTenantsModal from "./Modal/AddTenantsModal";
 import EditTenantsModal from "./Modal/EditTenantsModal";
@@ -15,8 +16,10 @@ const Customers = () => {
   const [customers, setCustomers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [dataUpdated, setDataUpdated] = useState(false);
+  const [roomBookings, setRoomBookings] = useState([]);
   useEffect(() => {
     fetchCustomers();
+    fetchRoomBookings();
   }, [dataUpdated]);
   const fetchCustomers = async () => {
     try {
@@ -24,6 +27,14 @@ const Customers = () => {
       setCustomers(data);
     } catch (error) {
       console.error("Error fetching customers:", error);
+    }
+  };
+  const fetchRoomBookings = async () => {
+    try {
+      const data = await getRoomBookings();
+      setRoomBookings(data);
+    } catch (error) {
+      console.error("Error fetching room bookings:", error);
     }
   };
   const submitHandler = async (payload) => {
@@ -39,6 +50,12 @@ const Customers = () => {
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
+  const isActive = (customerId) => {
+    return roomBookings.some(
+      (booking) =>
+        booking.userId === user.userId && booking.customerId === customerId
+    );
+  };
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
       <h2 class="h2 text-center ">Tenants</h2>
@@ -99,6 +116,9 @@ const Customers = () => {
                 Phone
               </th>
               <th scope="col" className="px-6 py-3">
+                Active
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Actions
               </th>
             </tr>
@@ -106,6 +126,7 @@ const Customers = () => {
           <tbody>
             {filteredCustomers.map((customer) => {
               console.log(customer.phoneNumber); // Log the phone number
+              const customerIsActive = isActive(customer.id);
               return (
                 <tr
                   key={customer.id}
@@ -116,6 +137,9 @@ const Customers = () => {
                   </td>
                   <td className="px-6 py-4">{customer.email}</td>
                   <td className="px-6 py-4">{customer.phoneNumber}</td>
+                  <td className="px-6 py-4">
+                    {customerIsActive ? "Yes" : "No"}
+                  </td>
                   <td className="px-6 py-4">
                     <div className="w-full">
                       <EditTenantsModal
