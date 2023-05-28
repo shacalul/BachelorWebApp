@@ -70,10 +70,11 @@ const RoomBookingsComp = () => {
   const submitHandler = async (payload) => {
     const updatedPayload = {
       ...payload,
-      roomId: payload.roomId.toString(),
-      customerId: payload.customerId.toString(),
+      roomId: parseInt(payload.roomId),
+      customerId: parseInt(payload.customerId),
     };
 
+    console.log(updatedPayload);
     try {
       const response = await createRoomBookings(updatedPayload);
       if (response) {
@@ -146,7 +147,7 @@ const RoomBookingsComp = () => {
           <div className="mb-5">
             <AddBookingModal
               onSubmit={submitHandler}
-              disabled={user && user.roleId !== 1}
+              disabled={user && user.roleId > 2}
               customers={customers}
               rooms={rooms}
               roombookings={roombookings}

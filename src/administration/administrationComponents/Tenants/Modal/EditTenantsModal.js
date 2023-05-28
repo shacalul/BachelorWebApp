@@ -1,25 +1,73 @@
-import { React, Fragment, useState } from "react";
+import { React, Fragment, useState, useEffect } from "react";
 import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { useCountries } from "use-react-countries";
-import { Phone } from "react-telephone";
-import { Select, Option } from "@material-tailwind/react";
-import { arrivalList } from "../../../../website/websiteComponents/Arrival";
-import { departureList } from "../../../../website/websiteComponents/Departure";
-import { categoryData } from "../../../../website/data/CategoryData";
+
+import { getCustomers, updateCustomer } from "../../../../api/customers";
+
 const EditTenantsModal = ({ disabled, customer }) => {
   const [size, setSize] = useState(null);
-  const [isChecked, setIsChecked] = useState(false);
   const handleOpen = (value) => setSize(value);
-  const { countries } = useCountries();
+
   const tenant = customer;
+  const [firstName, setFirstName] = useState(tenant.firstName);
+  const [lastName, setLastName] = useState(tenant.surname);
+  const [email, setEmail] = useState(customer.email);
+  const [phone, setPhone] = useState(customer.phoneNumber);
+  const [departure, setDeparture] = useState(customer.endRentDate);
+  const [customers, setCustomers] = useState("");
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const customersData = await getCustomers();
+      setCustomers(customersData);
+    } catch (error) {
+      console.error("Error fetching room bookings:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      id: customer.id,
+      firstName: firstName,
+      surname: lastName,
+      email: email,
+      phoneNumber: phone,
+      nationality: customer.nationality,
+      country: customer.country,
+      streetName: customer.streetName,
+      streetNumber: customer.streetNumber,
+      postalCode: customer.postalCode,
+      city: customer.city,
+      passportNumber: customer.passportNumber,
+      idNumber: customer.idNumber,
+    };
+
+    console.log(payload);
+
+    try {
+      const response = await updateCustomer(customer.id, payload);
+      console.log(response);
+
+      handleOpen(null);
+    } catch (error) {
+      console.error("Error updating administrator:", error);
+    }
+  };
+
   return (
     <Fragment>
       <div>
         <button
           className={`text-white bg-[#fde68a] hover:bg-[#fcd34d] focus:outline-none focus:ring-4  
-          focus:ring-amber-300  dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-900 font-bold  py-2 px-4 rounded-l ${
-            disabled ? "edit-disabled" : ""
-          }`}
+  focus:ring-amber-300  dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-900 font-bold  py-2 px-4 rounded-r rounded-l ${
+    disabled ? "edit-disabled" : ""
+  }`}
           onClick={() => handleOpen("sm")}
           disabled={disabled}
         >
@@ -35,7 +83,6 @@ const EditTenantsModal = ({ disabled, customer }) => {
                   <div class="mx-auto w-full max-w-[550px]">
                     <div class="py-4 lg:py-2 px-4 mx-auto max-w-screen-md">
                       <h2 class="h2 text-center ">Edit Tenant</h2>
-
                       <div class="mb-5">
                         <label
                           for="fName"
@@ -46,13 +93,13 @@ const EditTenantsModal = ({ disabled, customer }) => {
                         <input
                           type="text"
                           name="firstName"
-                          value={tenant.firstName}
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
                           id="firstName"
                           placeholder="First Name"
                           class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
                       </div>
-
                       <div class="mb-5">
                         <label
                           for="lName"
@@ -63,13 +110,13 @@ const EditTenantsModal = ({ disabled, customer }) => {
                         <input
                           type="text"
                           name="lName"
-                          value={tenant.surname}
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
                           id="lName"
                           placeholder="Last Name"
                           class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
                       </div>
-
                       <div class="mb-5">
                         <label class="mb-3 block text-base font-medium text-[#07074D]">
                           Email
@@ -79,7 +126,8 @@ const EditTenantsModal = ({ disabled, customer }) => {
                             <input
                               type="text"
                               name="email"
-                              value={customer.email}
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
                               id="email"
                               placeholder="Email"
                               class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
@@ -88,17 +136,6 @@ const EditTenantsModal = ({ disabled, customer }) => {
                         </div>
                       </div>
                       <div class="mb-5">
-                        <div>
-                          <label
-                            for="cCode"
-                            class="mb-3 block text-base font-medium text-[#07074D]"
-                          >
-                            Country Code
-                          </label>
-                          <Phone>
-                            <Phone.Country className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                          </Phone>
-                        </div>
                         <div class="mt-5">
                           <label
                             for="pNumber"
@@ -106,70 +143,19 @@ const EditTenantsModal = ({ disabled, customer }) => {
                           >
                             Phone number
                           </label>
-                          <Phone>
-                            <Phone.Number className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-                          </Phone>
-                        </div>
-                      </div>
-
-                      <div class="mb-5">
-                        <label
-                          class="mb-3 block text-base font-medium text-[#07074D]"
-                          for="roomCategoryDropDown"
-                        >
-                          Room Category
-                        </label>
-                        <div
-                          className="w-full border "
-                          name="roomCategoryDropDown"
-                          id="roomCategoryDropDown"
-                        >
-                          <Select size="lg" label="Select Room Category">
-                            {categoryData.map((category) => (
-                              <Option key={category.id}>{category.name}</Option>
-                            ))}
-                          </Select>
-                        </div>
-                      </div>
-                      <div class="mb-5">
-                        <label
-                          class="mb-3 block text-base font-medium text-[#07074D]"
-                          for="roomCategoryDropDown"
-                        >
-                          Room Number
-                        </label>
-                        <div
-                          className="w-full border "
-                          name="roomCategoryDropDown"
-                          id="roomCategoryDropDown"
-                        >
-                          <Select size="lg" label="Select Room Number">
-                            {categoryData.map((category) => (
-                              <Option key={category.id}>{category.name}</Option>
-                            ))}
-                          </Select>
-                        </div>
-                      </div>
-
-                      <div className="mb-5">
-                        <label
-                          className="mb-3 block text-base font-medium text-[#07074D]"
-                          htmlFor="departureDepartureDropDown"
-                        >
-                          Departure Date
-                        </label>
-                        <div
-                          className="w-full border "
-                          name="departureDepartureDropDown"
-                          id="departureDepartureDropDown"
-                        >
-                          <Select size="lg" label="Select Date">
-                            {departureList.map((option) => (
-                              <Option key={option.value} value={option.value}>
-                                {option.name}
-                              </Option>
-                            ))}
-                          </Select>
+                          <div class="flex items-center space-x-6">
+                            <div class="flex items-center w-full">
+                              <input
+                                type="text"
+                                name="phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                id="phone"
+                                placeholder="Phone"
+                                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -193,7 +179,10 @@ const EditTenantsModal = ({ disabled, customer }) => {
             </div>
             <div class="w-full px-3 sm:w-1/2">
               <div class="mb-5">
-                <button className="btn btn-secondary btn-sm w-full mx-auto">
+                <button
+                  className="btn btn-secondary btn-sm w-full mx-auto"
+                  onClick={handleSubmit}
+                >
                   Confirm
                 </button>
               </div>

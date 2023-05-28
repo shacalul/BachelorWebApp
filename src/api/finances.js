@@ -31,11 +31,33 @@ export function createFinance(invoiceData) {
 }
 
 export function updateFinance(financeData) {
-	return api
-		.put(`/finances/${financeData.id}`, financeData)
-		.then((response) => response.data)
-		.catch((error) => {
-			console.error(error);
-			throw error;
-		});
+  console.log(financeData);
+  let processedFinance = {
+    id: financeData.id,
+    name: financeData.name,
+    amountOfMoney: financeData.amountOfMoney,
+    description: financeData.description,
+    customerId: financeData.customer.id,
+    financeCategoryId: financeData.financeCategory.id,
+    dueDate: financeData.dueDate,
+    creationDate: financeData.creationDate,
+    isPaid: financeData.isPaid,
+  };
+  console.log(processedFinance);
+  return api
+    .put(`/finances/${processedFinance.id}`, processedFinance)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+}
+export function deleteFinance(id) {
+  return api
+    .delete(`/finances/${id}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
 }

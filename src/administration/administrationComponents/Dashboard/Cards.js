@@ -100,12 +100,30 @@ const CardMenu = () => {
   const totalTenants = customers.length;
   const totalEmployees = administrators.length;
 
+  const activeCustomers = roomBookings.length;
   useEffect(() => {
     handleCalculateBalance();
-  }, [finances]);
+  }, [finances, customers, roomBookings]);
 
   return (
-    <div className="flex items-center justify-center mt-5">
+    <div className="flex items-center justify-center mt-5 mr-[-10%]">
+      <div className="w-full md:w-2/5 px-2">
+        <div className="rounded-lg shadow-sm mb-4 mx-auto max-w-xs">
+          <div className="rounded-lg bg-white shadow-lg md:shadow-xl relative overflow-hidden">
+            <div className="px-3 pt-8 pb-10 text-center relative z-10">
+              <h4 className="text-sm uppercase text-gray-500 leading-tight">
+                Active Tenants
+              </h4>
+              <h3 className="text-3xl text-gray-700 font-semibold leading-tight my-3">
+                {activeCustomers}
+              </h3>
+            </div>
+            <div className="absolute bottom-0 inset-x-0">
+              <canvas id="chart1" height="70"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="w-full md:w-2/5 px-2">
         <div className="rounded-lg shadow-sm mb-4 mx-auto max-w-xs">
           <div className="rounded-lg bg-white shadow-lg md:shadow-xl relative overflow-hidden">
@@ -118,7 +136,7 @@ const CardMenu = () => {
               </h3>
             </div>
             <div className="absolute bottom-0 inset-x-0">
-              <canvas id="chart1" height="70"></canvas>
+              <canvas id="chart4" height="70"></canvas>
             </div>
           </div>
         </div>
