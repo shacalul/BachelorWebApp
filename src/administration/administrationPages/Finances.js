@@ -12,11 +12,21 @@ const BalanceCard = ({ balance }) => {
   );
 };
 
+const ExpectedBalanceCard = ({ expectedBalance }) => {
+  return (
+    <div className="flex justify-between mb-4">
+      <div className="text-sm font-medium text-gray-500">Expected balance:</div>
+      <div className="text-lg font-bold">{expectedBalance}</div>
+    </div>
+  );
+};
+
 const Finances = () => {
   const [isPaidAll, setisPaidAll] = useState(false);
   const [finances, setFinances] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [result, setResult] = useState();
+  const [expectedAmount, setExpectedAmount] = useState();
   const [selectedOption, setSelectedOption] = useState("");
 
   const [financeCategories, setfinanceCategories] = useState([]);
@@ -73,6 +83,7 @@ const Finances = () => {
   }, []);
 
   useEffect(() => {
+    getExpectedBalance();
     getTotalBalance();
   }, [filteredFinances]);
   //when finance change get new balance with use effect
@@ -93,7 +104,6 @@ const Finances = () => {
       const financesWithChecked = data.map((finance) => ({
         ...finance,
         date: new Date(finance.dueDate),
-        isPaid: false,
       }));
       setFinances(financesWithChecked);
 
@@ -112,15 +122,21 @@ const Finances = () => {
   const handleCheckboxChange = (index) => {
     const newFinances = [...filteredFinances];
     newFinances[index].isPaid = !newFinances[index].isPaid;
-    updateFinance(newFinances[index]);
-    setFilteredFinances(newFinances);
-    let truevalue = true;
-    filteredFinances.forEach((finance) => {
-      if (!finance.isPaid) {
-        truevalue = false;
-      }
-    });
-    setisPaidAll(truevalue);
+    try {
+      updateFinance(newFinances[index]);
+      setFilteredFinances(newFinances);
+      let truevalue = true;
+      filteredFinances.forEach((finance) => {
+        if (!finance.isPaid) {
+          truevalue = false;
+        }
+      });
+      setisPaidAll(truevalue);
+    } catch (error) {
+      // Error case
+      alert("Error");
+      console.error(error);
+    }
   };
 
   const handleCheckAllChange = () => {
@@ -148,10 +164,19 @@ const Finances = () => {
     setResult(result);
   };
 
+  const getExpectedBalance = () => {
+    let result = 0;
+    filteredFinances.forEach((finance) => {
+      result += parseInt(finance.amountOfMoney);
+    });
+    setExpectedAmount(result);
+  };
+
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
       <h2 className="h2 text-center ">Finances</h2>
       <BalanceCard balance={result} />
+      <ExpectedBalanceCard expectedBalance={expectedAmount} />
 
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full px-3 sm:w-1/3">
