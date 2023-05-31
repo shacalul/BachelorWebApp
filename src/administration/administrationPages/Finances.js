@@ -86,6 +86,7 @@ const Finances = () => {
     getExpectedBalance();
     getTotalBalance();
   }, [filteredFinances]);
+
   //when finance change get new balance with use effect
 
   const fetchFinanceCategories = async () => {
@@ -113,11 +114,20 @@ const Finances = () => {
     }
   };
 
-  // const filteredFinances = finances.filter((finance) =>
-  //   `${finance.customer.firstName} ${finance.customer.surname} ${finance.customer.email}`
-  //     .toLowerCase()
-  //     .includes(searchQuery.toLowerCase())
-  // );
+  useEffect(() => {
+    filterByCustomer();
+    console.log("MAAAAN");
+  }, [searchQuery]);
+
+  const filterByCustomer = () => {
+    setFilteredFinances(
+      finances.filter((finance) =>
+        `${finance.customer.firstName} ${finance.customer.surname} ${finance.customer.email}`
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      )
+    );
+  };
 
   const handleCheckboxChange = (index) => {
     const newFinances = [...filteredFinances];
