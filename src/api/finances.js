@@ -31,7 +31,6 @@ export function createFinance(invoiceData) {
 }
 
 export function updateFinance(financeData) {
-  console.log(financeData);
   let processedFinance = {
     id: financeData.id,
     name: financeData.name,
@@ -43,7 +42,6 @@ export function updateFinance(financeData) {
     creationDate: financeData.creationDate,
     isPaid: financeData.isPaid,
   };
-  console.log(processedFinance);
   return api
     .put(`/finances/${processedFinance.id}`, processedFinance)
     .then((response) => response.data)
@@ -52,6 +50,7 @@ export function updateFinance(financeData) {
       throw error;
     });
 }
+
 export function deleteFinance(id) {
   return api
     .delete(`/finances/${id}`)
