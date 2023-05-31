@@ -198,9 +198,7 @@ const AddTenantsModal = ({ onSubmit, disabled }) => {
 
     console.log(createdRoomBooking);
 
-    alert(
-      `Congratulations ${fNameRef.current.value}! Your room has been booked!`
-    );
+    alert(`${fNameRef.current.value} has been added as a tenant.`);
     window.location.reload();
   };
   return (
