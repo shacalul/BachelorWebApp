@@ -5,8 +5,8 @@ export const CategoryContext = createContext();
 
 const CategoryProvider = ({ children }) => {
   const [categories, setCategories] = useState(categoryData);
-  const [arrival, setArrival] = useState(null); // Initialize with null
-  const [departure, setDeparture] = useState(null); // Initialize with null
+  const [arrival, setArrival] = useState(null);
+  const [departure, setDeparture] = useState(null);
   const [categoryType, setCategoryType] = useState("Category");
 
   return (

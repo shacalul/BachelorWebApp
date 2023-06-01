@@ -85,7 +85,7 @@ const TopAppBar = ({ currentPage }) => {
             <li key={index}>
               <NavLink
                 to={link.link}
-                onClick={link.onClick} // Attach onClick event to the NavLink
+                onClick={link.onClick}
                 activeClassName="active"
               >
                 {link.name}

@@ -5,7 +5,7 @@ const apiURL =
   "http://kamtjatkaapi.cegegch4h0a4aea6.northeurope.azurecontainer.io/api";
 
 const api = axios.create({
-  baseURL: apiURL, // Replace this with your API base URL
+  baseURL: apiURL,
 });
 
 export default api;

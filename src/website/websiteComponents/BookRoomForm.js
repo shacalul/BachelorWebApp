@@ -105,13 +105,11 @@ const BookRoomForm = () => {
 
   const fetchData = async () => {
     try {
-      // customers
       const customersData = await getCustomers();
       setCustomers(customersData);
       const bookingsData = await getRoomBookings();
       const roomsData = await getRooms();
 
-      // modifying to disable rooms which are already booked
       roomsData.forEach((room) => {
         room.booked = bookingsData.some(
           (booking) => booking.roomId === room.id
@@ -126,20 +124,16 @@ const BookRoomForm = () => {
       setRooms(roomsData);
 
       setRoomBookings(bookingsData);
-      // setRooms(roomsData);
     } catch (error) {
       console.error("Error fetching room bookings:", error);
     }
   };
   const handleSubmit = async (e) => {
     setLoading(true);
-
-    // Create the customer payload
     const greatestId = customers.reduce(
       (maxId, user) => Math.max(maxId, user.id),
       0
     );
-
     const customerPayload = {
       id: greatestId + 1,
       firstName: fNameRef.current.value,
@@ -164,18 +158,13 @@ const BookRoomForm = () => {
       }
     }
 
-    // Create the customer
-
-    //
     console.log(customerPayload);
 
     const createdCustomer = await createCustomer(customerPayload);
     console.log(createdCustomer);
-    // console.log(createdCustomer);
 
     const customerId = createdCustomer.id;
 
-    // Create the room booking payload
     const greatestBookingId = roomBookings.reduce(
       (maxId, booking) => Math.max(maxId, booking.id),
       0

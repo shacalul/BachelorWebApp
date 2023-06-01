@@ -4,6 +4,7 @@ import AddRole from "./Modal/AddRole";
 
 import { useSelector } from "react-redux";
 import DeleteRoleModal from "./Modal/DeleteRoleModal";
+import { getAdministrators } from "../../../api/administrators";
 const RolesTable = () => {
   const user = useSelector((state) => state.auth.user);
   const [roles, setRoles] = useState([]);
@@ -12,8 +13,11 @@ const RolesTable = () => {
 
   const [dataUpdated, setDataUpdated] = useState(false);
 
+  const [employees, setEmployees] = useState([]);
+
   useEffect(() => {
     fetchRoles();
+    fetchEmployees();
   }, [dataUpdated]);
 
   const fetchRoles = async () => {
@@ -22,6 +26,15 @@ const RolesTable = () => {
       setRoles(data);
     } catch (error) {
       console.error("Error fetching roles:", error);
+    }
+  };
+
+  const fetchEmployees = async () => {
+    try {
+      const employeeData = await getAdministrators();
+      setEmployees(employeeData);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
     }
   };
 
@@ -106,6 +119,9 @@ const RolesTable = () => {
           </thead>
           <tbody>
             {filteredRole.map((role) => {
+              const roleEmployees = employees.filter(
+                (employee) => employee.roleId === role.id
+              );
               return (
                 <tr
                   key={role.id}
@@ -113,7 +129,7 @@ const RolesTable = () => {
                 >
                   <td className="px-6 py-4">{role.id}</td>
                   <td className="px-6 py-4">{role.name}</td>
-                  <td className="px-6 py-4">Number</td>
+                  <td className="px-6 py-4">{roleEmployees.length}</td>
 
                   <td>
                     <div class="inline-flex">

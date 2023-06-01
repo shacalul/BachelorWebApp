@@ -145,13 +145,13 @@ const RoomBookingsComp = () => {
         </div>
         <div className="w-full sm:w-1/2 px-3 text-right">
           <div className="mb-5">
-            <AddBookingModal
+            {/* <AddBookingModal
               onSubmit={submitHandler}
               disabled={user && user.roleId > 2}
               customers={customers}
               rooms={rooms}
               roombookings={roombookings}
-            />
+  />*/}
           </div>
         </div>
       </div>
