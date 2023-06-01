@@ -3,23 +3,8 @@ import { getFinances } from "../../api/finances";
 
 import { getFinanceCategories, updateFinance } from "../../api/finances";
 import { Select, Option } from "@material-tailwind/react";
-const BalanceCard = ({ balance }) => {
-  return (
-    <div className="flex justify-between mb-4">
-      <div className="text-sm font-medium text-gray-500">Balance:</div>
-      <div className="text-lg font-bold">{balance}</div>
-    </div>
-  );
-};
 
-const ExpectedBalanceCard = ({ expectedBalance }) => {
-  return (
-    <div className="flex justify-between mb-4">
-      <div className="text-sm font-medium text-gray-500">Expected balance:</div>
-      <div className="text-lg font-bold">{expectedBalance}</div>
-    </div>
-  );
-};
+import BalanceCard from "../administrationComponents/BalanceCard";
 
 const Finances = () => {
   const [isPaidAll, setisPaidAll] = useState(false);
@@ -185,8 +170,8 @@ const Finances = () => {
   return (
     <div className="pb-4 bg-white dark:bg-gray-900">
       <h2 className="h2 text-center ">Finances</h2>
-      <BalanceCard balance={result} />
-      <ExpectedBalanceCard expectedBalance={expectedAmount} />
+      <BalanceCard balance={result} text={"Balance"} />
+      <BalanceCard balance={expectedAmount} text={"Expected Balance"} />
 
       <div className="-mx-3 flex flex-wrap items-center">
         <div className="w-full px-3 sm:w-1/3">
